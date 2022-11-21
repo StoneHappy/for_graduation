@@ -2,7 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <Widgets/VulkanWindow.h>
+#include <QtOpenGL/QGLWidget>
 namespace Ui {
 class MainWindow;
 }
@@ -17,6 +18,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    CS::VulkanWindow* m_vulkanWindow;
+    QVulkanInstance* inst;
 };
 
 #endif // MAINWINDOW_H
