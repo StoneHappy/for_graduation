@@ -54,7 +54,26 @@
    <widget class="QWidget" name="dockWidgetContents_2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPlainTextEdit" name="debugLog"/>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
+       <widget class="QWidget" name="debugLogTab">
+        <attribute name="title">
+         <string>Debug Log</string>
+        </attribute>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QPlainTextEdit" name="debugLog"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Vulkan Info</string>
+        </attribute>
+       </widget>
+      </widget>
      </item>
     </layout>
    </widget>
