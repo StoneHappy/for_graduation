@@ -21,6 +21,7 @@ target_link_libraries(${TARGET_NAME} PUBLIC
 Qt5::Core
 Qt5::Gui
 Qt5::Widgets
+Vulkan::Vulkan
           )
 
 target_include_directories(
@@ -28,3 +29,5 @@ target_include_directories(
   PUBLIC 
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
 )
+
+add_dependencies(${TARGET_NAME} "Shadercompile")

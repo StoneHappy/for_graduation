@@ -1,10 +1,10 @@
-# Qt_empty_project
+# For Graduation
 
 ## how to use it
 ```bash
 # clone repository and submodule
 
-git clone --recursive https://github.com/StoneHappy/Qt-empty-project.git
+git clone --recursive https://github.com/StoneHappy/for_graduation.git
 
 # create buid dir
 
