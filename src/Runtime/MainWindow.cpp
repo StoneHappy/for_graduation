@@ -6,6 +6,7 @@
 #include <QPointer>
 #include <QMenu>
 #include <QToolButton>
+#include <Widgets/AboutDialog.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& text)
 {
@@ -60,6 +61,9 @@ void MainWindow::creatorPopMenu()
 	toolBtn->setMenu(menu);
 	ui->toolBar->addSeparator();
 	ui->toolBar->addWidget(toolBtn);
+
+	ui->toolBar->addSeparator();
+	ui->toolBar->addAction(ui->actAbout);
 }
 
 void MainWindow::on_actShowViewDock_triggered()
@@ -77,3 +81,10 @@ void MainWindow::on_actShowInfoDock_triggered()
 	else
 		ui->dockInfo->hide();
 }
+
+void MainWindow::on_actAbout_triggered()
+{
+	AboutDialog* aboutDialog = new AboutDialog(this);
+	aboutDialog->exec();
+}
+

@@ -141,6 +141,15 @@
     <string>容器显示</string>
    </property>
   </action>
+  <action name="actAbout">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/about.png</normaloff>:/images/about.png</iconset>
+   </property>
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../resources/resources.qrc"/>

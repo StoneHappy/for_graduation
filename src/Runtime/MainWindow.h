@@ -25,6 +25,7 @@ private:
 private slots:
     void on_actShowViewDock_triggered();
     void on_actShowInfoDock_triggered();
+    void on_actAbout_triggered();
 };
 
 #endif // MAINWINDOW_H
