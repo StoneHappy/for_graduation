@@ -3,5 +3,8 @@
         <file>images/模型.png</file>
         <file>images/工程.png</file>
         <file>images/多人-人群.png</file>
+        <file>images/树状图.png</file>
+        <file>images/日志.png</file>
+        <file>images/容器.png</file>
     </qresource>
 </RCC>

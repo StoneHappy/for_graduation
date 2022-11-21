@@ -35,7 +35,10 @@
    <addaction name="actOpen"/>
    <addaction name="actImportModel"/>
   </widget>
-  <widget class="QDockWidget" name="dockWidget">
+  <widget class="QDockWidget" name="dockView">
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
@@ -47,7 +50,10 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_2">
+  <widget class="QDockWidget" name="dockInfo">
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
@@ -56,7 +62,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="debugLogTab">
         <attribute name="title">
@@ -94,6 +100,45 @@
    </property>
    <property name="text">
     <string>导入模型</string>
+   </property>
+  </action>
+  <action name="actShowViewDock">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/树状图.png</normaloff>:/images/树状图.png</iconset>
+   </property>
+   <property name="text">
+    <string>显示视图</string>
+   </property>
+  </action>
+  <action name="actShowInfoDock">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/日志.png</normaloff>:/images/日志.png</iconset>
+   </property>
+   <property name="text">
+    <string>显示信息</string>
+   </property>
+  </action>
+  <action name="actSelPopMenu">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/容器.png</normaloff>:/images/容器.png</iconset>
+   </property>
+   <property name="text">
+    <string>容器显示</string>
    </property>
   </action>
  </widget>

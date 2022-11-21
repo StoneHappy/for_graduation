@@ -17,9 +17,14 @@ public:
     ~MainWindow();
 
 private:
+    void creatorPopMenu();
     Ui::MainWindow *ui;
     CS::VulkanWindow* m_vulkanWindow;
     QVulkanInstance* inst;
+
+private slots:
+    void on_actShowViewDock_triggered();
+    void on_actShowInfoDock_triggered();
 };
 
 #endif // MAINWINDOW_H

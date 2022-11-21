@@ -4,6 +4,8 @@
 #include <QLoggingCategory>
 #include <QPlainTextEdit>
 #include <QPointer>
+#include <QMenu>
+#include <QToolButton>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& text)
 {
@@ -23,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	qInstallMessageHandler(messageHandler);
     QWidget* vulkanWindowWrapper = QWidget::createWindowContainer(m_vulkanWindow);
 	QLoggingCategory::setFilterRules(QStringLiteral("qt.vulkan=true"));
-
 	inst = new QVulkanInstance();
 	inst->setLayers(QByteArrayList()
 		<< "VK_LAYER_GOOGLE_threading"
@@ -38,9 +39,41 @@ MainWindow::MainWindow(QWidget *parent) :
 		qFatal("Failed to create Vulkan instance: %d", inst->errorCode());
 	m_vulkanWindow->setVulkanInstance(inst);
 	setCentralWidget(vulkanWindowWrapper);
+	// pop Menu
+	creatorPopMenu();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::creatorPopMenu()
+{
+	QMenu* menu = new QMenu(this);
+	menu->addAction(ui->actShowViewDock);
+	menu->addAction(ui->actShowInfoDock);
+	QToolButton* toolBtn = new QToolButton(this);
+	toolBtn->setPopupMode(QToolButton::InstantPopup);
+	toolBtn->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+	toolBtn->setDefaultAction(ui->actSelPopMenu);
+	toolBtn->setMenu(menu);
+	ui->toolBar->addSeparator();
+	ui->toolBar->addWidget(toolBtn);
+}
+
+void MainWindow::on_actShowViewDock_triggered()
+{
+	if (ui->actShowViewDock->isChecked())
+		ui->dockView->show();
+	else
+		ui->dockView->hide();
+}
+
+void MainWindow::on_actShowInfoDock_triggered()
+{
+	if (ui->actShowInfoDock->isChecked())
+		ui->dockInfo->show();
+	else
+		ui->dockInfo->hide();
 }
