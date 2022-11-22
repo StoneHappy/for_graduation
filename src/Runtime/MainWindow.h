@@ -8,6 +8,8 @@ namespace Ui {
 class MainWindow;
 }
 
+class QLabel;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -21,6 +23,7 @@ private:
     Ui::MainWindow *ui;
     CS::VulkanWindow* m_vulkanWindow;
     QVulkanInstance* inst;
+    QLabel* m_mousePosition;
 
 private slots:
     void on_actShowViewDock_triggered();

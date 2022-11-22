@@ -7,6 +7,7 @@
 #include <QMenu>
 #include <QToolButton>
 #include <Widgets/AboutDialog.h>
+#include <QLabel>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& text)
 {
@@ -42,6 +43,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	setCentralWidget(vulkanWindowWrapper);
 	// pop Menu
 	creatorPopMenu();
+
+	// statusbar
+	m_mousePosition = new QLabel(this);
+	m_mousePosition->setText(QString::fromLocal8Bit("Êó±êÎ»ÖÃ£º"));
+	ui->statusbar->addWidget(m_mousePosition);
 }
 
 MainWindow::~MainWindow()
