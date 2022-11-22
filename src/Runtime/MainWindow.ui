@@ -150,6 +150,33 @@
     <string>关于</string>
    </property>
   </action>
+  <action name="actPlay">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/播放.png</normaloff>:/images/播放.png</iconset>
+   </property>
+   <property name="text">
+    <string>启动</string>
+   </property>
+  </action>
+  <action name="actPause">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/暂停.png</normaloff>:/images/暂停.png</iconset>
+   </property>
+   <property name="text">
+    <string>暂停</string>
+   </property>
+  </action>
+  <action name="actStop">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/停止.png</normaloff>:/images/停止.png</iconset>
+   </property>
+   <property name="text">
+    <string>停止</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../resources/resources.qrc"/>

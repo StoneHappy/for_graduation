@@ -26,6 +26,8 @@ private slots:
     void on_actShowViewDock_triggered();
     void on_actShowInfoDock_triggered();
     void on_actAbout_triggered();
+    void on_actPlay_triggered();
+    void on_actPause_triggered();
 };
 
 #endif // MAINWINDOW_H

@@ -63,6 +63,11 @@ void MainWindow::creatorPopMenu()
 	ui->toolBar->addWidget(toolBtn);
 
 	ui->toolBar->addSeparator();
+	ui->toolBar->addAction(ui->actPlay);
+	ui->toolBar->addAction(ui->actPause);
+	ui->actPause->setVisible(false);
+	ui->toolBar->addAction(ui->actStop);
+	ui->toolBar->addSeparator();
 	ui->toolBar->addAction(ui->actAbout);
 }
 
@@ -87,4 +92,17 @@ void MainWindow::on_actAbout_triggered()
 	AboutDialog* aboutDialog = new AboutDialog(this);
 	aboutDialog->exec();
 }
+
+void MainWindow::on_actPlay_triggered()
+{
+	if (ui->actPlay->isVisible()) ui->actPlay->setVisible(false);
+	if (!ui->actPause->isVisible()) ui->actPause->setVisible(true);
+}
+
+void MainWindow::on_actPause_triggered()
+{
+	if (ui->actPause->isVisible()) ui->actPause->setVisible(false);
+	if (!ui->actPlay->isVisible()) ui->actPlay->setVisible(true);
+}
+
 

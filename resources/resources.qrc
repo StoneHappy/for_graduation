@@ -7,5 +7,8 @@
         <file>images/日志.png</file>
         <file>images/容器.png</file>
         <file>images/about.png</file>
+        <file>images/播放.png</file>
+        <file>images/暂停.png</file>
+        <file>images/停止.png</file>
     </qresource>
 </RCC>
