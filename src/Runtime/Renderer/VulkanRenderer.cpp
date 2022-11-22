@@ -1,5 +1,8 @@
 #include "VulkanRenderer.h"
 #include <QVulkanDeviceFunctions>
+#include <Renderer/VulkanShader.h>
+#include "j_shader_modules_vert.h"
+#include "j_shader_modules_frag.h"
 namespace CS
 {
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)
@@ -12,6 +15,8 @@ namespace CS
 		qDebug("initResources");
 
 		m_devFuncs = m_window->vulkanInstance()->deviceFunctions(m_window->device());
+		VkShaderModule vertexShader = VulkanLib::createShader(m_window->device(), j_shader_modules_vert, sizeof(j_shader_modules_vert));
+		VkShaderModule fragShader = VulkanLib::createShader(m_window->device(), j_shader_modules_frag, sizeof(j_shader_modules_frag));
 	}
 
 	void VulkanRenderer::initSwapChainResources()
