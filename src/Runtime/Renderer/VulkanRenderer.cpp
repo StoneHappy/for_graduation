@@ -47,16 +47,9 @@ namespace GU
 			nullptr
 		}
 		};
-		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
-		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		pipelineLayoutInfo.setLayoutCount = 0;
-		pipelineLayoutInfo.pushConstantRangeCount = 0;
-		VkPipelineLayout pipelineLayout;
-		if (m_devFuncs->vkCreatePipelineLayout(m_window->device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
-		{
-			throw std::runtime_error("failed to create shader module!");
-		}
-		createGraphicsPipeline(m_vulkanContext, shaderStages, pipelineLayout, m_vulkanContext.graphicsPipeline);
+		createDescriptorSetLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayouts);
+		createPipelineLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayouts, m_vulkanContext.pipelineLayout);
+		createGraphicsPipeline(m_vulkanContext, shaderStages, m_vulkanContext.pipelineLayout, m_vulkanContext.graphicsPipeline);
 		std::vector<Vertex> vertices = {
 				{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
 				{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},

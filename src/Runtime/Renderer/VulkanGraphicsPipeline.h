@@ -9,4 +9,8 @@ namespace GU
 		const std::vector<VkPipelineShaderStageCreateInfo>& shaderStages,\
 		const VkPipelineLayout& pipelineLayout, \
 		VkPipeline& graphicsPipeline);
+
+	void createPipelineLayout(const VulkanContext& vulkanContext, std::vector<VkDescriptorSetLayout>& descriptorSetLayouts, VkPipelineLayout& pipelineLayout);
+
+	void createDescriptorSetLayout(const VulkanContext& vulkanContext, std::vector<VkDescriptorSetLayout>& descriptorSetLayouts);
 }
