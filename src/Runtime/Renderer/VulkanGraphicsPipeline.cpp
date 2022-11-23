@@ -4,7 +4,7 @@
 #include <Renderer/RenderData.h>
 namespace GU
 {
-    VkPipeline createGraphicsPipeline(VkDevice device, VkRenderPass renderPass, std::vector<VkPipelineShaderStageCreateInfo> shaderStages, VkPipelineLayout pipelineLayout, VkExtent2D extent)
+    void createGraphicsPipeline(const VulkanContext& vulkanContext, const std::vector<VkPipelineShaderStageCreateInfo>& shaderStages, const VkPipelineLayout& pipelineLayout, VkPipeline& graphicsPipeline)
 	{
         GU::g_CoreContext.g_Log("正在创建渲染管线");
         // vertex input
@@ -27,14 +27,14 @@ namespace GU
         VkViewport viewport = {};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
-        viewport.width = (float)extent.width;
-        viewport.height = (float)extent.height;
+        viewport.width = (float)vulkanContext.swapChainExtent.width;
+        viewport.height = (float)vulkanContext.swapChainExtent.height;
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
 
         VkRect2D scissor = {};
         scissor.offset = { 0, 0 };
-        scissor.extent = extent;
+        scissor.extent = vulkanContext.swapChainExtent;
 
         VkPipelineViewportStateCreateInfo viewportState{};
         viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -94,17 +94,14 @@ namespace GU
         pipelineInfo.pColorBlendState = &colorBlending;
         pipelineInfo.pDynamicState = &dynamicState;
         pipelineInfo.layout = pipelineLayout;
-        pipelineInfo.renderPass = renderPass;
+        pipelineInfo.renderPass = vulkanContext.renderPass;
         pipelineInfo.subpass = 0;
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-        VkPipeline rnt;
-        if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &rnt) != VK_SUCCESS)
+        if (vkCreateGraphicsPipelines(vulkanContext.logicalDevice, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS)
         {
             GU::g_CoreContext.g_Log("failed to create graphics pipeline!");
             throw std::runtime_error("failed to create graphics pipeline!");
         }
-
-        return rnt;
 	}
 }

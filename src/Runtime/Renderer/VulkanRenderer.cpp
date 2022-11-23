@@ -19,9 +19,14 @@ namespace GU
 		qDebug("initResources");
 
 		m_devFuncs = m_window->vulkanInstance()->deviceFunctions(m_window->device());
+		m_vulkanContext.physicalDevice = m_window->physicalDevice();
+		m_vulkanContext.logicalDevice = m_window->device();
+		m_vulkanContext.commandPool = m_window->graphicsCommandPool();
+		m_vulkanContext.graphicsQueue = m_window->graphicsQueue();
+		m_vulkanContext.renderPass = m_window->defaultRenderPass();
+
 		VkShaderModule vertexShader = createShader(m_window->device(), r_descriptor_layout_buffer_vert, sizeof(r_descriptor_layout_buffer_vert));
 		VkShaderModule fragShader = createShader(m_window->device(), r_descriptor_layout_buffer_frag, sizeof(r_descriptor_layout_buffer_frag));
-
 		std::vector<VkPipelineShaderStageCreateInfo> shaderStages = {
 		{
 			VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
@@ -51,8 +56,7 @@ namespace GU
 		{
 			throw std::runtime_error("failed to create shader module!");
 		}
-		VkExtent2D extent = {m_window->swapChainImageSize().width(), m_window->swapChainImageSize().height()};
-		m_vulkanContext.graphicsPipeline = createGraphicsPipeline(m_window->device(), m_window->defaultRenderPass(), shaderStages, pipelineLayout, extent);
+		createGraphicsPipeline(m_vulkanContext, shaderStages, pipelineLayout, m_vulkanContext.graphicsPipeline);
 		std::vector<Vertex> vertices = {
 				{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
 				{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
@@ -62,10 +66,7 @@ namespace GU
 		std::vector<uint16_t> indices = {
 				0, 1, 2, 2, 3, 0
 		};
-		m_vulkanContext.physicalDevice = m_window->physicalDevice();
-		m_vulkanContext.logicalDevice = m_window->device();
-		m_vulkanContext.commandPool = m_window->graphicsCommandPool();
-		m_vulkanContext.graphicsQueue = m_window->graphicsQueue();
+		
 		createVertexBuffer(m_vulkanContext, vertices, m_vulkanContext.vertexBuffer, m_vulkanContext.vertexMemory);
 		createIndexBuffer(m_vulkanContext, indices, m_vulkanContext.indexBuffer, m_vulkanContext.indexMemory);
 		createUniformBuffers(m_vulkanContext, m_vulkanContext.uniformBuffers, m_vulkanContext.uniformBuffersMemory, m_vulkanContext.uniformBuffersMapped);

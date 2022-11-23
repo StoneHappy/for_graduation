@@ -11,6 +11,7 @@ namespace GU
 		VkCommandPool				commandPool;
 		VkQueue						graphicsQueue;
 		VkExtent2D					swapChainExtent;
+		VkRenderPass				renderPass;
 		VkPipeline					graphicsPipeline;
 		VkBuffer					vertexBuffer;
 		VkDeviceMemory				vertexMemory;

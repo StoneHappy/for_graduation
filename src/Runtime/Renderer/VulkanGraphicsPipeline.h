@@ -2,11 +2,11 @@
 #include <vulkan/vulkan.h>
 #include <vector>
 #include <Core/Type.h>
+#include <Renderer/VulkanContext.h>
 namespace GU
 {
-	VkPipeline createGraphicsPipeline(VkDevice device,\
-		VkRenderPass renderPass, \
-		std::vector<VkPipelineShaderStageCreateInfo> shaderStages,\
-		VkPipelineLayout pipelineLayout, \
-		VkExtent2D extent);
+	void createGraphicsPipeline(const VulkanContext& vulkanContext, \
+		const std::vector<VkPipelineShaderStageCreateInfo>& shaderStages,\
+		const VkPipelineLayout& pipelineLayout, \
+		VkPipeline& graphicsPipeline);
 }
