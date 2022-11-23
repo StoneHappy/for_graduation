@@ -20,8 +20,10 @@ namespace GU
 		QVulkanWindow* m_window;
 		QVulkanDeviceFunctions* m_devFuncs;
 		VkPipeline m_graphicsPipeline;
-		VkBuffer m_buffer;
-		VkDeviceMemory m_memory;
+		VkBuffer m_vertexBuffer;
+		VkDeviceMemory m_vertexMemory;
+		VkBuffer m_indexBuffer;
+		VkDeviceMemory m_indexMemory;
 		VulkanContext m_vulkanContext;
 	};
 }

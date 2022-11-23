@@ -54,15 +54,20 @@ namespace GU
 		VkExtent2D extent = {m_window->swapChainImageSize().width(), m_window->swapChainImageSize().height()};
 		m_graphicsPipeline = createGraphicsPipeline(m_window->device(), m_window->defaultRenderPass(), shaderStages, pipelineLayout, extent);
 		std::vector<Vertex> vertices = {
-					{{	0.0f,		-0.5f}, {0.0f, 0.0f, 0.0f}},
-					{{	0.5f,		0.5f},	{0.0f, 1.0f, 0.0f}},
-					{{	-0.5f,		0.5f},	{0.0f, 0.0f, 1.0f}}
+				{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+				{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+				{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+				{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+		};
+		std::vector<uint16_t> indices = {
+				0, 1, 2, 2, 3, 0
 		};
 		m_vulkanContext.physicalDevice = m_window->physicalDevice();
 		m_vulkanContext.logicalDevice = m_window->device();
 		m_vulkanContext.commandPool = m_window->graphicsCommandPool();
 		m_vulkanContext.graphicsQueue = m_window->graphicsQueue();
-		createVertexBuffer(m_vulkanContext, vertices, m_buffer, m_memory);
+		createVertexBuffer(m_vulkanContext, vertices, m_vertexBuffer, m_vertexMemory);
+		createIndexBuffer(m_vulkanContext, indices, m_indexBuffer, m_indexMemory);
 	}
 
 	void VulkanRenderer::initSwapChainResources()
@@ -117,11 +122,12 @@ namespace GU
 		scissor.extent.height = viewport.height;
 		m_devFuncs->vkCmdSetScissor(cmdBuf, 0, 1, &scissor);
 
-		VkBuffer vertexBuffers[] = { m_buffer };
+		VkBuffer vertexBuffers[] = { m_vertexBuffer };
 		VkDeviceSize offsets[] = { 0 };
 		m_devFuncs->vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
-
-		m_devFuncs->vkCmdDraw(cmdBuf, 3, 1, 0, 0);
+		m_devFuncs->vkCmdBindIndexBuffer(cmdBuf, m_indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+		//m_devFuncs->vkCmdDraw(cmdBuf, 3, 1, 0, 0);
+		m_devFuncs->vkCmdDrawIndexed(cmdBuf, 6, 1, 0, 0, 0);
 		m_devFuncs->vkCmdEndRenderPass(cmdBuf);
 
 		m_window->frameReady();
