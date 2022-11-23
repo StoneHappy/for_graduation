@@ -49,7 +49,7 @@ namespace CS
 			throw std::runtime_error("failed to create shader module!");
 		}
 		VkExtent2D extent = {m_window->swapChainImageSize().width(), m_window->swapChainImageSize().height()};
-		m_graphicsPipeline = VulkanLib::createGraphicsPipeline(m_window->device(), m_window->defaultRenderPass(), shaderStages, pipelineLayout, extent, GU::QtDebugLogFunction());
+		m_graphicsPipeline = VulkanLib::createGraphicsPipeline(m_window->device(), m_window->defaultRenderPass(), shaderStages, pipelineLayout, extent);
 	}
 
 	void VulkanRenderer::initSwapChainResources()

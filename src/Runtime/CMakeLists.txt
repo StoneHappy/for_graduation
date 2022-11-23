@@ -22,6 +22,7 @@ Qt5::Core
 Qt5::Gui
 Qt5::Widgets
 Vulkan::Vulkan
+glm::glm
           )
 
 target_include_directories(

@@ -1,10 +1,11 @@
 #include "VulkanGraphicsPipeline.h"
 #include <stdexcept>
+#include <Global/GlobalContext.h>
 namespace VulkanLib
 {
-    VkPipeline createGraphicsPipeline(VkDevice device, VkRenderPass renderPass, std::vector<VkPipelineShaderStageCreateInfo> shaderStages, VkPipelineLayout pipelineLayout, VkExtent2D extent, GU::LogFunc logFunc)
+    VkPipeline createGraphicsPipeline(VkDevice device, VkRenderPass renderPass, std::vector<VkPipelineShaderStageCreateInfo> shaderStages, VkPipelineLayout pipelineLayout, VkExtent2D extent)
 	{
-        logFunc("正在创建渲染图像管线");
+        GU::g_GlobalContext.g_Log("正在创建渲染图像管线");
         // vertex input
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -94,7 +95,7 @@ namespace VulkanLib
         VkPipeline rnt;
         if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &rnt) != VK_SUCCESS)
         {
-            logFunc("failed to create graphics pipeline!");
+            GU::g_GlobalContext.g_Log("failed to create graphics pipeline!");
             throw std::runtime_error("failed to create graphics pipeline!");
         }
 

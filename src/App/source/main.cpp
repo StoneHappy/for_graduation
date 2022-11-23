@@ -3,9 +3,13 @@
 #include <QSplashScreen>
 #include <MainWindow.h>
 #include <QDateTime>
+#include <Global/GlobalContext.h>
 int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
+
+	// Global Context
+	GU::g_GlobalContext.g_Log = GU::QtDebugLogFunction();
 
 	QPixmap pixmap(QString::fromLocal8Bit(":/images/ะฃปี.png"));
 	QSplashScreen splash(pixmap);
@@ -21,7 +25,7 @@ int main(int argc, char* argv[])
 		a.processEvents();
 	}
 #endif
-
+	
 	MainWindow w;
 
 	w.showMaximized();

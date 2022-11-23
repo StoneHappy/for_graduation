@@ -8,6 +8,5 @@ namespace VulkanLib
 		VkRenderPass renderPass, \
 		std::vector<VkPipelineShaderStageCreateInfo> shaderStages,\
 		VkPipelineLayout pipelineLayout, \
-		VkExtent2D extent,\
-		GU::LogFunc logFunc = GU::STDDebugLogFunction());
+		VkExtent2D extent);
 }
