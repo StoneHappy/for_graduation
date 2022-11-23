@@ -6,7 +6,7 @@
 #include "r_descriptor_layout_buffer_vert.h"
 #include "r_descriptor_layout_buffer_frag.h"
 #include <Renderer/VulkanGraphicsPipeline.h>
-#include <Renderer/VertexBuffer.h>
+#include <Renderer/VulkanBuffer.h>
 namespace GU
 {
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)

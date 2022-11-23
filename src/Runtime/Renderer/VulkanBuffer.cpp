@@ -1,4 +1,4 @@
-#include "VertexBuffer.h"
+#include "VulkanBuffer.h"
 
 namespace GU
 {
