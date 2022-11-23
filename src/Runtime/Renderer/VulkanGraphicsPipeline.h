@@ -2,7 +2,7 @@
 #include <vulkan/vulkan.h>
 #include <vector>
 #include <Core/Type.h>
-namespace VulkanLib
+namespace GU
 {
 	VkPipeline createGraphicsPipeline(VkDevice device,\
 		VkRenderPass renderPass, \

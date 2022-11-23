@@ -4,7 +4,8 @@
 #include "j_shader_modules_vert.h"
 #include "j_shader_modules_frag.h"
 #include <Renderer/VulkanGraphicsPipeline.h>
-namespace CS
+#include <Renderer/VertexBuffer.h>
+namespace GU
 {
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)
 		:m_window(w)
@@ -16,8 +17,8 @@ namespace CS
 		qDebug("initResources");
 
 		m_devFuncs = m_window->vulkanInstance()->deviceFunctions(m_window->device());
-		VkShaderModule vertexShader = VulkanLib::createShader(m_window->device(), j_shader_modules_vert, sizeof(j_shader_modules_vert));
-		VkShaderModule fragShader = VulkanLib::createShader(m_window->device(), j_shader_modules_frag, sizeof(j_shader_modules_frag));
+		VkShaderModule vertexShader = createShader(m_window->device(), j_shader_modules_vert, sizeof(j_shader_modules_vert));
+		VkShaderModule fragShader = createShader(m_window->device(), j_shader_modules_frag, sizeof(j_shader_modules_frag));
 
 		std::vector<VkPipelineShaderStageCreateInfo> shaderStages = {
 		{
@@ -49,7 +50,7 @@ namespace CS
 			throw std::runtime_error("failed to create shader module!");
 		}
 		VkExtent2D extent = {m_window->swapChainImageSize().width(), m_window->swapChainImageSize().height()};
-		m_graphicsPipeline = VulkanLib::createGraphicsPipeline(m_window->device(), m_window->defaultRenderPass(), shaderStages, pipelineLayout, extent);
+		m_graphicsPipeline = createGraphicsPipeline(m_window->device(), m_window->defaultRenderPass(), shaderStages, pipelineLayout, extent);
 	}
 
 	void VulkanRenderer::initSwapChainResources()

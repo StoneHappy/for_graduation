@@ -2,11 +2,11 @@
 #include <Core/Type.h>
 namespace GU
 {
-	class GlobalContext;
+	class CoreContext;
 
-	extern GlobalContext g_GlobalContext;
+	extern CoreContext g_CoreContext;
 
-	class GlobalContext
+	class CoreContext
 	{
 	public:
 		LogFunc g_Log = STDDebugLogFunction();

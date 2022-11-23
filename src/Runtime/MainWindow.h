@@ -21,7 +21,7 @@ public:
 private:
     void creatorPopMenu();
     Ui::MainWindow *ui;
-    CS::VulkanWindow* m_vulkanWindow;
+    GU::VulkanWindow* m_vulkanWindow;
     QVulkanInstance* inst;
     QLabel* m_mousePosition;
 

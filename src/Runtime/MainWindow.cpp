@@ -17,7 +17,7 @@ static void messageHandler(QtMsgType msgType, const QMessageLogContext& logConte
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    m_vulkanWindow(new CS::VulkanWindow())
+    m_vulkanWindow(new GU::VulkanWindow())
 {
     ui->setupUi(this);
 
@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	// statusbar
 	m_mousePosition = new QLabel(this);
-	m_mousePosition->setText(QString::fromLocal8Bit("Êó±êÎ»ÖÃ£º"));
+	m_mousePosition->setText(QString::fromLocal8Bit("æ­£åœ¨åŠ è½½ç¨‹åº..."));
 	ui->statusbar->addWidget(m_mousePosition);
 }
 

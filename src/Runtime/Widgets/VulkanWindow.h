@@ -1,6 +1,6 @@
 #pragma once
 #include <QVulkanWindow>
-namespace CS
+namespace GU
 {
     class VulkanWindow : public QVulkanWindow
     {

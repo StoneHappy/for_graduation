@@ -1,6 +1,6 @@
 #include "VulkanWindow.h"
 #include <Renderer/VulkanRenderer.h>
-namespace CS
+namespace GU
 {
 	QVulkanWindowRenderer* VulkanWindow::createRenderer()
 	{

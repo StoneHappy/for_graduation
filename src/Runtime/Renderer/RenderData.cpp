@@ -1,8 +1,8 @@
 #include "RenderData.h"
 
-namespace VulkanLib
+namespace GU
 {
-	VkVertexInputBindingDescription Vertex::getBindingDescription()
+	VkVertexInputBindingDescription Vertex::getBindingDescription() const
 	{
 		VkVertexInputBindingDescription bindingDescription{};
 		bindingDescription.binding = 0;
@@ -11,7 +11,7 @@ namespace VulkanLib
 
 		return bindingDescription;
 	}
-	std::vector<VkVertexInputAttributeDescription> Vertex::getAttributeDescriptions()
+	std::vector<VkVertexInputAttributeDescription> Vertex::getAttributeDescriptions() const
 	{
 		std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
 		attributeDescriptions.resize(2);
@@ -26,5 +26,9 @@ namespace VulkanLib
 		attributeDescriptions[1].offset = offsetof(Vertex, color);
 
 		return attributeDescriptions;
+	}
+	uint32_t Vertex::getDataSize() const
+	{
+		return (sizeof(pos) + sizeof(color));
 	}
 }

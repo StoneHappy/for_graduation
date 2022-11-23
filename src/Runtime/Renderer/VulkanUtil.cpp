@@ -1,6 +1,6 @@
 #include "VulkanUtil.h"
 #include <stdexcept>
-namespace VulkanLib
+namespace GU
 {
 	uint32_t findMemoryType(VkPhysicalDevice device, uint32_t typeFilter, VkMemoryPropertyFlags properties)
 	{

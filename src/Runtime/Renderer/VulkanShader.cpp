@@ -1,7 +1,7 @@
 #include "VulkanShader.h"
 #include <stdexcept>
 #include <QDebug>
-namespace VulkanLib
+namespace GU
 {
 	VkShaderModule createShader(VkDevice device, const uint32_t* code, uint32_t size)
 	{

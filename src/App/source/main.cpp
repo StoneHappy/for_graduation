@@ -1,20 +1,20 @@
-#include <iostream>
+Ôªø#include <iostream>
 #include <QApplication>
 #include <QSplashScreen>
 #include <MainWindow.h>
 #include <QDateTime>
-#include <Global/GlobalContext.h>
+#include <Global/CoreContext.h>
 int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
 
 	// Global Context
-	GU::g_GlobalContext.g_Log = GU::QtDebugLogFunction();
+	GU::g_CoreContext.g_Log = GU::QtDebugLogFunction();
 
-	QPixmap pixmap(QString::fromLocal8Bit(":/images/–£ª’.png"));
+	QPixmap pixmap(QString::fromLocal8Bit(":/images/Ê†°ÂæΩ.png"));
 	QSplashScreen splash(pixmap);
 	splash.show();
-	splash.showMessage(QString::fromLocal8Bit("≥Ã–Ú’˝‘⁄º”‘ÿ...."));
+	splash.showMessage(QString::fromLocal8Bit("Á®ãÂ∫èÊ≠£Âú®Âä†ËΩΩ...."));
 
 #if 0
 	QDateTime time = QDateTime::currentDateTime();

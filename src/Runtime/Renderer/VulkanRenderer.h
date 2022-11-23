@@ -2,7 +2,7 @@
 
 #include <QVulkanWindowRenderer>
 
-namespace CS
+namespace GU
 {
 	class VulkanRenderer : public QVulkanWindowRenderer
 	{
