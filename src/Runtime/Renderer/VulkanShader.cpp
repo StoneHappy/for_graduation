@@ -18,4 +18,27 @@ namespace GU
 
         return rnt;
 	}
+    void createShaderStageInfo(const VkShaderModule& vertexShader, const VkShaderModule& fragShader, std::vector<VkPipelineShaderStageCreateInfo>& pipelineShaderStageCreateInfo)
+    {
+		pipelineShaderStageCreateInfo = {
+		{
+			VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+			nullptr,
+			0,
+			VK_SHADER_STAGE_VERTEX_BIT,
+			vertexShader,
+			"main",
+			nullptr
+		},
+		{
+			VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+			nullptr,
+			0,
+			VK_SHADER_STAGE_FRAGMENT_BIT,
+			fragShader,
+			"main",
+			nullptr
+		}
+		};
+    }
 }

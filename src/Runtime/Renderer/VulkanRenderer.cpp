@@ -27,29 +27,10 @@ namespace GU
 
 		VkShaderModule vertexShader = createShader(m_window->device(), r_descriptor_layout_buffer_vert, sizeof(r_descriptor_layout_buffer_vert));
 		VkShaderModule fragShader = createShader(m_window->device(), r_descriptor_layout_buffer_frag, sizeof(r_descriptor_layout_buffer_frag));
-		std::vector<VkPipelineShaderStageCreateInfo> shaderStages = {
-		{
-			VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-			nullptr,
-			0,
-			VK_SHADER_STAGE_VERTEX_BIT,
-			vertexShader,
-			"main",
-			nullptr
-		},
-		{
-			VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-			nullptr,
-			0,
-			VK_SHADER_STAGE_FRAGMENT_BIT,
-			fragShader,
-			"main",
-			nullptr
-		}
-		};
+		createShaderStageInfo(vertexShader, fragShader, m_vulkanContext.shaderStage);
 		createDescriptorSetLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayouts);
 		createPipelineLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayouts, m_vulkanContext.pipelineLayout);
-		createGraphicsPipeline(m_vulkanContext, shaderStages, m_vulkanContext.pipelineLayout, m_vulkanContext.graphicsPipeline);
+		createGraphicsPipeline(m_vulkanContext, m_vulkanContext.shaderStage, m_vulkanContext.pipelineLayout, m_vulkanContext.graphicsPipeline);
 		std::vector<Vertex> vertices = {
 				{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
 				{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},

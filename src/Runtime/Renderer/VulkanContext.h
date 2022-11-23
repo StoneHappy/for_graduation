@@ -22,7 +22,7 @@ namespace GU
 		std::vector<VkBuffer>					uniformBuffers;
 		std::vector<VkDeviceMemory>				uniformBuffersMemory;
 		std::vector<void*>						uniformBuffersMapped;
-
+		std::vector<VkPipelineShaderStageCreateInfo> shaderStage;
 		static int MAX_FRAMES_IN_FLIGHT;
 	private:
 
