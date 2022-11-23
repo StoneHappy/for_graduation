@@ -2,8 +2,7 @@
 
 namespace GU
 {
-	VkVertexInputBindingDescription Vertex::getBindingDescription() const
-	{
+	VkVertexInputBindingDescription Vertex::getBindingDescription() {
 		VkVertexInputBindingDescription bindingDescription{};
 		bindingDescription.binding = 0;
 		bindingDescription.stride = sizeof(Vertex);
@@ -11,10 +10,10 @@ namespace GU
 
 		return bindingDescription;
 	}
-	std::vector<VkVertexInputAttributeDescription> Vertex::getAttributeDescriptions() const
-	{
-		std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
-		attributeDescriptions.resize(2);
+
+	std::array<VkVertexInputAttributeDescription, 2> Vertex::getAttributeDescriptions() {
+		std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+
 		attributeDescriptions[0].binding = 0;
 		attributeDescriptions[0].location = 0;
 		attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
@@ -26,9 +25,5 @@ namespace GU
 		attributeDescriptions[1].offset = offsetof(Vertex, color);
 
 		return attributeDescriptions;
-	}
-	uint32_t Vertex::getDataSize() const
-	{
-		return (sizeof(pos) + sizeof(color));
 	}
 }

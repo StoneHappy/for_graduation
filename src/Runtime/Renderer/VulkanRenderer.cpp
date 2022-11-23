@@ -3,6 +3,8 @@
 #include <Renderer/VulkanShader.h>
 #include "j_shader_modules_vert.h"
 #include "j_shader_modules_frag.h"
+#include "r_descriptor_layout_buffer_vert.h"
+#include "r_descriptor_layout_buffer_frag.h"
 #include <Renderer/VulkanGraphicsPipeline.h>
 #include <Renderer/VertexBuffer.h>
 namespace GU
@@ -17,8 +19,8 @@ namespace GU
 		qDebug("initResources");
 
 		m_devFuncs = m_window->vulkanInstance()->deviceFunctions(m_window->device());
-		VkShaderModule vertexShader = createShader(m_window->device(), j_shader_modules_vert, sizeof(j_shader_modules_vert));
-		VkShaderModule fragShader = createShader(m_window->device(), j_shader_modules_frag, sizeof(j_shader_modules_frag));
+		VkShaderModule vertexShader = createShader(m_window->device(), r_descriptor_layout_buffer_vert, sizeof(r_descriptor_layout_buffer_vert));
+		VkShaderModule fragShader = createShader(m_window->device(), r_descriptor_layout_buffer_frag, sizeof(r_descriptor_layout_buffer_frag));
 
 		std::vector<VkPipelineShaderStageCreateInfo> shaderStages = {
 		{
@@ -51,6 +53,15 @@ namespace GU
 		}
 		VkExtent2D extent = {m_window->swapChainImageSize().width(), m_window->swapChainImageSize().height()};
 		m_graphicsPipeline = createGraphicsPipeline(m_window->device(), m_window->defaultRenderPass(), shaderStages, pipelineLayout, extent);
+		std::vector<Vertex> vertices = {
+					{{	0.0f,		-0.5f}, {0.0f, 0.0f, 0.0f}},
+					{{	0.5f,		0.5f},	{0.0f, 1.0f, 0.0f}},
+					{{	-0.5f,		0.5f},	{0.0f, 0.0f, 1.0f}}
+		};
+
+		auto [buffer, memory] = createVertexBuffer(m_window->physicalDevice(), m_window->device(), vertices);
+		m_buffer = buffer;
+		m_memory = memory;
 	}
 
 	void VulkanRenderer::initSwapChainResources()
@@ -104,6 +115,10 @@ namespace GU
 		scissor.extent.width = viewport.width;
 		scissor.extent.height = viewport.height;
 		m_devFuncs->vkCmdSetScissor(cmdBuf, 0, 1, &scissor);
+
+		VkBuffer vertexBuffers[] = { m_buffer };
+		VkDeviceSize offsets[] = { 0 };
+		m_devFuncs->vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
 
 		m_devFuncs->vkCmdDraw(cmdBuf, 3, 1, 0, 0);
 		m_devFuncs->vkCmdEndRenderPass(cmdBuf);
