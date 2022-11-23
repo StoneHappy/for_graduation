@@ -3,6 +3,7 @@
 #include <Renderer/VulkanShader.h>
 #include "j_shader_modules_vert.h"
 #include "j_shader_modules_frag.h"
+#include <Renderer/VulkanGraphicsPipeline.h>
 namespace CS
 {
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)
@@ -17,6 +18,38 @@ namespace CS
 		m_devFuncs = m_window->vulkanInstance()->deviceFunctions(m_window->device());
 		VkShaderModule vertexShader = VulkanLib::createShader(m_window->device(), j_shader_modules_vert, sizeof(j_shader_modules_vert));
 		VkShaderModule fragShader = VulkanLib::createShader(m_window->device(), j_shader_modules_frag, sizeof(j_shader_modules_frag));
+
+		std::vector<VkPipelineShaderStageCreateInfo> shaderStages = {
+		{
+			VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+			nullptr,
+			0,
+			VK_SHADER_STAGE_VERTEX_BIT,
+			vertexShader,
+			"main",
+			nullptr
+		},
+		{
+			VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+			nullptr,
+			0,
+			VK_SHADER_STAGE_FRAGMENT_BIT,
+			fragShader,
+			"main",
+			nullptr
+		}
+		};
+		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+		pipelineLayoutInfo.setLayoutCount = 0;
+		pipelineLayoutInfo.pushConstantRangeCount = 0;
+		VkPipelineLayout pipelineLayout;
+		if (m_devFuncs->vkCreatePipelineLayout(m_window->device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
+		{
+			throw std::runtime_error("failed to create shader module!");
+		}
+		VkExtent2D extent = {m_window->swapChainImageSize().width(), m_window->swapChainImageSize().height()};
+		m_graphicsPipeline = VulkanLib::createGraphicsPipeline(m_window->device(), m_window->defaultRenderPass(), shaderStages, pipelineLayout, extent, GU::QtDebugLogFunction());
 	}
 
 	void VulkanRenderer::initSwapChainResources()
@@ -59,7 +92,7 @@ namespace CS
 		rpBeginInfo.pClearValues = clearValues;
 		VkCommandBuffer cmdBuf = m_window->currentCommandBuffer();
 		m_devFuncs->vkCmdBeginRenderPass(cmdBuf, &rpBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-
+		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline);
 		m_devFuncs->vkCmdEndRenderPass(cmdBuf);
 
 		m_window->frameReady();
