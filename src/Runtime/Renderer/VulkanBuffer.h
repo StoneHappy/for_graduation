@@ -1,11 +1,14 @@
 #pragma once
 #include <vulkan/vulkan.h>
 #include <Renderer/RenderData.h>
+#include <Renderer/VulkanContext.h>
 #include <Global/CoreContext.h>
-#include <Renderer/VulkanUtil.h>
 #include <vector>
 #include <stdexcept>
 namespace GU
 {
-	std::pair<VkBuffer, VkDeviceMemory> createVertexBuffer(VkPhysicalDevice physicalDevice, VkDevice device, const std::vector<Vertex> vertices);
+	void createVertexBuffer(const VulkanContext& vkContext, const std::vector<Vertex> vertices, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+	void createBuffer(const VulkanContext& vkContext, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+	void copyBuffer(const VulkanContext& vkContext, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+	uint32_t findMemoryType(VkPhysicalDevice device, uint32_t typeFilter, VkMemoryPropertyFlags properties);
 }

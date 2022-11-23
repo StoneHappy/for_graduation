@@ -58,10 +58,11 @@ namespace GU
 					{{	0.5f,		0.5f},	{0.0f, 1.0f, 0.0f}},
 					{{	-0.5f,		0.5f},	{0.0f, 0.0f, 1.0f}}
 		};
-
-		auto [buffer, memory] = createVertexBuffer(m_window->physicalDevice(), m_window->device(), vertices);
-		m_buffer = buffer;
-		m_memory = memory;
+		m_vulkanContext.physicalDevice = m_window->physicalDevice();
+		m_vulkanContext.logicalDevice = m_window->device();
+		m_vulkanContext.commandPool = m_window->graphicsCommandPool();
+		m_vulkanContext.graphicsQueue = m_window->graphicsQueue();
+		createVertexBuffer(m_vulkanContext, vertices, m_buffer, m_memory);
 	}
 
 	void VulkanRenderer::initSwapChainResources()

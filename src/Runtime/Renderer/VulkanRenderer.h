@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QVulkanWindowRenderer>
-
+#include <Renderer/VulkanContext.h>
 namespace GU
 {
 	class VulkanRenderer : public QVulkanWindowRenderer
@@ -22,5 +22,6 @@ namespace GU
 		VkPipeline m_graphicsPipeline;
 		VkBuffer m_buffer;
 		VkDeviceMemory m_memory;
+		VulkanContext m_vulkanContext;
 	};
 }
