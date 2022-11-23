@@ -9,6 +9,8 @@ namespace GU
 		VkDevice logicalDevice;
 		VkCommandPool commandPool;
 		VkQueue graphicsQueue;
+
+		VkExtent2D swapChainExtent;
 	private:
 
 	};
