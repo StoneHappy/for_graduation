@@ -52,7 +52,7 @@ namespace GU
 			throw std::runtime_error("failed to create shader module!");
 		}
 		VkExtent2D extent = {m_window->swapChainImageSize().width(), m_window->swapChainImageSize().height()};
-		m_graphicsPipeline = createGraphicsPipeline(m_window->device(), m_window->defaultRenderPass(), shaderStages, pipelineLayout, extent);
+		m_vulkanContext.graphicsPipeline = createGraphicsPipeline(m_window->device(), m_window->defaultRenderPass(), shaderStages, pipelineLayout, extent);
 		std::vector<Vertex> vertices = {
 				{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
 				{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
@@ -66,8 +66,8 @@ namespace GU
 		m_vulkanContext.logicalDevice = m_window->device();
 		m_vulkanContext.commandPool = m_window->graphicsCommandPool();
 		m_vulkanContext.graphicsQueue = m_window->graphicsQueue();
-		createVertexBuffer(m_vulkanContext, vertices, m_vertexBuffer, m_vertexMemory);
-		createIndexBuffer(m_vulkanContext, indices, m_indexBuffer, m_indexMemory);
+		createVertexBuffer(m_vulkanContext, vertices, m_vulkanContext.vertexBuffer, m_vulkanContext.vertexMemory);
+		createIndexBuffer(m_vulkanContext, indices, m_vulkanContext.indexBuffer, m_vulkanContext.indexMemory);
 	}
 
 	void VulkanRenderer::initSwapChainResources()
@@ -106,7 +106,7 @@ namespace GU
 		rpBeginInfo.pClearValues = clearValues;
 		VkCommandBuffer cmdBuf = m_window->currentCommandBuffer();
 		m_devFuncs->vkCmdBeginRenderPass(cmdBuf, &rpBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline);
+		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.graphicsPipeline);
 		VkViewport viewport{};
 		viewport.x = 0.0f;
 		viewport.y = 0.0f;
@@ -122,10 +122,10 @@ namespace GU
 		scissor.extent.height = viewport.height;
 		m_devFuncs->vkCmdSetScissor(cmdBuf, 0, 1, &scissor);
 
-		VkBuffer vertexBuffers[] = { m_vertexBuffer };
+		VkBuffer vertexBuffers[] = { m_vulkanContext.vertexBuffer };
 		VkDeviceSize offsets[] = { 0 };
 		m_devFuncs->vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
-		m_devFuncs->vkCmdBindIndexBuffer(cmdBuf, m_indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+		m_devFuncs->vkCmdBindIndexBuffer(cmdBuf, m_vulkanContext.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 		//m_devFuncs->vkCmdDraw(cmdBuf, 3, 1, 0, 0);
 		m_devFuncs->vkCmdDrawIndexed(cmdBuf, 6, 1, 0, 0, 0);
 		m_devFuncs->vkCmdEndRenderPass(cmdBuf);
