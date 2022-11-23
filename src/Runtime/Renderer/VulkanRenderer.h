@@ -19,11 +19,6 @@ namespace GU
 	private:
 		QVulkanWindow* m_window;
 		QVulkanDeviceFunctions* m_devFuncs;
-		/*VkPipeline m_graphicsPipeline;
-		VkBuffer m_vertexBuffer;
-		VkDeviceMemory m_vertexMemory;
-		VkBuffer m_indexBuffer;
-		VkDeviceMemory m_indexMemory;*/
 		VulkanContext m_vulkanContext;
 	};
 }
