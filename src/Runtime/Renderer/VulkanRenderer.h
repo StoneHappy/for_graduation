@@ -19,7 +19,6 @@ namespace CS
 	private:
 		QVulkanWindow* m_window;
 		QVulkanDeviceFunctions* m_devFuncs;
-		float m_green = 0.0f;
 		VkPipeline m_graphicsPipeline;
 	};
 }

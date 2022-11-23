@@ -70,11 +70,7 @@ namespace CS
 	void VulkanRenderer::startNextFrame()
 	{
 		const QSize sz = m_window->swapChainImageSize();
-		m_green += 0.005f;
-		if (m_green > 1.0f)
-			m_green = 0.0f;
-
-		VkClearColorValue clearColor = { { 0.0f, m_green, 0.0f, 1.0f } };
+		VkClearColorValue clearColor = { { 0.0f, 0.0f, 0.0f, 1.0f } };
 		VkClearDepthStencilValue clearDS = { 1.0f, 0.0f };
 		VkClearValue clearValues[2];
 		memset(clearValues, 0, sizeof(clearValues));
