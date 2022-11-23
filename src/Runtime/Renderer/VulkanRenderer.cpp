@@ -69,6 +69,7 @@ namespace CS
 
 	void VulkanRenderer::startNextFrame()
 	{
+		const QSize sz = m_window->swapChainImageSize();
 		m_green += 0.005f;
 		if (m_green > 1.0f)
 			m_green = 0.0f;
@@ -85,7 +86,6 @@ namespace CS
 		rpBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 		rpBeginInfo.renderPass = m_window->defaultRenderPass();
 		rpBeginInfo.framebuffer = m_window->currentFramebuffer();
-		const QSize sz = m_window->swapChainImageSize();
 		rpBeginInfo.renderArea.extent.width = sz.width();
 		rpBeginInfo.renderArea.extent.height = sz.height();
 		rpBeginInfo.clearValueCount = 2;
@@ -93,6 +93,22 @@ namespace CS
 		VkCommandBuffer cmdBuf = m_window->currentCommandBuffer();
 		m_devFuncs->vkCmdBeginRenderPass(cmdBuf, &rpBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline);
+		VkViewport viewport{};
+		viewport.x = 0.0f;
+		viewport.y = 0.0f;
+		viewport.width = (float)sz.width();
+		viewport.height = (float)sz.height();
+		viewport.minDepth = 0.0f;
+		viewport.maxDepth = 1.0f;
+		m_devFuncs->vkCmdSetViewport(cmdBuf, 0, 1, &viewport);
+
+		VkRect2D scissor{};
+		scissor.offset = { 0, 0 };
+		scissor.extent.width = viewport.width;
+		scissor.extent.height = viewport.height;
+		m_devFuncs->vkCmdSetScissor(cmdBuf, 0, 1, &scissor);
+
+		m_devFuncs->vkCmdDraw(cmdBuf, 3, 1, 0, 0);
 		m_devFuncs->vkCmdEndRenderPass(cmdBuf);
 
 		m_window->frameReady();
