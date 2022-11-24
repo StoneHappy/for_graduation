@@ -1,8 +1,8 @@
 #include "VulkanRenderer.h"
 #include <QVulkanDeviceFunctions>
 #include <Renderer/VulkanShader.h>
-#include "shader_ubo_vert.h"
-#include "shader_ubo_frag.h"
+#include "shader_texture_frag.h"
+#include "shader_texture_vert.h"
 
 #include <Renderer/VulkanGraphicsPipeline.h>
 #include <Renderer/VulkanBuffer.h>
@@ -25,8 +25,8 @@ namespace GU
 		m_vulkanContext.graphicsQueue = m_window->graphicsQueue();
 		m_vulkanContext.renderPass = m_window->defaultRenderPass();
 
-		VkShaderModule vertexShader = createShader(m_window->device(), shader_ubo_vert, sizeof(shader_ubo_vert));
-		VkShaderModule fragShader = createShader(m_window->device(), shader_ubo_frag, sizeof(shader_ubo_frag));
+		VkShaderModule vertexShader = createShader(m_window->device(), shader_texture_vert, sizeof(shader_texture_vert));
+		VkShaderModule fragShader = createShader(m_window->device(), shader_texture_frag, sizeof(shader_texture_frag));
 		createShaderStageInfo(vertexShader, fragShader, m_vulkanContext.shaderStage);
 		createDescriptorSetLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayout);
 		createPipelineLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayout, m_vulkanContext.pipelineLayout);
