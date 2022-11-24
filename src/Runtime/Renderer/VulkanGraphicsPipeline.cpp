@@ -106,20 +106,20 @@ namespace GU
 	}
 
 
-    void createPipelineLayout(const VulkanContext& vulkanContext, std::vector<VkDescriptorSetLayout>& descriptorSetLayouts, VkPipelineLayout& pipelineLayout)
+    void createPipelineLayout(const VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout, VkPipelineLayout& pipelineLayout)
     {
         GU::g_CoreContext.g_Log("正在创建PipelineLayout...");
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
         pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-        pipelineLayoutInfo.setLayoutCount = descriptorSetLayouts.size();
-        pipelineLayoutInfo.pSetLayouts = descriptorSetLayouts.data();
+        pipelineLayoutInfo.setLayoutCount = 1;
+        pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
 
         if (vkCreatePipelineLayout(vulkanContext.logicalDevice, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
             throw std::runtime_error("failed to create pipeline layout!");
         }
     }
 
-    void createDescriptorSetLayout(const VulkanContext& vulkanContext, std::vector<VkDescriptorSetLayout>& descriptorSetLayouts)
+    void createDescriptorSetLayout(const VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout)
     {
         VkDescriptorSetLayoutBinding uboLayoutBinding{};
         uboLayoutBinding.binding = 0;
@@ -132,8 +132,8 @@ namespace GU
         layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
         layoutInfo.bindingCount = 1;
         layoutInfo.pBindings = &uboLayoutBinding;
-        descriptorSetLayouts.resize(1);
-        if (vkCreateDescriptorSetLayout(vulkanContext.logicalDevice, &layoutInfo, nullptr, &descriptorSetLayouts[0]) != VK_SUCCESS) {
+
+        if (vkCreateDescriptorSetLayout(vulkanContext.logicalDevice, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
             throw std::runtime_error("failed to create descriptor set layout!");
         }
     }

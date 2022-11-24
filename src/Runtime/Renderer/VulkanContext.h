@@ -12,19 +12,20 @@ namespace GU
 		VkQueue									graphicsQueue;
 		VkExtent2D								swapChainExtent;
 		VkRenderPass							renderPass;
-		VkPipeline								graphicsPipeline;
+		std::vector<VkPipelineShaderStageCreateInfo> shaderStage;
 		VkPipelineLayout						pipelineLayout;
-		std::vector<VkDescriptorSetLayout>		descriptorSetLayouts;
+		VkPipeline								graphicsPipeline;
+		VkDescriptorPool						descriptorPool;
+		std::vector<VkDescriptorSet>			descriptorSets;
+		std::vector<VkBuffer>					uniformBuffers;
+		std::vector<VkDeviceMemory>				uniformBuffersMemory;
+		std::vector<void*>						uniformBuffersMapped;
+		VkDescriptorSetLayout					descriptorSetLayout;
 		VkBuffer								vertexBuffer;
 		VkDeviceMemory							vertexMemory;
 		VkBuffer								indexBuffer;
 		VkDeviceMemory							indexMemory;
-		std::vector<VkBuffer>					uniformBuffers;
-		std::vector<VkDeviceMemory>				uniformBuffersMemory;
-		std::vector<void*>						uniformBuffersMapped;
-		VkDescriptorPool						descriptorPool;
-
-		std::vector<VkPipelineShaderStageCreateInfo> shaderStage;
+		
 		static int MAX_FRAMES_IN_FLIGHT;
 	private:
 

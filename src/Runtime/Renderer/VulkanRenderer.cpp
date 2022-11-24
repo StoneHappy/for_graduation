@@ -28,8 +28,8 @@ namespace GU
 		VkShaderModule vertexShader = createShader(m_window->device(), r_descriptor_layout_buffer_vert, sizeof(r_descriptor_layout_buffer_vert));
 		VkShaderModule fragShader = createShader(m_window->device(), r_descriptor_layout_buffer_frag, sizeof(r_descriptor_layout_buffer_frag));
 		createShaderStageInfo(vertexShader, fragShader, m_vulkanContext.shaderStage);
-		createDescriptorSetLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayouts);
-		createPipelineLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayouts, m_vulkanContext.pipelineLayout);
+		createDescriptorSetLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayout);
+		createPipelineLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayout, m_vulkanContext.pipelineLayout);
 		createGraphicsPipeline(m_vulkanContext, m_vulkanContext.shaderStage, m_vulkanContext.pipelineLayout, m_vulkanContext.graphicsPipeline);
 		std::vector<Vertex> vertices = {
 				{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
@@ -44,6 +44,7 @@ namespace GU
 		createIndexBuffer(m_vulkanContext, indices, m_vulkanContext.indexBuffer, m_vulkanContext.indexMemory);
 		createUniformBuffers(m_vulkanContext, m_vulkanContext.uniformBuffers, m_vulkanContext.uniformBuffersMemory, m_vulkanContext.uniformBuffersMapped);
 		createDescriptorPool(m_vulkanContext, m_vulkanContext.descriptorPool);
+		createDescriptorSet(m_vulkanContext, m_vulkanContext.descriptorSetLayout, m_vulkanContext.descriptorPool, m_vulkanContext.descriptorSets);
 	}
 
 	void VulkanRenderer::initSwapChainResources()

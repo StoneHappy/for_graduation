@@ -11,7 +11,7 @@ namespace GU
 	void createIndexBuffer(const VulkanContext& vkContext, const std::vector<uint16_t>& indices, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
 	void createUniformBuffers(const VulkanContext& vkContext, std::vector<VkBuffer>& uniformBuffers, std::vector<VkDeviceMemory>& uniformBuffersMemory, std::vector<void*>& uniformBuffersMapped);
 	void createDescriptorPool(const VulkanContext& vkContext, VkDescriptorPool& descriptorPool);
-
+	void createDescriptorSet(const VulkanContext& vkContext, VkDescriptorSetLayout& descriptorSetLayout, VkDescriptorPool& descriptorPool, std::vector<VkDescriptorSet>& descriptorSets);
 	void createBuffer(const VulkanContext& vkContext, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
 	void copyBuffer(const VulkanContext& vkContext, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 	uint32_t findMemoryType(VkPhysicalDevice device, uint32_t typeFilter, VkMemoryPropertyFlags properties);
