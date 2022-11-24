@@ -9,10 +9,13 @@
 #include <Widgets/AboutDialog.h>
 #include <QLabel>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
+static QPointer<QFile> s_logFile;
 static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& text)
 {
 	if (!s_messageLogWidget.isNull())
 		s_messageLogWidget->appendPlainText(text);
+	QTextStream ts(s_logFile);
+	ts << text << endl;
 }
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,7 +27,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	// Debug log
 	s_messageLogWidget = ui->debugLog;
 	s_messageLogWidget->setReadOnly(true);
+	s_logFile = new QFile("log.txt");
+	s_logFile->open(QIODevice::WriteOnly | QIODevice::Append);
+	s_logFile->resize(0);
 	qInstallMessageHandler(messageHandler);
+
+	// vulkanWindow
     QWidget* vulkanWindowWrapper = QWidget::createWindowContainer(m_vulkanWindow);
 	QLoggingCategory::setFilterRules(QStringLiteral("qt.vulkan=true"));
 	inst = new QVulkanInstance();
@@ -41,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
 		qFatal("Failed to create Vulkan instance: %d", inst->errorCode());
 	m_vulkanWindow->setVulkanInstance(inst);
 	setCentralWidget(vulkanWindowWrapper);
+
 	// pop Menu
 	creatorPopMenu();
 
