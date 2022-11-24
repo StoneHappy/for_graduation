@@ -31,23 +31,24 @@ namespace GU
 		createDescriptorSetLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayout);
 		createPipelineLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayout, m_vulkanContext.pipelineLayout);
 		createGraphicsPipeline(m_vulkanContext, m_vulkanContext.shaderStage, m_vulkanContext.pipelineLayout, m_vulkanContext.graphicsPipeline);
-		std::vector<Vertex> vertices = {
-				{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-				{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-				{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-				{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+		const std::vector<Vertex> vertices = {
+				{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
+				{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+				{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
+				{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
 		};
 		std::vector<uint16_t> indices = {
 				0, 1, 2, 2, 3, 0
 		};
+		VulkanImage vkImage;
+		createTextureImage(m_vulkanContext, "./assets/texture.jpg", vkImage);
+		createTextureImageView(m_vulkanContext, vkImage);
+		createTextureSampler(m_vulkanContext, vkImage);
 		createVertexBuffer(m_vulkanContext, vertices, m_vulkanContext.vertexBuffer, m_vulkanContext.vertexMemory);
 		createIndexBuffer(m_vulkanContext, indices, m_vulkanContext.indexBuffer, m_vulkanContext.indexMemory);
 		createUniformBuffers(m_vulkanContext, m_vulkanContext.uniformBuffers, m_vulkanContext.uniformBuffersMemory, m_vulkanContext.uniformBuffersMapped);
 		createDescriptorPool(m_vulkanContext, m_vulkanContext.descriptorPool);
-		createDescriptorSet(m_vulkanContext, m_vulkanContext.descriptorSetLayout, m_vulkanContext.descriptorPool, m_vulkanContext.descriptorSets);
-		VulkanImage vkImage;
-		createTextureImage(m_vulkanContext,"./assets/texture.jpg", vkImage);
-		createTextureImageView(m_vulkanContext, vkImage);
+		createDescriptorSets(m_vulkanContext, vkImage, m_vulkanContext.descriptorSetLayout, m_vulkanContext.descriptorPool, m_vulkanContext.descriptorSets);
 	}
 
 	void VulkanRenderer::initSwapChainResources()

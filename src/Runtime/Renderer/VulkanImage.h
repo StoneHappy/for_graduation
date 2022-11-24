@@ -13,4 +13,5 @@ namespace GU
     void copyBufferToImage(const VulkanContext& vulkanContext, VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
     void createImageView(const VulkanContext& vulkanContext, VkImage image, VkFormat format, VkImageView& imageView);
     void createTextureImageView(const VulkanContext& vulkanContext, VulkanImage& vkImage);
+    void createTextureSampler(const VulkanContext& vulkanContext, VulkanImage& vkImage);
 }
