@@ -2,14 +2,22 @@
 #include <functional>
 namespace GU
 {
-	typedef std::function<void(const char*)> LogFunc;
+	enum class LogType
+	{
+		Debug,
+		Warning,
+		Critical,
+		Fatal
+	};
+
+	typedef std::function<void(LogType, const char*)> LogFunc;
 	struct STDDebugLogFunction
 	{
-		void operator() (const char* msg);
+		void operator() (LogType type, const char* msg);
 	};
 
 	struct QtDebugLogFunction
 	{
-		void operator() (const char* msg);
+		void operator() (LogType type, const char* msg);
 	};
 }

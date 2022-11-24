@@ -7,7 +7,7 @@ namespace GU
 {
 	void createVertexBuffer(const VulkanContext& vkContext, const std::vector<Vertex>& vertices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
-		GU::g_CoreContext.g_Log("正在创建VertexBuffer...");
+		DEBUG_LOG("正在创建VertexBuffer...");
 		VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
 		VkBuffer stagingBuffer;
@@ -30,7 +30,7 @@ namespace GU
 
 	void createIndexBuffer(const VulkanContext& vkContext, const std::vector<uint16_t>& indices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
-		GU::g_CoreContext.g_Log("正在创建IndexBuffer...");
+		DEBUG_LOG("正在创建IndexBuffer...");
 		VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
 
 		VkBuffer stagingBuffer;
@@ -53,6 +53,7 @@ namespace GU
 
 	void createUniformBuffers(const VulkanContext& vkContext, std::vector<VkBuffer>& uniformBuffers, std::vector<VkDeviceMemory>& uniformBuffersMemory, std::vector<void*>& uniformBuffersMapped)
 	{
+		DEBUG_LOG("正在创建UniformBuffers...");
 		VkDeviceSize bufferSize = sizeof(UniformBufferObject);
 
 		uniformBuffers.resize(VulkanContext::MAX_FRAMES_IN_FLIGHT);
@@ -68,6 +69,7 @@ namespace GU
 
 	void createDescriptorPool(const VulkanContext& vkContext, VkDescriptorPool& descriptorPool)
 	{
+		DEBUG_LOG("正在创建DescriptorPool...");
 		VkDescriptorPoolSize poolSize{};
 		poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 		poolSize.descriptorCount = static_cast<uint32_t>(VulkanContext::MAX_FRAMES_IN_FLIGHT);
@@ -79,12 +81,14 @@ namespace GU
 		poolInfo.maxSets = static_cast<uint32_t>(VulkanContext::MAX_FRAMES_IN_FLIGHT);
 
 		if (vkCreateDescriptorPool(vkContext.logicalDevice, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
+			FATAL_LOG("failed to create descriptor pool!");
 			throw std::runtime_error("failed to create descriptor pool!");
 		}
 	}
 
 	void createDescriptorSet(const VulkanContext& vkContext, VkDescriptorSetLayout& descriptorSetLayout, VkDescriptorPool& descriptorPool, std::vector<VkDescriptorSet>& descriptorSets)
 	{
+		DEBUG_LOG("正在创建DescriptorSet...");
 		std::vector<VkDescriptorSetLayout> layouts(VulkanContext::MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
 		VkDescriptorSetAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
@@ -94,6 +98,7 @@ namespace GU
 
 		descriptorSets.resize(VulkanContext::MAX_FRAMES_IN_FLIGHT);
 		if (vkAllocateDescriptorSets(vkContext.logicalDevice, &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
+			FATAL_LOG("failed to allocate descriptor sets!");
 			throw std::runtime_error("failed to allocate descriptor sets!");
 		}
 
@@ -118,6 +123,7 @@ namespace GU
 
 	void createBuffer(const VulkanContext& vkContext, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
+		DEBUG_LOG("正在创建Buffer...");
 		VkBufferCreateInfo bufferInfo = {};
 		bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 		bufferInfo.size = size;
@@ -126,6 +132,7 @@ namespace GU
 
 		if (vkCreateBuffer(vkContext.logicalDevice, &bufferInfo, nullptr, &buffer) != VK_SUCCESS)
 		{
+			FATAL_LOG("failed to create buffer!");
 			throw std::runtime_error("failed to create buffer!");
 		}
 
@@ -139,6 +146,7 @@ namespace GU
 
 		if (vkAllocateMemory(vkContext.logicalDevice, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS)
 		{
+			FATAL_LOG("failed to allocate buffer memory!");
 			throw std::runtime_error("failed to allocate buffer memory!");
 		}
 
@@ -147,6 +155,7 @@ namespace GU
 
 	void copyBuffer(const VulkanContext& vkContext, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
 	{
+		DEBUG_LOG("正在拷贝Buffer...");
 		VkCommandBufferAllocateInfo allocInfo = {};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
@@ -188,7 +197,7 @@ namespace GU
 		{
 			if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) return i;
 		}
-
+		FATAL_LOG("failed to find suitable memory type!");
 		throw std::runtime_error("failed to find suitable memory type!");
 	}
 

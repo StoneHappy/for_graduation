@@ -13,4 +13,7 @@ namespace GU
 	};
 
 }
-#define GLOBAL_LOG(msg) ::GU::g_CoreContext.g_Log("正在创建渲染管线")
+#define DEBUG_LOG(msg) ::GU::g_CoreContext.g_Log(LogType::Debug ,msg)
+#define WARNING_LOG(msg) ::GU::g_CoreContext.g_Log(LogType::Warning ,msg)
+#define CRITICAL_LOG(msg) ::GU::g_CoreContext.g_Log(LogType::Critical ,msg)
+#define FATAL_LOG(msg) ::GU::g_CoreContext.g_Log(LogType::Fatal ,msg)
