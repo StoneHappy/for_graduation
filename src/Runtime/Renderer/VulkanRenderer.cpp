@@ -40,10 +40,10 @@ namespace GU
 		std::vector<uint16_t> indices = {
 				0, 1, 2, 2, 3, 0
 		};
-		
 		createVertexBuffer(m_vulkanContext, vertices, m_vulkanContext.vertexBuffer, m_vulkanContext.vertexMemory);
 		createIndexBuffer(m_vulkanContext, indices, m_vulkanContext.indexBuffer, m_vulkanContext.indexMemory);
 		createUniformBuffers(m_vulkanContext, m_vulkanContext.uniformBuffers, m_vulkanContext.uniformBuffersMemory, m_vulkanContext.uniformBuffersMapped);
+		createDescriptorPool(m_vulkanContext, m_vulkanContext.descriptorPool);
 	}
 
 	void VulkanRenderer::initSwapChainResources()
