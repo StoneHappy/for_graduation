@@ -6,6 +6,7 @@
 
 #include <Renderer/VulkanGraphicsPipeline.h>
 #include <Renderer/VulkanBuffer.h>
+#include <Renderer/VulkanImage.h>
 namespace GU
 {
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)
@@ -44,6 +45,8 @@ namespace GU
 		createUniformBuffers(m_vulkanContext, m_vulkanContext.uniformBuffers, m_vulkanContext.uniformBuffersMemory, m_vulkanContext.uniformBuffersMapped);
 		createDescriptorPool(m_vulkanContext, m_vulkanContext.descriptorPool);
 		createDescriptorSet(m_vulkanContext, m_vulkanContext.descriptorSetLayout, m_vulkanContext.descriptorPool, m_vulkanContext.descriptorSets);
+		VulkanImage vkImage;
+		createTextureImage(m_vulkanContext,"./assets/texture.jpg", vkImage);
 	}
 
 	void VulkanRenderer::initSwapChainResources()

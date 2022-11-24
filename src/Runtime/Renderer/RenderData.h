@@ -26,8 +26,8 @@ namespace GU
 	// Image
 	struct VulkanImage
 	{
-		stbi_uc* pixels;
-		int texWidth, texHeight, texChannels;
+		VkImage textureImage;
+		VkDeviceMemory textureImageMemory;
 		VkDeviceSize size;
 	};
 }
