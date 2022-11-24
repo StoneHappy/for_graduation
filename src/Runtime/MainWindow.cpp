@@ -8,6 +8,7 @@
 #include <QToolButton>
 #include <Widgets/AboutDialog.h>
 #include <QLabel>
+#include <QDateTime>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& text)
@@ -27,7 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	// Debug log
 	s_messageLogWidget = ui->debugLog;
 	s_messageLogWidget->setReadOnly(true);
-	s_logFile = new QFile("log.txt");
+	QDateTime currDateTime = QDateTime::currentDateTime();
+	s_logFile = new QFile(QString("%1-log.txt").arg(currDateTime.toString("yyyy-MM-dd-hh-mm-ss-zzz")));
 	s_logFile->open(QIODevice::WriteOnly | QIODevice::Append);
 	s_logFile->resize(0);
 	qInstallMessageHandler(messageHandler);
