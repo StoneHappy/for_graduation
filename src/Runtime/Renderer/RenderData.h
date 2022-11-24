@@ -3,8 +3,11 @@
 #include <array>
 #include <vector>
 #include <vulkan/vulkan.h>
+#include <stb/stb_image.h>
 namespace GU
 {
+
+	// Vertex
 	struct Vertex {
 		glm::vec2 pos;
 		glm::vec3 color;
@@ -18,5 +21,13 @@ namespace GU
 		glm::mat4 model;
 		glm::mat4 view;
 		glm::mat4 proj;
+	};
+
+	// Image
+	struct VulkanImage
+	{
+		stbi_uc* pixels;
+		int texWidth, texHeight, texChannels;
+		VkDeviceSize size;
 	};
 }

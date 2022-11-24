@@ -23,6 +23,7 @@ Qt5::Gui
 Qt5::Widgets
 Vulkan::Vulkan
 glm::glm
+stblib
           )
 
 target_include_directories(

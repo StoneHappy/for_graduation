@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	s_messageLogWidget = ui->debugLog;
 	s_messageLogWidget->setReadOnly(true);
 	QDateTime currDateTime = QDateTime::currentDateTime();
-	s_logFile = new QFile(QString("%1-log.txt").arg(currDateTime.toString("yyyy-MM-dd-hh-mm-ss-zzz")));
+	s_logFile = new QFile(QString("./logs/%1-log.txt").arg(currDateTime.toString("yyyy-MM-dd-hh-mm-ss-zzz")));
 	s_logFile->open(QIODevice::WriteOnly | QIODevice::Append);
 	s_logFile->resize(0);
 	qInstallMessageHandler(messageHandler);
