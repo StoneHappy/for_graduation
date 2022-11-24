@@ -11,12 +11,29 @@
 #include <QDateTime>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
-static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& text)
+static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& msg)
 {
+
+	QString txt;
+	switch (msgType) {
+	case QtDebugMsg:
+		txt = QString("[Debug]: %1").arg(msg);
+		break;
+	case QtWarningMsg:
+		txt = QString("[Warning]: %1").arg(msg);
+		break;
+	case QtCriticalMsg:
+		txt = QString("[Critical]: %1").arg(msg);
+		break;
+	case QtFatalMsg:
+		txt = QString("[Fatal]: %1").arg(msg);
+		abort();
+	}
+
 	if (!s_messageLogWidget.isNull())
-		s_messageLogWidget->appendPlainText(text);
+		s_messageLogWidget->appendPlainText(txt);
 	QTextStream ts(s_logFile);
-	ts << text << endl;
+	ts << txt << endl;
 }
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

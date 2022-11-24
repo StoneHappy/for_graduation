@@ -11,4 +11,6 @@ namespace GU
 	public:
 		LogFunc g_Log = STDDebugLogFunction();
 	};
+
 }
+#define GLOBAL_LOG(msg) ::GU::g_CoreContext.g_Log("正在创建渲染管线")

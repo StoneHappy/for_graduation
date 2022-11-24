@@ -6,7 +6,7 @@ namespace GU
 {
     void createGraphicsPipeline(const VulkanContext& vulkanContext, const std::vector<VkPipelineShaderStageCreateInfo>& shaderStages, const VkPipelineLayout& pipelineLayout, VkPipeline& graphicsPipeline)
 	{
-        GU::g_CoreContext.g_Log("正在创建渲染管线");
+        GLOBAL_LOG("正在创建渲染管线");
         // vertex input
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -108,19 +108,21 @@ namespace GU
 
     void createPipelineLayout(const VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout, VkPipelineLayout& pipelineLayout)
     {
-        GU::g_CoreContext.g_Log("正在创建PipelineLayout...");
+        GLOBAL_LOG("正在创建PipelineLayout...");
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
         pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
         pipelineLayoutInfo.setLayoutCount = 1;
         pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
 
         if (vkCreatePipelineLayout(vulkanContext.logicalDevice, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
+            GLOBAL_LOG("failed to create pipeline layout!");
             throw std::runtime_error("failed to create pipeline layout!");
         }
     }
 
     void createDescriptorSetLayout(const VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout)
     {
+        GLOBAL_LOG("正在创建descriptorSetLayout");
         VkDescriptorSetLayoutBinding uboLayoutBinding{};
         uboLayoutBinding.binding = 0;
         uboLayoutBinding.descriptorCount = 1;
@@ -134,6 +136,7 @@ namespace GU
         layoutInfo.pBindings = &uboLayoutBinding;
 
         if (vkCreateDescriptorSetLayout(vulkanContext.logicalDevice, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
+            GLOBAL_LOG("failed to create descriptor set layout!");
             throw std::runtime_error("failed to create descriptor set layout!");
         }
     }
