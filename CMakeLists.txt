@@ -7,6 +7,12 @@ option(ENABLE_TEST "Enable google test" OFF)
 option(ENABLE_DOCS "Enable doxygen docs" ON)
 
 
+if(MSVC)
+    message("Compiler: MSVC")
+    # 在Release模式下 不显示后台
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /subsystem:windows /entry:mainCRTStartup")
+endif()
+
 # just for qt
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -48,6 +54,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${${PROJECT_NAME}_ROOT_DIR}/out/bin)
 # vendors dir
 set(VENDORS_DIR ${CMAKE_SOURCE_DIR}/src/Vendors)
 set(QRCFILE ${CMAKE_SOURCE_DIR}/resources/resources.qrc)
+set(APP_ICON_RESOURCE_WINDOWS  ${CMAKE_SOURCE_DIR}/resources/appicon.rc)
 
 
 find_package(Qt5 COMPONENTS
