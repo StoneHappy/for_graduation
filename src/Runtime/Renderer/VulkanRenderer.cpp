@@ -47,6 +47,7 @@ namespace GU
 		createDescriptorSet(m_vulkanContext, m_vulkanContext.descriptorSetLayout, m_vulkanContext.descriptorPool, m_vulkanContext.descriptorSets);
 		VulkanImage vkImage;
 		createTextureImage(m_vulkanContext,"./assets/texture.jpg", vkImage);
+		createTextureImageView(m_vulkanContext, vkImage);
 	}
 
 	void VulkanRenderer::initSwapChainResources()

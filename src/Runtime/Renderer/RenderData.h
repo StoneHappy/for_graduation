@@ -29,5 +29,6 @@ namespace GU
 		VkImage textureImage;
 		VkDeviceMemory textureImageMemory;
 		VkDeviceSize size;
+		VkImageView textureView;
 	};
 }
