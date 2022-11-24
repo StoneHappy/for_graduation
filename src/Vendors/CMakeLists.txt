@@ -15,3 +15,8 @@ if(NOT TARGET glm)
     set_target_properties(glm_static PROPERTIES FOLDER Vendors/glm)
     set_target_properties(uninstall PROPERTIES FOLDER Vendors/glm)
 endif()
+
+if(NOT TARGET stblib)
+    add_subdirectory(stblib)
+    set_target_properties(stblib PROPERTIES FOLDER Vendors/stb)
+endif()
