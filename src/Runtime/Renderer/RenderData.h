@@ -27,10 +27,10 @@ namespace GU
 	// Image
 	struct VulkanImage
 	{
-		VkImage			textureImage;
-		VkDeviceMemory	textureImageMemory;
+		VkImage			image;
+		VkDeviceMemory	imageMemory;
 		VkDeviceSize	size;
-		VkImageView		textureView;
-		VkSampler		textureSampler;
+		VkImageView		view;
+		VkSampler		sampler;
 	};
 }

@@ -23,10 +23,10 @@ namespace GU
 
         stbi_image_free(pixels);
 
-        createImage(vulkanContext, texWidth, texHeight, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, image.textureImage, image.textureImageMemory);
-        transitionImageLayout(vulkanContext, image.textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-            copyBufferToImage(vulkanContext, stagingBuffer, image.textureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
-        transitionImageLayout(vulkanContext, image.textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        createImage(vulkanContext, texWidth, texHeight, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, image.image, image.imageMemory);
+        transitionImageLayout(vulkanContext, image.image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+            copyBufferToImage(vulkanContext, stagingBuffer, image.image, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
+        transitionImageLayout(vulkanContext, image.image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         vkDestroyBuffer(vulkanContext.logicalDevice, stagingBuffer, nullptr);
         vkFreeMemory(vulkanContext.logicalDevice, stagingBufferMemory, nullptr);
     }
@@ -137,13 +137,13 @@ namespace GU
         endSingleTimeCommands(vulkanContext, commandBuffer);
     }
 
-    void createImageView(const VulkanContext& vulkanContext, VkImage image, VkFormat format, VkImageView& imageView) {
+    void createImageView(const VulkanContext& vulkanContext, VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkImageView& imageView) {
         VkImageViewCreateInfo viewInfo{};
         viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         viewInfo.image = image;
         viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
         viewInfo.format = format;
-        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        viewInfo.subresourceRange.aspectMask = aspectFlags;
         viewInfo.subresourceRange.baseMipLevel = 0;
         viewInfo.subresourceRange.levelCount = 1;
         viewInfo.subresourceRange.baseArrayLayer = 0;
@@ -155,7 +155,7 @@ namespace GU
     }
 
     void createTextureImageView(const VulkanContext& vulkanContext, VulkanImage& vkImage) {
-        createImageView(vulkanContext, vkImage.textureImage, VK_FORMAT_R8G8B8A8_SRGB, vkImage.textureView);
+        createImageView(vulkanContext, vkImage.image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT, vkImage.view);
     }
 
     void createTextureSampler(const VulkanContext& vulkanContext, VulkanImage& vkImage) {
@@ -177,9 +177,17 @@ namespace GU
         samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
         samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 
-        if (vkCreateSampler(vulkanContext.logicalDevice, &samplerInfo, nullptr, &vkImage.textureSampler) != VK_SUCCESS) {
+        if (vkCreateSampler(vulkanContext.logicalDevice, &samplerInfo, nullptr, &vkImage.sampler) != VK_SUCCESS) {
             throw std::runtime_error("failed to create texture sampler!");
         }
+    }
+    void createDepthResources(const VulkanContext& vulkanContext, VulkanImage& vkImage)
+    {
+        VkFormat depthFormat;
+        findDepthFormat(vulkanContext, depthFormat);
+
+        createImage(vulkanContext,vulkanContext.swapChainExtent.width, vulkanContext.swapChainExtent.height, depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vkImage.image, vkImage.imageMemory);
+        createImageView(vulkanContext, vkImage.image, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, vkImage.view);
     }
     void findSupportedFormat(const VulkanContext& vulkanContext, const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features, VkFormat& format)
     {

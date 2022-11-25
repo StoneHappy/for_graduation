@@ -193,8 +193,8 @@ namespace GU
 
             VkDescriptorImageInfo imageInfo{};
             imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-            imageInfo.imageView = vulkanImage.textureView;
-            imageInfo.sampler = vulkanImage.textureSampler;
+            imageInfo.imageView = vulkanImage.view;
+            imageInfo.sampler = vulkanImage.sampler;
 
             std::array<VkWriteDescriptorSet, 2> descriptorWrites{};
 
