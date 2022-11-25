@@ -4,6 +4,7 @@
 #include <vulkan/vulkan.h>
 namespace GU
 {
+    void createBackgroundPipeline(const VulkanContext& vulkanContext, VkPipeline& backgroudPipeline);
     void createGraphicsPipeline(const VulkanContext& vulkanContext, const std::vector<VkPipelineShaderStageCreateInfo>& shaderStages, const VkPipelineLayout& pipelineLayout, VkPipeline& graphicsPipeline);
     void createPipelineLayout(const VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout, VkPipelineLayout& pipelineLayout);
     void createDescriptorSetLayout(const VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout);

@@ -15,6 +15,7 @@ namespace GU
 		std::vector<VkPipelineShaderStageCreateInfo> shaderStage;
 		VkPipelineLayout						pipelineLayout;
 		VkPipeline								graphicsPipeline;
+		VkPipeline								backgroudPipeline;
 		VkDescriptorPool						descriptorPool;
 		std::vector<VkDescriptorSet>			descriptorSets;
 		std::vector<VkBuffer>					uniformBuffers;
