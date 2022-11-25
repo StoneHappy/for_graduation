@@ -7,3 +7,6 @@
 [submodule "src/Vendors/stblib/stb"]
 	path = src/Vendors/stblib/stb
 	url = https://github.com/nothings/stb.git
+[submodule "src/Vendors/tinyobjloader"]
+	path = src/Vendors/tinyobjloader
+	url = https://github.com/tinyobjloader/tinyobjloader.git

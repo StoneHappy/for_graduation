@@ -24,6 +24,7 @@ Qt5::Widgets
 Vulkan::Vulkan
 glm::glm
 stblib
+tinyobjloader
           )
 
 target_include_directories(
