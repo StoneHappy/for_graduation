@@ -30,7 +30,7 @@ namespace GU
 		vkFreeMemory(vkContext.logicalDevice, stagingBufferMemory, nullptr);
 	}
 
-	void createIndexBuffer(const VulkanContext& vkContext, const std::vector<uint16_t>& indices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
+	void createIndexBuffer(const VulkanContext& vkContext, const std::vector<uint32_t>& indices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
 		DEBUG_LOG("正在创建IndexBuffer...");
 		VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();

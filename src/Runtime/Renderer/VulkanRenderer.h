@@ -2,6 +2,7 @@
 
 #include <QVulkanWindowRenderer>
 #include <Renderer/VulkanContext.h>
+#include <Renderer/RenderData.h>
 namespace GU
 {
 	class VulkanRenderer : public QVulkanWindowRenderer
@@ -20,5 +21,7 @@ namespace GU
 		QVulkanWindow* m_window;
 		QVulkanDeviceFunctions* m_devFuncs;
 		VulkanContext m_vulkanContext;
+		std::vector<Vertex> vertices;
+		std::vector<uint32_t> indices;
 	};
 }
