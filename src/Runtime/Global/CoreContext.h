@@ -17,6 +17,8 @@ namespace GU
 		float g_timeIntegral = 0;
 		bool g_isPlay = false;
 		bool g_isStop = false;
+
+		float g_winWidth = 1280.0, g_winHeight = 720.0;
 		void timeTick();
 
 	};

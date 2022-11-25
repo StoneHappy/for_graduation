@@ -62,8 +62,10 @@ namespace GU
 	void VulkanRenderer::startNextFrame()
 	{
 		g_CoreContext.timeTick();
+		g_CoreContext.g_winWidth = m_window->swapChainImageSize().width();
+		g_CoreContext.g_winHeight = m_window->swapChainImageSize().height();
 		m_vulkanContext.swapChainExtent = { (unsigned int)m_window->swapChainImageSize().width(),(unsigned int)m_window->swapChainImageSize().height() };
-		updateUniformBuffer(m_vulkanContext, m_window->currentSwapChainImageIndex(), m_vulkanContext.uniformBuffersMapped);
+		updateUniformBuffer(m_vulkanContext, m_Camera, m_window->currentSwapChainImageIndex(), m_vulkanContext.uniformBuffersMapped);
 		const QSize sz = m_window->swapChainImageSize();
 		VkClearColorValue clearColor = { { 0.0f, 0.0f, 0.0f, 1.0f } };
 		VkClearDepthStencilValue clearDS = { 1.0f, 0.0f };

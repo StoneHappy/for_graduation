@@ -138,5 +138,17 @@ namespace GU
 
 		memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 	}
+
+	void updateUniformBuffer(const VulkanContext& vkContext, EditCamera& camera, uint32_t currentImage, std::vector<void*>& uniformBuffersMapped)
+	{
+		float rotateGreed = 1.0f;
+
+		UniformBufferObject ubo{};
+		ubo.model = glm::rotate(glm::mat4(1.0f), rotateGreed * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		ubo.view = camera.getViewMatrix();
+		ubo.proj = camera.getProjectionMatrix();;
+		ubo.proj[1][1] *= -1;
+		memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
+	}
 	
 }
