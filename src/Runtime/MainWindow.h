@@ -31,6 +31,7 @@ private slots:
     void on_actAbout_triggered();
     void on_actPlay_triggered();
     void on_actPause_triggered();
+    void on_actStop_triggered();
 };
 
 #endif // MAINWINDOW_H

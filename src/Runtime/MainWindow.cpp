@@ -9,6 +9,7 @@
 #include <Widgets/AboutDialog.h>
 #include <QLabel>
 #include <QDateTime>
+#include <Global/CoreContext.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& msg)
@@ -131,12 +132,33 @@ void MainWindow::on_actPlay_triggered()
 {
 	if (ui->actPlay->isVisible()) ui->actPlay->setVisible(false);
 	if (!ui->actPause->isVisible()) ui->actPause->setVisible(true);
+	ui->dockView->hide();
+	ui->dockInfo->hide();
+	ui->actShowInfoDock->setChecked(false);
+	ui->actShowViewDock->setChecked(false);
+	GU::g_CoreContext.g_isStop = false;
+	GU::g_CoreContext.g_isPlay = true;
 }
 
 void MainWindow::on_actPause_triggered()
 {
 	if (ui->actPause->isVisible()) ui->actPause->setVisible(false);
 	if (!ui->actPlay->isVisible()) ui->actPlay->setVisible(true);
+	GU::g_CoreContext.g_isPlay = false;
+	GU::g_CoreContext.g_isStop = false;
 }
+
+void MainWindow::on_actStop_triggered()
+{
+	if (ui->actPause->isVisible()) ui->actPause->setVisible(false);
+	if (!ui->actPlay->isVisible()) ui->actPlay->setVisible(true);
+	ui->dockView->show();
+	ui->dockInfo->show();
+	ui->actShowInfoDock->setChecked(true);
+	ui->actShowViewDock->setChecked(true);
+	GU::g_CoreContext.g_isPlay = false;
+	GU::g_CoreContext.g_isStop = true;
+}
+
 
 

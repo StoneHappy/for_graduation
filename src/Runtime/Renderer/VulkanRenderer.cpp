@@ -61,6 +61,7 @@ namespace GU
 
 	void VulkanRenderer::startNextFrame()
 	{
+		g_CoreContext.timeTick();
 		m_vulkanContext.swapChainExtent = { (unsigned int)m_window->swapChainImageSize().width(),(unsigned int)m_window->swapChainImageSize().height() };
 		updateUniformBuffer(m_vulkanContext, m_window->currentSwapChainImageIndex(), m_vulkanContext.uniformBuffersMapped);
 		const QSize sz = m_window->swapChainImageSize();

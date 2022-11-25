@@ -1,5 +1,6 @@
 #pragma once
 #include <Core/Type.h>
+#include <chrono>
 namespace GU
 {
 	class CoreContext;
@@ -9,7 +10,15 @@ namespace GU
 	class CoreContext
 	{
 	public:
+		CoreContext();
 		LogFunc g_Log = STDDebugLogFunction();
+		std::chrono::steady_clock::time_point g_lastTimePoint;
+		float g_daltaTime = 0;
+		float g_timeIntegral = 0;
+		bool g_isPlay = false;
+		bool g_isStop = false;
+		void timeTick();
+
 	};
 
 }
