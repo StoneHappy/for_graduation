@@ -49,7 +49,7 @@ namespace GU
 
         glm::quat orientation = getOrientation();
 
-        m_viewMatrix = glm::translate(glm::mat4(1), m_position);
+        m_viewMatrix = glm::translate(glm::mat4(1), m_position) * glm::toMat4(orientation);;
         m_viewMatrix = glm::inverse(m_viewMatrix);
     }
 
@@ -99,7 +99,7 @@ namespace GU
         m_distance -= delta * zoomSpeed();
         if (m_distance < 1.0f)
         {
-            m_focalPoint += getForwardDirection();
+            //m_focalPoint += getForwardDirection();
             m_distance = 1.0f;
         }
         DEBUG_LOG(QString::fromLocal8Bit("m_distance: %1").arg(m_distance).toUtf8());
