@@ -14,4 +14,7 @@ namespace GU
     void createImageView(const VulkanContext& vulkanContext, VkImage image, VkFormat format, VkImageView& imageView);
     void createTextureImageView(const VulkanContext& vulkanContext, VulkanImage& vkImage);
     void createTextureSampler(const VulkanContext& vulkanContext, VulkanImage& vkImage);
+    void findSupportedFormat(const VulkanContext& vulkanContext, const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features, VkFormat& format);
+    void findDepthFormat(const VulkanContext& vulkanContext, VkFormat& format);
+    bool hasStencilComponent(VkFormat format);
 }
