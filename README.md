@@ -43,29 +43,3 @@ Install plug-ins, ``Ctrl + Shift + P`` call ``CMake: Configure`` to generate nin
 ``CMake: Run Without Debug`` to run target, the arguements was configured in ``.vscode/settings.json``
 
 debug configure in ``.vscode/launch.json``
-
-vec3 positions[20] = vec3[](
-    vec3(   -1.0,  -1.0, -1.0),
-    vec3(   1.0,  -1.0, -1.0),
-    vec3(   1.0,  1.0, -1.0),
-    vec3(   -1.0,  1.0, -1.0),
-    vec3(   -1.0,  -1.0, -1.0),
-
-    vec3(   -1.0, -1.0,  -1.0),
-    vec3(   1.0 , -1.0,  -1.0),
-    vec3(   1.0 , -1.0,   1.0),
-    vec3(   -1.0, -1.0,   1.0),
-    vec3(   -1.0, -1.0,  -1.0),
-
-    vec3(  -1.0, -1.0,   -1.0),
-    vec3(  -1.0, 1.0 ,   -1.0),
-    vec3(  -1.0, 1.0 ,    1.0),
-    vec3(  -1.0, -1.0,    1.0),
-    vec3(  -1.0, -1.0,   -1.0),
-
-    vec3(   -1.0,  -1.0,    1.0),
-    vec3(   1.0,  -1.0,     1.0),
-    vec3(   1.0,  1.0,      1.0),
-    vec3(   -1.0,  1.0,     1.0),
-    vec3(   -1.0,  -1.0,    1.0)
-);
