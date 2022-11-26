@@ -118,7 +118,7 @@ namespace GU
 		// Wireframe
 		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.boundingboxPipeline);
 		m_devFuncs->vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.pipelineLayout, 0, 1, &m_vulkanContext.descriptorSets[m_window->currentSwapChainImageIndex()], 0, nullptr);
-		m_devFuncs->vkCmdDraw(cmdBuf, 8, 1, 0, 0);
+		m_devFuncs->vkCmdDraw(cmdBuf, 24, 1, 0, 0);
 
 		// 3D model
 		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.graphicsPipeline);
