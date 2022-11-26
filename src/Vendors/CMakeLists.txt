@@ -25,3 +25,31 @@ if(NOT TARGET tinyobjloader)
     add_subdirectory(tinyobjloader)
     set_target_properties(tinyobjloader PROPERTIES FOLDER Vendors/tinyobjloaderp)
 endif()
+
+if(NOT TARGET assimp)
+    OPTION ( ASSIMP_WARNINGS_AS_ERRORS
+        "Treat all warnings as errors."
+        OFF
+    )
+    OPTION( ASSIMP_INSTALL
+        "Disable this if you want to use assimp as a submodule."
+        OFF
+    )
+    OPTION( ASSIMP_BUILD_ASSIMP_TOOLS
+        "If the supplementary tools for Assimp are built in addition to the library."
+        OFF
+    )
+    OPTION ( ASSIMP_BUILD_TESTS
+        "If the test suite for Assimp is built in addition to the library."
+        OFF
+    )
+    OPTION( ASSIMP_INJECT_DEBUG_POSTFIX
+        "Inject debug postfix in .a/.so/.dll lib names"
+        OFF
+    )
+    option(USE_STATIC_CRT "Link against the static runtime libraries." ON)
+    add_subdirectory(Assimp)
+    set_target_properties(assimp PROPERTIES FOLDER Vendors/Assimp)
+    set_target_properties(UpdateAssimpLibsDebugSymbolsAndDLLs PROPERTIES FOLDER Vendors/Assimp)
+    set_target_properties(zlibstatic PROPERTIES FOLDER Vendors/Assimp)
+endif()

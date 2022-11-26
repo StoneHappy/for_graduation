@@ -22,7 +22,7 @@ Qt5::Core
 Qt5::Gui
 Qt5::Widgets
 Vulkan::Vulkan
-glm::glm
+glm::glm_static
 stblib
 tinyobjloader
           )
