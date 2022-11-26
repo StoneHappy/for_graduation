@@ -7,7 +7,7 @@ namespace GU
 	bool readMesh(MeshNode& meshnode, const char* filePath)
 	{
 		::Assimp::Importer import;
-		const aiScene* scene = import.ReadFile(filePath, aiProcess_ValidateDataStructure);
+		const aiScene* scene = import.ReadFile(filePath, aiProcessPreset_TargetRealtime_MaxQuality);
 
 		for (size_t i = 0; i < scene->mNumMeshes; i++)
 		{
@@ -16,10 +16,10 @@ namespace GU
 			//apply_material(sc->mMaterials[mesh->mMaterialIndex]);
 			for (size_t j = 0; j < aimesh->mNumVertices; j++)
 			{
-				Vertex v;
-				v.pos = { aimesh->mVertices[j].x , aimesh->mVertices[j].y, aimesh->mVertices[j].z };
-				v.texCoord = { aimesh->mTextureCoords[0] == nullptr ? 0 : aimesh->mTextureCoords[0][i].x, aimesh->mTextureCoords[0] == nullptr ? 0 : aimesh->mTextureCoords[0][i].y };
-				mesh.m_vertices.push_back(v);
+				Vertex vertex{};
+				vertex.pos = { aimesh->mVertices[j].x , aimesh->mVertices[j].y, aimesh->mVertices[j].z };
+				vertex.texCoord = { aimesh->mTextureCoords[0] == nullptr ? 0 : aimesh->mTextureCoords[0][j].x,1- (aimesh->mTextureCoords[0] == nullptr ? 0 : aimesh->mTextureCoords[0][j].y) };
+				mesh.m_vertices.push_back(vertex);
 			}
 
 			for (size_t i = 0; i < aimesh->mNumFaces; i++)

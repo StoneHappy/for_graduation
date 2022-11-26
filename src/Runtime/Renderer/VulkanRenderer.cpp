@@ -20,7 +20,7 @@ namespace GU
 		qDebug("initResources");
 
 		MeshNode node;
-		readMesh(node, "D:/codes/for_graduation/src/App/assets/models/viking_room.obj");
+		readMesh(node, "./assets/models/viking_room.obj");
 		vertices = node.m_meshs[0].m_vertices;
 		indices = node.m_meshs[0].m_indices;
 		m_devFuncs = m_window->vulkanInstance()->deviceFunctions(m_window->device());
