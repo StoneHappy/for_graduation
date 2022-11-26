@@ -47,6 +47,7 @@ namespace GU
 		createDescriptorPool(m_vulkanContext, m_vulkanContext.descriptorPool);
 		createDescriptorSets(m_vulkanContext, vkImage, m_vulkanContext.descriptorSetLayout, m_vulkanContext.descriptorPool, m_vulkanContext.descriptorSets);
 		createBackgroundPipeline(m_vulkanContext, m_vulkanContext.backgroudPipeline);
+		createBoundingBoxPipeline(m_vulkanContext, m_vulkanContext.boundingboxPipeline);
 	}
 
 	void VulkanRenderer::initSwapChainResources()
@@ -91,6 +92,7 @@ namespace GU
 		rpBeginInfo.clearValueCount = 2;
 		rpBeginInfo.pClearValues = clearValues;
 
+		// dynamic state
 		VkViewport viewport{};
 		viewport.x = 0.0f;
 		viewport.y = 0.0f;
@@ -98,33 +100,36 @@ namespace GU
 		viewport.height = (float)sz.height();
 		viewport.minDepth = 0.0f;
 		viewport.maxDepth = 1.0f;
-
 		VkRect2D scissor{};
 		scissor.offset = { 0, 0 };
 		scissor.extent.width = viewport.width;
 		scissor.extent.height = viewport.height;
 
-
 		VkCommandBuffer cmdBuf = m_window->currentCommandBuffer();
-
-		
-
+		// prepare cammondbuffer
 		m_devFuncs->vkCmdBeginRenderPass(cmdBuf, &rpBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.backgroudPipeline);
 		m_devFuncs->vkCmdSetViewport(cmdBuf, 0, 1, &viewport);
 		m_devFuncs->vkCmdSetScissor(cmdBuf, 0, 1, &scissor);
+
+		// BackgroundColor
+		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.backgroudPipeline);
 		m_devFuncs->vkCmdDraw(cmdBuf, 6, 1, 0, 0);
 
+		// Wireframe
+		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.boundingboxPipeline);
+		m_devFuncs->vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.pipelineLayout, 0, 1, &m_vulkanContext.descriptorSets[m_window->currentSwapChainImageIndex()], 0, nullptr);
+		m_devFuncs->vkCmdDraw(cmdBuf, 8, 1, 0, 0);
+
+		// 3D model
 		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.graphicsPipeline);
-		/*m_devFuncs->vkCmdSetViewport(cmdBuf, 0, 1, &viewport);
-		m_devFuncs->vkCmdSetScissor(cmdBuf, 0, 1, &scissor);*/
+		m_devFuncs->vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.pipelineLayout, 0, 1, &m_vulkanContext.descriptorSets[m_window->currentSwapChainImageIndex()], 0, nullptr);
 		VkBuffer vertexBuffers[] = { m_vulkanContext.vertexBuffer };
 		VkDeviceSize offsets[] = { 0 };
 		m_devFuncs->vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
 		m_devFuncs->vkCmdBindIndexBuffer(cmdBuf, m_vulkanContext.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
-		m_devFuncs->vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.pipelineLayout, 0, 1, &m_vulkanContext.descriptorSets[m_window->currentSwapChainImageIndex()], 0, nullptr);
-		m_devFuncs->vkCmdDrawIndexed(cmdBuf, indices.size(), 1, 0, 0, 0);
+		//m_devFuncs->vkCmdDrawIndexed(cmdBuf, indices.size(), 1, 0, 0, 0);
+
+		// submit queue
 		m_devFuncs->vkCmdEndRenderPass(cmdBuf);
 		m_window->frameReady();
 		m_window->requestUpdate();

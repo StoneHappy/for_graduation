@@ -16,6 +16,7 @@ namespace GU
 		VkPipelineLayout						pipelineLayout;
 		VkPipeline								graphicsPipeline;
 		VkPipeline								backgroudPipeline;
+		VkPipeline								boundingboxPipeline;
 		VkDescriptorPool						descriptorPool;
 		std::vector<VkDescriptorSet>			descriptorSets;
 		std::vector<VkBuffer>					uniformBuffers;
