@@ -56,4 +56,6 @@ if(NOT TARGET assimp)
     set_target_properties(assimp PROPERTIES FOLDER Vendors/Assimp)
     set_target_properties(UpdateAssimpLibsDebugSymbolsAndDLLs PROPERTIES FOLDER Vendors/Assimp)
     set_target_properties(zlibstatic PROPERTIES FOLDER Vendors/Assimp)
+    target_compile_options(zlibstatic PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX->")
+
 endif()

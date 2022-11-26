@@ -7,6 +7,7 @@
 #include <Renderer/VulkanGraphicsPipeline.h>
 #include <Renderer/VulkanBuffer.h>
 #include <Renderer/VulkanImage.h>
+#include <Renderer/Mesh.h>
 namespace GU
 {
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)
@@ -18,6 +19,10 @@ namespace GU
 	{
 		qDebug("initResources");
 
+		MeshNode node;
+		readMesh(node, "D:/codes/for_graduation/src/App/assets/models/viking_room.obj");
+		vertices = node.m_meshs[0].m_vertices;
+		indices = node.m_meshs[0].m_indices;
 		m_devFuncs = m_window->vulkanInstance()->deviceFunctions(m_window->device());
 		m_vulkanContext.physicalDevice = m_window->physicalDevice();
 		m_vulkanContext.logicalDevice = m_window->device();
@@ -31,7 +36,7 @@ namespace GU
 		createDescriptorSetLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayout);
 		createPipelineLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayout, m_vulkanContext.pipelineLayout);
 		createGraphicsPipeline(m_vulkanContext, m_vulkanContext.shaderStage, m_vulkanContext.pipelineLayout, m_vulkanContext.graphicsPipeline);
-		loadModel("assets/models/viking_room.obj", vertices, indices);
+		//loadModel("assets/models/viking_room.obj", vertices, indices);
 		VulkanImage vkImage;
 		createTextureImage(m_vulkanContext, "./assets/models/viking_room.png", vkImage);
 		createTextureImageView(m_vulkanContext, vkImage);

@@ -25,6 +25,7 @@ Vulkan::Vulkan
 glm::glm_static
 stblib
 tinyobjloader
+assimp::assimp
           )
 
 target_include_directories(

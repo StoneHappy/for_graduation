@@ -1,0 +1,41 @@
+#include <Renderer/Mesh.h>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+namespace GU
+{
+	bool readMesh(MeshNode& meshnode, const char* filePath)
+	{
+		::Assimp::Importer import;
+		const aiScene* scene = import.ReadFile(filePath, aiProcess_ValidateDataStructure);
+
+		for (size_t i = 0; i < scene->mNumMeshes; i++)
+		{
+			Mesh mesh;
+			aiMesh* aimesh = scene->mMeshes[i];
+			//apply_material(sc->mMaterials[mesh->mMaterialIndex]);
+			for (size_t j = 0; j < aimesh->mNumVertices; j++)
+			{
+				Vertex v;
+				v.pos = { aimesh->mVertices[j].x , aimesh->mVertices[j].y, aimesh->mVertices[j].z };
+				v.texCoord = { aimesh->mTextureCoords[0] == nullptr ? 0 : aimesh->mTextureCoords[0][i].x, aimesh->mTextureCoords[0] == nullptr ? 0 : aimesh->mTextureCoords[0][i].y };
+				mesh.m_vertices.push_back(v);
+			}
+
+			for (size_t i = 0; i < aimesh->mNumFaces; i++)
+			{
+				const aiFace* face = &aimesh->mFaces[i];
+
+				if (face->mNumIndices != 3)
+				{
+						return false;
+				}
+				mesh.m_indices.push_back(face->mIndices[0]);
+				mesh.m_indices.push_back(face->mIndices[1]);
+				mesh.m_indices.push_back(face->mIndices[2]);
+			}
+			meshnode.m_meshs.emplace_back(std::move(mesh));
+		}
+		return true;
+	}
+}
