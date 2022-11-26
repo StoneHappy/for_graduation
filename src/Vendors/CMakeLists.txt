@@ -13,6 +13,10 @@ if(NOT TARGET glm)
     option(GLM_TEST_ENABLE "" OFF)
     add_subdirectory(glm)
     set_target_properties(glm_static PROPERTIES FOLDER Vendors/glm)
+    if(TARGET glm_shared)
+        set_target_properties(glm_shared PROPERTIES FOLDER Vendors/glm)
+    endif()
+    
     set_target_properties(uninstall PROPERTIES FOLDER Vendors/glm)
 endif()
 
