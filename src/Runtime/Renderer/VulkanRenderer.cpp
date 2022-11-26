@@ -69,6 +69,8 @@ namespace GU
 		g_CoreContext.timeTick();
 		g_CoreContext.g_winWidth = m_window->swapChainImageSize().width();
 		g_CoreContext.g_winHeight = m_window->swapChainImageSize().height();
+		m_Camera.updateView();
+		m_Camera.updateProjection();
 		m_vulkanContext.swapChainExtent = { (unsigned int)m_window->swapChainImageSize().width(),(unsigned int)m_window->swapChainImageSize().height() };
 		updateUniformBuffer(m_vulkanContext, m_Camera, m_window->currentSwapChainImageIndex(), m_vulkanContext.uniformBuffersMapped);
 		const QSize sz = m_window->swapChainImageSize();

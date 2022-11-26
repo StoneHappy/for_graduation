@@ -32,11 +32,11 @@ namespace GU
         bool shift = e->modifiers().testFlag(Qt::ShiftModifier);
         if (shift)
         {
-            m_renderer->getCamera().mousePan({ dx * g_CoreContext.g_daltaTime, dy * g_CoreContext.g_daltaTime });
+            m_renderer->getCamera().mousePan({ dx * g_CoreContext.g_editDeltaTime, dy * g_CoreContext.g_editDeltaTime });
         }
         else
         {
-            m_renderer->getCamera().mouseRotate({ dx * g_CoreContext.g_daltaTime, dy * g_CoreContext.g_daltaTime });
+            m_renderer->getCamera().mouseRotate({ dx * g_CoreContext.g_editDeltaTime, dy * g_CoreContext.g_editDeltaTime });
         }
         m_lastPos = e->pos();
     }
@@ -48,6 +48,6 @@ namespace GU
 
     void VulkanWindow::wheelEvent(QWheelEvent* event)
     {
-        m_renderer->getCamera().mouseZoom(event->delta() * g_CoreContext.g_daltaTime);
+        m_renderer->getCamera().mouseZoom(event->delta() * g_CoreContext.g_editDeltaTime);
     }
 }

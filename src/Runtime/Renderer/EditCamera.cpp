@@ -81,8 +81,6 @@ namespace GU
         auto [xSpeed, ySpeed] = panSpeed();
         m_focalPoint += -getRightDirection() * delta.x * xSpeed * m_distance;
         m_focalPoint += getUpDirection() * delta.y * ySpeed * m_distance;
-        updateView();
-        updateProjection();
     }
 
     void EditCamera::mouseRotate(const glm::vec2& delta)
@@ -90,8 +88,6 @@ namespace GU
         float yawSign = getUpDirection().y < 0 ? -1.0f : 1.0f;
         m_yaw += yawSign * delta.x * 0.8f;
         m_pitch += delta.y * 0.8f;
-        updateView();
-        updateProjection();
     }
 
     void EditCamera::mouseZoom(float delta)
@@ -103,8 +99,6 @@ namespace GU
             m_distance = 1.0f;
         }
         DEBUG_LOG(QString::fromLocal8Bit("m_distance: %1").arg(m_distance).toUtf8());
-        updateView();
-        updateProjection();
     }
 
     float EditCamera::zoomSpeed() const

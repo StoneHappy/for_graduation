@@ -13,10 +13,11 @@ namespace GU
 		CoreContext();
 		LogFunc g_Log = STDDebugLogFunction();
 		std::chrono::steady_clock::time_point g_lastTimePoint;
-		float g_daltaTime = 0;
+		float g_deltaTime = 0;
+		float g_editDeltaTime = 0;
 		float g_timeIntegral = 0;
 		bool g_isPlay = false;
-		bool g_isStop = false;
+		bool g_isStop = true;
 
 		float g_winWidth = 1280.0, g_winHeight = 720.0;
 		void timeTick();
