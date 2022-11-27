@@ -127,7 +127,7 @@ namespace GU
 		VkDeviceSize offsets[] = { 0 };
 		m_devFuncs->vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
 		m_devFuncs->vkCmdBindIndexBuffer(cmdBuf, m_vulkanContext.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
-		//m_devFuncs->vkCmdDrawIndexed(cmdBuf, indices.size(), 1, 0, 0, 0);
+		m_devFuncs->vkCmdDrawIndexed(cmdBuf, indices.size(), 1, 0, 0, 0);
 
 		// submit queue
 		m_devFuncs->vkCmdEndRenderPass(cmdBuf);
