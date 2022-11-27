@@ -35,7 +35,7 @@
    <addaction name="actOpen"/>
    <addaction name="actImportModel"/>
   </widget>
-  <widget class="QDockWidget" name="dockView">
+  <widget class="QDockWidget" name="dockEntity">
    <property name="features">
     <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
@@ -48,7 +48,7 @@
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QTreeView" name="treeView"/>
+      <widget class="QTreeView" name="entityTreeView"/>
      </item>
     </layout>
    </widget>
@@ -90,7 +90,7 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidget">
+  <widget class="QDockWidget" name="dockComponent">
    <property name="windowTitle">
     <string>组件</string>
    </property>
@@ -100,7 +100,7 @@
    <widget class="QWidget" name="dockWidgetContents_3">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QTreeView" name="treeView_2"/>
+      <widget class="QTreeView" name="componentTreeView"/>
      </item>
     </layout>
    </widget>
@@ -196,6 +196,42 @@
    </property>
    <property name="text">
     <string>停止</string>
+   </property>
+  </action>
+  <action name="actCreateEntity">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/添加.png</normaloff>:/images/添加.png</iconset>
+   </property>
+   <property name="text">
+    <string>创建实体</string>
+   </property>
+   <property name="toolTip">
+    <string>创建实体</string>
+   </property>
+  </action>
+  <action name="actDeleteEntity">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/删除.png</normaloff>:/images/删除.png</iconset>
+   </property>
+   <property name="text">
+    <string>删除实体</string>
+   </property>
+   <property name="toolTip">
+    <string>删除实体</string>
+   </property>
+  </action>
+  <action name="actCopyEntity">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/复制.png</normaloff>:/images/复制.png</iconset>
+   </property>
+   <property name="text">
+    <string>复制实体</string>
+   </property>
+   <property name="toolTip">
+    <string>复制实体</string>
    </property>
   </action>
  </widget>

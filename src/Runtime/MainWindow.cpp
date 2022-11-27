@@ -10,6 +10,10 @@
 #include <QLabel>
 #include <QDateTime>
 #include <Global/CoreContext.h>
+#include <QStandardItem>
+#include <QStandardItemModel>
+#include <QItemSelectionModel>
+#include <QPoint>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& msg)
@@ -71,12 +75,14 @@ MainWindow::MainWindow(QWidget *parent) :
 	setCentralWidget(vulkanWindowWrapper);
 
 	// pop Menu
-	creatorPopMenu();
+	createPopMenu();
+	createEntityView();
 
 	// statusbar
 	m_mousePosition = new QLabel(this);
 	m_mousePosition->setText(QString::fromLocal8Bit("正在加载程序..."));
 	ui->statusbar->addWidget(m_mousePosition);
+
 }
 
 MainWindow::~MainWindow()
@@ -84,7 +90,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::creatorPopMenu()
+void MainWindow::createPopMenu()
 {
 	QMenu* menu = new QMenu(this);
 	menu->addAction(ui->actShowViewDock);
@@ -106,12 +112,35 @@ void MainWindow::creatorPopMenu()
 	ui->toolBar->addAction(ui->actAbout);
 }
 
+void MainWindow::createEntityView()
+{
+	m_model = new QStandardItemModel(this);
+	m_selectModel = new QItemSelectionModel(m_model, this);
+	ui->entityTreeView->setModel(m_model);
+	ui->entityTreeView->setHeaderHidden(true);
+	ui->entityTreeView->setAlternatingRowColors(true);
+	ui->entityTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
+	ui->entityTreeView->setRootIsDecorated(false);
+	connect(ui->entityTreeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(slot_treeviewEntity_customcontextmenu(const QPoint&)));
+
+	rootItem = new QStandardItem(QString::fromLocal8Bit("场景根节点"));
+	QIcon icon;
+	icon.addFile(":/images/root.png");
+	rootItem->setIcon(icon);
+	m_model->appendRow(rootItem);
+}
+
+void MainWindow::craeteComponentView()
+{
+
+}
+
 void MainWindow::on_actShowViewDock_triggered()
 {
 	if (ui->actShowViewDock->isChecked())
-		ui->dockView->show();
+		ui->dockEntity->show();
 	else
-		ui->dockView->hide();
+		ui->dockEntity->hide();
 }
 
 void MainWindow::on_actShowInfoDock_triggered()
@@ -132,7 +161,7 @@ void MainWindow::on_actPlay_triggered()
 {
 	if (ui->actPlay->isVisible()) ui->actPlay->setVisible(false);
 	if (!ui->actPause->isVisible()) ui->actPause->setVisible(true);
-	ui->dockView->hide();
+	ui->dockEntity->hide();
 	ui->dockInfo->hide();
 	ui->actShowInfoDock->setChecked(false);
 	ui->actShowViewDock->setChecked(false);
@@ -152,12 +181,34 @@ void MainWindow::on_actStop_triggered()
 {
 	if (ui->actPause->isVisible()) ui->actPause->setVisible(false);
 	if (!ui->actPlay->isVisible()) ui->actPlay->setVisible(true);
-	ui->dockView->show();
+	ui->dockEntity->show();
 	ui->dockInfo->show();
 	ui->actShowInfoDock->setChecked(true);
 	ui->actShowViewDock->setChecked(true);
 	GU::g_CoreContext.g_isPlay = false;
 	GU::g_CoreContext.g_isStop = true;
+}
+
+void MainWindow::on_actCreateEntity_triggered()
+{
+
+}
+
+void MainWindow::on_actCopyEntity_triggered()
+{
+}
+
+void MainWindow::on_actDeleteEntity_triggered()
+{
+}
+
+void MainWindow::slot_treeviewEntity_customcontextmenu(const QPoint& point)
+{
+	QMenu* menu = new QMenu(this);
+	menu->addAction(ui->actCreateEntity);
+	menu->addAction(ui->actCopyEntity);
+	menu->addAction(ui->actDeleteEntity);
+	menu->exec(QCursor::pos());
 }
 
 

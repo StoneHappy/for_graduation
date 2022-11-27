@@ -25,7 +25,7 @@ namespace GU
 	};
 
 }
-#define DEBUG_LOG(msg) ::GU::g_CoreContext.g_Log(LogType::Debug ,msg)
-#define WARNING_LOG(msg) ::GU::g_CoreContext.g_Log(LogType::Warning ,msg)
-#define CRITICAL_LOG(msg) ::GU::g_CoreContext.g_Log(LogType::Critical ,msg)
-#define FATAL_LOG(msg) ::GU::g_CoreContext.g_Log(LogType::Fatal ,msg)
+#define DEBUG_LOG(msg) ::GU::g_CoreContext.g_Log(::GU::LogType::Debug ,msg)
+#define WARNING_LOG(msg) ::GU::g_CoreContext.g_Log(::GU::LogType::Warning ,msg)
+#define CRITICAL_LOG(msg) ::GU::g_CoreContext.g_Log(::GU::LogType::Critical ,msg)
+#define FATAL_LOG(msg) ::GU::g_CoreContext.g_Log(::GU::LogType::Fatal ,msg)

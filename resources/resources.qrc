@@ -11,5 +11,10 @@
         <file>images/暂停.png</file>
         <file>images/停止.png</file>
         <file>images/校徽.png</file>
+        <file>images/entity.png</file>
+        <file>images/root.png</file>
+        <file>images/复制.png</file>
+        <file>images/删除.png</file>
+        <file>images/添加.png</file>
     </qresource>
 </RCC>
