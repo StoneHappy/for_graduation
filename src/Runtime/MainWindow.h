@@ -32,9 +32,12 @@ private:
     QVulkanInstance* inst;
     QLabel* m_mousePosition;
     std::unordered_map<GU::UUID, QStandardItem*> m_entityMap;
-    QStandardItemModel* m_model;
-    QItemSelectionModel* m_selectModel;
+    QStandardItemModel* m_entityTreeModel;
+    QItemSelectionModel* m_entityTreeSelectModel;
     QStandardItem* m_treeviewEntityRoot;
+    QStandardItemModel* m_componentTreeModel;
+    QItemSelectionModel* m_componentTreeSelectModel;
+
 private slots:
     void on_actShowViewDock_triggered();
     void on_actShowInfoDock_triggered();
@@ -47,6 +50,7 @@ private slots:
     void on_actDeleteEntity_triggered();
 
     void slot_treeviewEntity_customcontextmenu(const QPoint&);
+    void slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&, const QModelIndex&);
 };
 
 #endif // MAINWINDOW_H

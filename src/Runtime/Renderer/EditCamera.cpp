@@ -98,7 +98,6 @@ namespace GU
             //m_focalPoint += getForwardDirection();
             m_distance = 1.0f;
         }
-        DEBUG_LOG(QString::fromLocal8Bit("m_distance: %1").arg(m_distance).toUtf8());
     }
 
     float EditCamera::zoomSpeed() const
@@ -107,7 +106,6 @@ namespace GU
         distance = std::max(distance, 0.0f);
         float speed = distance * distance;
         speed = std::min(speed, 30.0f); // max speed = 100
-        DEBUG_LOG(QString::fromLocal8Bit("zoomSpeed: %1").arg(speed).toUtf8());
         return speed;
     }
 }

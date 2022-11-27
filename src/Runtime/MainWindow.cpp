@@ -79,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	// pop Menu
 	createPopMenu();
 	createEntityView();
-
+	craeteComponentView();
 	// statusbar
 	m_mousePosition = new QLabel(this);
 	m_mousePosition->setText(QString::fromLocal8Bit("正在加载程序..."));
@@ -116,9 +116,11 @@ void MainWindow::createPopMenu()
 
 void MainWindow::createEntityView()
 {
-	m_model = new QStandardItemModel(this);
-	m_selectModel = new QItemSelectionModel(m_model, this);
-	ui->entityTreeView->setModel(m_model);
+	m_entityTreeModel = new QStandardItemModel(this);
+	m_entityTreeSelectModel = new QItemSelectionModel(m_entityTreeModel, this);
+
+	ui->entityTreeView->setModel(m_entityTreeModel);
+	ui->entityTreeView->setSelectionModel(m_entityTreeSelectModel);
 	ui->entityTreeView->setHeaderHidden(true);
 	ui->entityTreeView->setAlternatingRowColors(true);
 	ui->entityTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -127,11 +129,20 @@ void MainWindow::createEntityView()
 	QIcon icon;
 	icon.addFile(":/images/root.png");
 	m_treeviewEntityRoot->setIcon(icon);
-	m_model->appendRow(m_treeviewEntityRoot);
+	m_entityTreeModel->appendRow(m_treeviewEntityRoot);
+
+	connect(m_entityTreeSelectModel, SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&, const QModelIndex&)));
 }
 
 void MainWindow::craeteComponentView()
 {
+	m_componentTreeModel = new QStandardItemModel(this);
+	m_componentTreeModel->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("属性") << QString::fromLocal8Bit("状态/值"));
+	m_componentTreeSelectModel = new QItemSelectionModel(m_componentTreeModel, this);
+	ui->componentTreeView->setModel(m_componentTreeModel);
+	ui->componentTreeView->setSelectionModel(m_componentTreeSelectModel);
+	ui->componentTreeView->setAlternatingRowColors(true);
+	ui->componentTreeView->setRootIsDecorated(false);
 }
 
 void MainWindow::on_actShowViewDock_triggered()
@@ -218,6 +229,52 @@ void MainWindow::slot_treeviewEntity_customcontextmenu(const QPoint& point)
 	menu->addAction(ui->actCopyEntity);
 	menu->addAction(ui->actDeleteEntity);
 	menu->exec(QCursor::pos());
+}
+
+void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+	m_componentTreeModel->clear();
+	m_componentTreeModel->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("属性") << QString::fromLocal8Bit("状态/值"));
+	QStandardItem* item = m_entityTreeModel->itemFromIndex(current);
+	if (!item) return;
+
+	std::unordered_map<GU::UUID, QStandardItem*>::iterator it;
+	for (it = m_entityMap.begin(); it != m_entityMap.end(); it++)
+	{
+		if (it->second == item) break;
+	}
+	if (it == m_entityMap.end()) return;
+
+	GU::Entity entity =  GU::g_CoreContext.g_Scene.getEntityByUUID(it->first);
+	std::string name = entity.getComponent<GU::TagComponent>().Tag;
+
+	auto nameItem		= new QStandardItem(QString::fromLocal8Bit("名字"));
+	auto UUIDItem		= new QStandardItem(QString::fromLocal8Bit("UUID"));
+	auto positionItem	= new QStandardItem(QString::fromLocal8Bit("位置"));
+	auto rotateItem		= new QStandardItem(QString::fromLocal8Bit("旋转"));
+	auto scaleItem		= new QStandardItem(QString::fromLocal8Bit("缩放"));
+	nameItem->setEditable(false);
+	UUIDItem->setEditable(false);
+	positionItem->setEditable(false);
+	rotateItem->setEditable(false);
+	scaleItem->setEditable(false);
+	m_componentTreeModel->setItem(0, 0, nameItem);
+	m_componentTreeModel->setItem(0, 1, new QStandardItem(QString::fromLocal8Bit(name.c_str())));
+	m_componentTreeModel->setItem(1, 0, UUIDItem);
+	m_componentTreeModel->setItem(1, 1, new QStandardItem(QString::fromLocal8Bit("%1").arg(it->first)));
+
+	QStandardItem* transformItem = new QStandardItem(QString::fromLocal8Bit("变换组件"));
+	QStandardItem* empty = new QStandardItem();
+	transformItem->setEditable(false);
+	empty->setEditable(false);
+	transformItem->setData(QColor(Qt::gray), Qt::BackgroundRole);
+	empty->setData(QColor(Qt::gray), Qt::BackgroundRole);
+	m_componentTreeModel->appendRow(transformItem);
+	m_componentTreeModel->setItem(2, 1, empty);
+	m_componentTreeModel->setItem(3, 0, positionItem);
+	m_componentTreeModel->setItem(4, 0, rotateItem);
+	m_componentTreeModel->setItem(5, 0, scaleItem);
+
 }
 
 
