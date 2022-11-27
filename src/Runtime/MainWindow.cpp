@@ -14,6 +14,8 @@
 #include <QStandardItemModel>
 #include <QItemSelectionModel>
 #include <QPoint>
+#include <Scene/Entity.h>
+#include <Scene/Component.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& msg)
@@ -120,19 +122,16 @@ void MainWindow::createEntityView()
 	ui->entityTreeView->setHeaderHidden(true);
 	ui->entityTreeView->setAlternatingRowColors(true);
 	ui->entityTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
-	ui->entityTreeView->setRootIsDecorated(false);
 	connect(ui->entityTreeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(slot_treeviewEntity_customcontextmenu(const QPoint&)));
-
-	rootItem = new QStandardItem(QString::fromLocal8Bit("场景根节点"));
+	m_treeviewEntityRoot = new QStandardItem(QString::fromLocal8Bit("场景根节点"));
 	QIcon icon;
 	icon.addFile(":/images/root.png");
-	rootItem->setIcon(icon);
-	m_model->appendRow(rootItem);
+	m_treeviewEntityRoot->setIcon(icon);
+	m_model->appendRow(m_treeviewEntityRoot);
 }
 
 void MainWindow::craeteComponentView()
 {
-
 }
 
 void MainWindow::on_actShowViewDock_triggered()
@@ -191,15 +190,25 @@ void MainWindow::on_actStop_triggered()
 
 void MainWindow::on_actCreateEntity_triggered()
 {
-
+	auto entity =  GU::g_CoreContext.g_Scene.createEntity();
+	auto uuid = entity.getComponent<GU::IDComponent>().ID;
+	auto name = entity.getComponent<GU::TagComponent>().Tag;
+	QStandardItem* item = new QStandardItem(name.c_str());
+	m_entityMap[uuid] = item;
+	QIcon icon;
+	icon.addFile(":/images/entity.png");
+	item->setIcon(icon);
+	m_treeviewEntityRoot->appendRow(item);
 }
 
 void MainWindow::on_actCopyEntity_triggered()
 {
+
 }
 
 void MainWindow::on_actDeleteEntity_triggered()
 {
+
 }
 
 void MainWindow::slot_treeviewEntity_customcontextmenu(const QPoint& point)

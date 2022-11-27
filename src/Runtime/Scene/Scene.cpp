@@ -3,6 +3,14 @@
 #include <Scene/Component.h>
 namespace GU
 {
+
+	Scene::Scene()
+	{
+	}
+
+	Scene::~Scene()
+	{
+	}
 	Entity Scene::createEntity(const std::string& name)
 	{
 		return createEntityWithUUID(UUID(), name);

@@ -34,7 +34,7 @@ private:
     std::unordered_map<GU::UUID, QStandardItem*> m_entityMap;
     QStandardItemModel* m_model;
     QItemSelectionModel* m_selectModel;
-    QStandardItem* rootItem;
+    QStandardItem* m_treeviewEntityRoot;
 private slots:
     void on_actShowViewDock_triggered();
     void on_actShowInfoDock_triggered();
