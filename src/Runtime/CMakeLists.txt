@@ -26,6 +26,7 @@ glm::glm_static
 stblib
 tinyobjloader
 assimp::assimp
+EnTT::EnTT
           )
 
 target_include_directories(

@@ -59,3 +59,7 @@ if(NOT TARGET assimp)
     target_compile_options(zlibstatic PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX->")
 
 endif()
+
+if(NOT TARGET EnTT)
+    add_subdirectory(entt)
+endif()

@@ -13,3 +13,6 @@
 [submodule "src/Vendors/assimp"]
 	path = src/Vendors/assimp
 	url = https://github.com/assimp/assimp.git
+[submodule "src/Vendors/entt"]
+	path = src/Vendors/entt
+	url = https://github.com/skypjack/entt.git
