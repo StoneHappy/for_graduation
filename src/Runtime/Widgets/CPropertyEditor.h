@@ -24,6 +24,9 @@ public:
 public Q_SLOTS:
     void onWidgetEditorFinished();
     
+Q_SIGNALS:
+    void tagChanged();
+
 private Q_SLOTS:
     void onCurrentItemChanged(QTreeWidgetItem * current, QTreeWidgetItem * previous);
     void onItemClicked(QTreeWidgetItem * item, int column);

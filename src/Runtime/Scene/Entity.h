@@ -61,7 +61,8 @@ namespace GU
 		}
 	private:
 		entt::entity m_entityHandle{ entt::null };
-		Scene* m_scene = nullptr;
+		Scene* m_scene;
 
+		friend class Scene;
 	};
 }

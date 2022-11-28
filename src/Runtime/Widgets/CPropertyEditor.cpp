@@ -6,8 +6,9 @@
 #include <QHeaderView>
 #include <QDebug>
 #include <QApplication>
-
-
+#include <Global/CoreContext.h>
+#include <Scene/Entity.h>
+#include <Scene/Component.h>
 CPropertyEditor::CPropertyEditor(QWidget *parent) :
     QTreeWidget(parent),
     m_addingItem(false)
@@ -173,7 +174,20 @@ void CPropertyEditor::onItemChanged(QTreeWidgetItem *item, int column)
     {
         if (column)
         {
-            qDebug() << "Value state of property [" << prop->getId() << "] changed to: " << prop->getVariantValue();
+            qDebug() << "UUID " << m_propertyMap[QString::fromLocal8Bit("uuidProperty").toUtf8()]->getVariantValue();
+
+            std::string uuidstring = m_propertyMap[QString::fromLocal8Bit("uuidProperty").toUtf8()]->getVariantValue().toString().toStdString();
+            uint64_t uuid;
+            sscanf(uuidstring.c_str(), "%llu", &uuid);
+            if (uuid == 0) return;
+            auto entity = GU::g_CoreContext.g_Scene.getEntityByUUID(uuid);
+            if (prop->getId() == "tagProperty")
+            {
+                QString qsTag = prop->getVariantValue().toString();
+                entity.getComponent<GU::TagComponent>().Tag = qsTag.toStdString();
+                emit tagChanged();
+            }
+
         }
         else
         {

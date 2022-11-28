@@ -157,6 +157,11 @@ void MainWindow::createEntityView()
 	m_entityTreeModel->appendRow(m_treeviewEntityRoot);
 
 	connect(m_entityTreeSelectModel, SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&, const QModelIndex&)));
+	connect(ui->componentTreeWidget,
+		SIGNAL(tagChanged()),
+		this,
+		SLOT(slot_tagPropertyChanged())
+	);
 }
 
 void MainWindow::craeteComponentView()
@@ -164,7 +169,7 @@ void MainWindow::craeteComponentView()
 	ui->componentTreeWidget->init();
 	// Tag Component
 	tagProperty = new CStringProperty("tagProperty", QString::fromLocal8Bit("标签"), QString::fromLocal8Bit("entity"));
-	uuidProperty = new CStringProperty("uuidProperty", QString::fromLocal8Bit("UUID"), QString::fromLocal8Bit("%1").arg(113123123124));
+	uuidProperty = new CStringProperty(QString::fromLocal8Bit("uuidProperty").toUtf8(), QString::fromLocal8Bit("UUID"), QString::fromLocal8Bit("%1").arg(113123123124));
 	uuidProperty->setDisabled(true);
 	// Transform Component
 	tsfheader = new CPropertyHeader("tsfheader", QString::fromLocal8Bit("转换组件"));
@@ -273,6 +278,7 @@ void MainWindow::on_actCreateEntity_triggered()
 	QIcon icon;
 	icon.addFile(":/images/entity.png");
 	item->setIcon(icon);
+	item->setEditable(false);
 	m_treeviewEntityRoot->appendRow(item);
 }
 
@@ -299,13 +305,14 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 {
 	clearAllComponentProperty();
 	auto item = m_entityTreeModel->itemFromIndex(currentIndex);
-	UINT64 uuid = *(UINT64*)item->data().data();
+	UINT64 uuid = item->data().toLongLong();
 	if (uuid == 0) return;
 	auto entity = GU::g_CoreContext.g_Scene.getEntityByUUID(uuid);
 
 	if (entity.hasComponent<GU::TagComponent>())
 	{
 		auto tag = entity.getComponent<GU::TagComponent>().Tag.c_str();
+		tagProperty->setValue(tag);
 		ui->componentTreeWidget->add(tagProperty);
 	}
 
@@ -353,4 +360,16 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 		ui->componentTreeWidget->add(szProperty);
 
 	}
+	ui->componentTreeWidget->adjustToContents();
+}
+void MainWindow::slot_tagPropertyChanged()
+{
+	auto item = m_entityTreeModel->itemFromIndex(m_entityTreeSelectModel->currentIndex());
+	std::string uuidstring = item->data().toString().toStdString();
+	uint64_t uuid;
+	sscanf(uuidstring.c_str(), "%llu", &uuid);
+	if (uuid == 0) return;
+	auto entity = GU::g_CoreContext.g_Scene.getEntityByUUID(uuid);
+	auto tag = entity.getComponent<GU::TagComponent>().Tag;
+	item->setText(tag.c_str());
 }

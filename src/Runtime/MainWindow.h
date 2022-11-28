@@ -46,7 +46,7 @@ private slots:
     void on_actCreateEntity_triggered();
     void on_actCopyEntity_triggered();
     void on_actDeleteEntity_triggered();
-
+    void slot_tagPropertyChanged();
     void slot_treeviewEntity_customcontextmenu(const QPoint&);
     void slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&, const QModelIndex&);
 };
