@@ -25,7 +25,7 @@ private:
     void createPopMenu();
     void createEntityView();
     void craeteComponentView();
-
+    void clearAllComponentProperty();
 private:
     Ui::MainWindow *ui;
     GU::VulkanWindow* m_vulkanWindow;
@@ -35,8 +35,6 @@ private:
     QStandardItemModel* m_entityTreeModel;
     QItemSelectionModel* m_entityTreeSelectModel;
     QStandardItem* m_treeviewEntityRoot;
-    QStandardItemModel* m_componentTreeModel;
-    QItemSelectionModel* m_componentTreeSelectModel;
 
 private slots:
     void on_actShowViewDock_triggered();

@@ -16,8 +16,33 @@
 #include <QPoint>
 #include <Scene/Entity.h>
 #include <Scene/Component.h>
+#include <Widgets/CPropertyHeader.h>
+#include <Widgets/CDoubleProperty.h>
+#include <Widgets/CStringProperty.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
+
+
+/*******************************Property***********************************************/ 
+// Tag Component
+CStringProperty* tagProperty;
+CStringProperty* uuidProperty;
+// Transform Component
+CPropertyHeader* tsfheader;
+CPropertyHeader* posheader;
+CPropertyHeader* rotheader;
+CPropertyHeader* sclheader;
+CDoubleProperty* pxProperty;
+CDoubleProperty* pyProperty;
+CDoubleProperty* pzProperty;
+CDoubleProperty* rxProperty;
+CDoubleProperty* ryProperty;
+CDoubleProperty* rzProperty;
+CDoubleProperty* sxProperty;
+CDoubleProperty* syProperty;
+CDoubleProperty* szProperty;
+/*******************************Property***********************************************/
+
 static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& msg)
 {
 
@@ -136,14 +161,52 @@ void MainWindow::createEntityView()
 
 void MainWindow::craeteComponentView()
 {
-	m_componentTreeModel = new QStandardItemModel(this);
-	m_componentTreeModel->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("属性") << QString::fromLocal8Bit("状态/值"));
-	m_componentTreeSelectModel = new QItemSelectionModel(m_componentTreeModel, this);
-	ui->componentTreeView->setModel(m_componentTreeModel);
-	ui->componentTreeView->setSelectionModel(m_componentTreeSelectModel);
-	ui->componentTreeView->setAlternatingRowColors(true);
-	ui->componentTreeView->setRootIsDecorated(false);
+	ui->componentTreeWidget->init();
+	// Tag Component
+	tagProperty = new CStringProperty("tagProperty", QString::fromLocal8Bit("标签"), QString::fromLocal8Bit("entity"));
+	uuidProperty = new CStringProperty("uuidProperty", QString::fromLocal8Bit("UUID"), QString::fromLocal8Bit("%1").arg(113123123124));
+	uuidProperty->setDisabled(true);
+	// Transform Component
+	tsfheader = new CPropertyHeader("tsfheader", QString::fromLocal8Bit("转换组件"));
+	posheader = new CPropertyHeader(tsfheader, "tsfHeader", QString::fromLocal8Bit("位置"));
+	rotheader = new CPropertyHeader(tsfheader, "rotheader", QString::fromLocal8Bit("旋转"));
+	sclheader = new CPropertyHeader(tsfheader, "sclheader", QString::fromLocal8Bit("缩放"));
+	pxProperty = new CDoubleProperty(posheader, "pxProperty", "x:", 0, 0, -1000.0, 1000.0);
+	pyProperty = new CDoubleProperty(posheader, "pyProperty", "y:", 0, 0, -1000.0, 1000.0);
+	pzProperty = new CDoubleProperty(posheader, "pzProperty", "z:", 0, 0, -1000.0, 1000.0);
+
+	rxProperty = new CDoubleProperty(rotheader, "rxProperty", "x:", 0, 0, -1000.0, 1000.0);
+	ryProperty = new CDoubleProperty(rotheader, "ryProperty", "y:", 0, 0, -1000.0, 1000.0);
+	rzProperty = new CDoubleProperty(rotheader, "rzProperty", "z:", 0, 0, -1000.0, 1000.0);
+
+	sxProperty = new CDoubleProperty(sclheader, "sxProperty", "x:", 0, 0, -1000.0, 1000.0);
+	syProperty = new CDoubleProperty(sclheader, "syProperty", "y:", 0, 0, -1000.0, 1000.0);
+	szProperty = new CDoubleProperty(sclheader, "szProperty", "z:", 0, 0, -1000.0, 1000.0);
+
+	//ui->componentTreeWidget->adjustToContents();
 }
+
+void MainWindow::clearAllComponentProperty()
+{
+	ui->componentTreeWidget->remove(tagProperty);
+	ui->componentTreeWidget->remove(uuidProperty);
+	ui->componentTreeWidget->remove(tsfheader );
+	ui->componentTreeWidget->remove(posheader );
+	ui->componentTreeWidget->remove(rotheader );
+	ui->componentTreeWidget->remove(sclheader );
+	ui->componentTreeWidget->remove(pxProperty);
+	ui->componentTreeWidget->remove(pyProperty);
+	ui->componentTreeWidget->remove(pzProperty);
+
+	ui->componentTreeWidget->remove(rxProperty);
+	ui->componentTreeWidget->remove(ryProperty);
+	ui->componentTreeWidget->remove(rzProperty);
+
+	ui->componentTreeWidget->remove(sxProperty);
+	ui->componentTreeWidget->remove(syProperty);
+	ui->componentTreeWidget->remove(szProperty);
+}
+
 
 void MainWindow::on_actShowViewDock_triggered()
 {
@@ -205,6 +268,7 @@ void MainWindow::on_actCreateEntity_triggered()
 	auto uuid = entity.getComponent<GU::IDComponent>().ID;
 	auto name = entity.getComponent<GU::TagComponent>().Tag;
 	QStandardItem* item = new QStandardItem(name.c_str());
+	item->setData((UINT64)uuid);
 	m_entityMap[uuid] = item;
 	QIcon icon;
 	icon.addFile(":/images/entity.png");
@@ -231,51 +295,62 @@ void MainWindow::slot_treeviewEntity_customcontextmenu(const QPoint& point)
 	menu->exec(QCursor::pos());
 }
 
-void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex& current, const QModelIndex& previous)
+void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex& currentIndex, const QModelIndex& previousIndex)
 {
-	m_componentTreeModel->clear();
-	m_componentTreeModel->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("属性") << QString::fromLocal8Bit("状态/值"));
-	QStandardItem* item = m_entityTreeModel->itemFromIndex(current);
-	if (!item) return;
+	clearAllComponentProperty();
+	auto item = m_entityTreeModel->itemFromIndex(currentIndex);
+	UINT64 uuid = *(UINT64*)item->data().data();
+	if (uuid == 0) return;
+	auto entity = GU::g_CoreContext.g_Scene.getEntityByUUID(uuid);
 
-	std::unordered_map<GU::UUID, QStandardItem*>::iterator it;
-	for (it = m_entityMap.begin(); it != m_entityMap.end(); it++)
+	if (entity.hasComponent<GU::TagComponent>())
 	{
-		if (it->second == item) break;
+		auto tag = entity.getComponent<GU::TagComponent>().Tag.c_str();
+		ui->componentTreeWidget->add(tagProperty);
 	}
-	if (it == m_entityMap.end()) return;
 
-	GU::Entity entity =  GU::g_CoreContext.g_Scene.getEntityByUUID(it->first);
-	std::string name = entity.getComponent<GU::TagComponent>().Tag;
+	if (entity.hasComponent<GU::IDComponent>())
+	{
+		auto uuid = entity.getComponent<GU::IDComponent>().ID;
+		uuidProperty->setValue(QString("%1").arg(uuid));
+		ui->componentTreeWidget->add(uuidProperty);
+	}
 
-	auto nameItem		= new QStandardItem(QString::fromLocal8Bit("名字"));
-	auto UUIDItem		= new QStandardItem(QString::fromLocal8Bit("UUID"));
-	auto positionItem	= new QStandardItem(QString::fromLocal8Bit("位置"));
-	auto rotateItem		= new QStandardItem(QString::fromLocal8Bit("旋转"));
-	auto scaleItem		= new QStandardItem(QString::fromLocal8Bit("缩放"));
-	nameItem->setEditable(false);
-	UUIDItem->setEditable(false);
-	positionItem->setEditable(false);
-	rotateItem->setEditable(false);
-	scaleItem->setEditable(false);
-	m_componentTreeModel->setItem(0, 0, nameItem);
-	m_componentTreeModel->setItem(0, 1, new QStandardItem(QString::fromLocal8Bit(name.c_str())));
-	m_componentTreeModel->setItem(1, 0, UUIDItem);
-	m_componentTreeModel->setItem(1, 1, new QStandardItem(QString::fromLocal8Bit("%1").arg(it->first)));
+	if (entity.hasComponent<GU::TransformComponent>())
+	{
+		auto translation = entity.getComponent<GU::TransformComponent>().Translation;
+		auto rotation = entity.getComponent<GU::TransformComponent>().Rotation;
+		auto scale = entity.getComponent<GU::TransformComponent>().Scale;
 
-	QStandardItem* transformItem = new QStandardItem(QString::fromLocal8Bit("变换组件"));
-	QStandardItem* empty = new QStandardItem();
-	transformItem->setEditable(false);
-	empty->setEditable(false);
-	transformItem->setData(QColor(Qt::gray), Qt::BackgroundRole);
-	empty->setData(QColor(Qt::gray), Qt::BackgroundRole);
-	m_componentTreeModel->appendRow(transformItem);
-	m_componentTreeModel->setItem(2, 1, empty);
-	m_componentTreeModel->setItem(3, 0, positionItem);
-	m_componentTreeModel->setItem(4, 0, rotateItem);
-	m_componentTreeModel->setItem(5, 0, scaleItem);
+		pxProperty->setValue(translation.x);
+		pyProperty->setValue(translation.y);
+		pzProperty->setValue(translation.z);
 
+		rxProperty->setValue(rotation.x);
+		ryProperty->setValue(rotation.y);
+		rzProperty->setValue(rotation.z);
+
+		sxProperty->setValue(scale.x);
+		syProperty->setValue(scale.y);
+		szProperty->setValue(scale.z);
+
+		ui->componentTreeWidget->add(tsfheader);
+		ui->componentTreeWidget->add(posheader);
+		ui->componentTreeWidget->add(rotheader);
+		ui->componentTreeWidget->add(sclheader);
+
+
+		ui->componentTreeWidget->add(pxProperty);
+		ui->componentTreeWidget->add(pyProperty);
+		ui->componentTreeWidget->add(pzProperty);
+
+		ui->componentTreeWidget->add(rxProperty);
+		ui->componentTreeWidget->add(ryProperty);
+		ui->componentTreeWidget->add(rzProperty);
+
+		ui->componentTreeWidget->add(sxProperty);
+		ui->componentTreeWidget->add(syProperty);
+		ui->componentTreeWidget->add(szProperty);
+
+	}
 }
-
-
-
