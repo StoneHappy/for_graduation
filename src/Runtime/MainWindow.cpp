@@ -241,6 +241,16 @@ void MainWindow::on_actNewProject_triggered()
 
 	}
 }
+void MainWindow::on_actOpenProject_triggered()
+{
+	QFileDialog* fileDlg = new QFileDialog(this, QString::fromLocal8Bit("打开工程"), QDir::currentPath(), QString::fromLocal8Bit("工程文件(*.gu)"));
+	auto rnt =  fileDlg->exec();
+
+	if (rnt == QDialog::Accepted)
+	{
+		auto projectPath = fileDlg->FileName;
+	}
+}
 
 void MainWindow::on_actAbout_triggered()
 {
