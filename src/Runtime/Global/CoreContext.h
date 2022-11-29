@@ -2,6 +2,7 @@
 #include <Core/Type.h>
 #include <chrono>
 #include <Scene/Scene.h>
+#include <Renderer/VulkanContext.h>
 namespace GU
 {
 	class CoreContext;
@@ -22,7 +23,7 @@ namespace GU
 		float g_winWidth = 1280.0, g_winHeight = 720.0;
 		Scene g_Scene;
 		void timeTick();
-
+		VulkanContext g_vulkanContext;
 	};
 
 }

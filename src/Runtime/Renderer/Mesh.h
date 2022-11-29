@@ -2,6 +2,7 @@
 #include <Renderer/RenderData.h>
 #include <vulkan/vulkan.h>
 #include <Renderer/VulkanImage.h>
+#include <Renderer/VulkanContext.h>
 namespace GU
 {
 	class Mesh
@@ -12,6 +13,10 @@ namespace GU
 		std::vector<uint32_t> m_indices;
 		VulkanImage m_Texture;
 		VkPipeline m_Pipeline;
+		VkBuffer								vertexBuffer;
+		VkDeviceMemory							vertexMemory;
+		VkBuffer								indexBuffer;
+		VkDeviceMemory							indexMemory;
 
 		bool isRoot = false;
 		bool isLeaf = false;
@@ -25,5 +30,5 @@ namespace GU
 		std::vector<Mesh> m_meshs;
 	};
 
-	bool readMesh(MeshNode& meshnode, const char* filePath);
+	bool readMesh(const VulkanContext& vulkanContext, MeshNode& meshnode, const char* filePath);
 }

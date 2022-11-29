@@ -2,6 +2,8 @@
 #include <string>
 #include <entt/entt.hpp>
 #include <Core/UUID.h>
+#include <Renderer/VulkanContext.h>
+#include <QVulkanDeviceFunctions>
 namespace GU
 {
 
@@ -20,7 +22,8 @@ namespace GU
 		Entity getEntityByUUID(UUID uuid);
 		void destroyEntity(Entity entity);
 
-	private:
+		void renderTick(const VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime);
+	public:
 		entt::registry m_registry;
 		std::unordered_map<UUID, entt::entity> m_entityMap;
 		

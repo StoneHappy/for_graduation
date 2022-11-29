@@ -2,9 +2,10 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <Renderer/VulkanBuffer.h>
 namespace GU
 {
-	bool readMesh(MeshNode& meshnode, const char* filePath)
+	bool readMesh(const VulkanContext& vulkanContext, MeshNode& meshnode, const char* filePath)
 	{
 		::Assimp::Importer import;
 		const aiScene* scene = import.ReadFile(filePath, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -34,6 +35,9 @@ namespace GU
 				mesh.m_indices.push_back(face->mIndices[1]);
 				mesh.m_indices.push_back(face->mIndices[2]);
 			}
+
+			createVertexBuffer(vulkanContext, mesh.m_vertices, mesh.vertexBuffer, mesh.vertexMemory);
+			createIndexBuffer(vulkanContext, mesh.m_indices, mesh.indexBuffer, mesh.indexMemory);
 			meshnode.m_meshs.emplace_back(std::move(mesh));
 		}
 		return true;

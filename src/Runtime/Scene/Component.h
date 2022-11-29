@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <Renderer/Mesh.h>
 namespace GU
 {
 	struct IDComponent
@@ -45,5 +46,10 @@ namespace GU
 				* rotation
 				* glm::scale(glm::mat4(1.0f), Scale);
 		}
+	};
+
+	struct MeshComponent
+	{
+		MeshNode meshNode;
 	};
 }

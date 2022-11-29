@@ -8,6 +8,7 @@
 #include <Renderer/VulkanBuffer.h>
 #include <Renderer/VulkanImage.h>
 #include <Renderer/Mesh.h>
+#include <Scene/Entity.h>
 namespace GU
 {
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)
@@ -19,16 +20,15 @@ namespace GU
 	{
 		qDebug("initResources");
 
-		MeshNode node;
-		readMesh(node, "./assets/models/viking_room.obj");
-		vertices = node.m_meshs[0].m_vertices;
-		indices = node.m_meshs[0].m_indices;
 		m_devFuncs = m_window->vulkanInstance()->deviceFunctions(m_window->device());
 		m_vulkanContext.physicalDevice = m_window->physicalDevice();
 		m_vulkanContext.logicalDevice = m_window->device();
 		m_vulkanContext.commandPool = m_window->graphicsCommandPool();
 		m_vulkanContext.graphicsQueue = m_window->graphicsQueue();
 		m_vulkanContext.renderPass = m_window->defaultRenderPass();
+		Entity entity = g_CoreContext.g_Scene.createEntity();
+		auto& meshcomponent = entity.addComponent<MeshComponent>();
+		readMesh(m_vulkanContext, meshcomponent.meshNode, "./assets/models/viking_room.obj");
 
 		VkShaderModule vertexShader = createShader(m_window->device(), shader_texture_vert, sizeof(shader_texture_vert));
 		VkShaderModule fragShader = createShader(m_window->device(), shader_texture_frag, sizeof(shader_texture_frag));
@@ -41,8 +41,6 @@ namespace GU
 		createTextureImage(m_vulkanContext, "./assets/models/viking_room.png", vkImage);
 		createTextureImageView(m_vulkanContext, vkImage);
 		createTextureSampler(m_vulkanContext, vkImage);
-		createVertexBuffer(m_vulkanContext, vertices, m_vulkanContext.vertexBuffer, m_vulkanContext.vertexMemory);
-		createIndexBuffer(m_vulkanContext, indices, m_vulkanContext.indexBuffer, m_vulkanContext.indexMemory);
 		createUniformBuffers(m_vulkanContext, m_vulkanContext.uniformBuffers, m_vulkanContext.uniformBuffersMemory, m_vulkanContext.uniformBuffersMapped);
 		createDescriptorPool(m_vulkanContext, m_vulkanContext.descriptorPool);
 		createDescriptorSets(m_vulkanContext, vkImage, m_vulkanContext.descriptorSetLayout, m_vulkanContext.descriptorPool, m_vulkanContext.descriptorSets);
@@ -121,13 +119,7 @@ namespace GU
 		m_devFuncs->vkCmdDraw(cmdBuf, 24, 1, 0, 0);
 
 		// 3D model
-		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.graphicsPipeline);
-		m_devFuncs->vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.pipelineLayout, 0, 1, &m_vulkanContext.descriptorSets[m_window->currentSwapChainImageIndex()], 0, nullptr);
-		VkBuffer vertexBuffers[] = { m_vulkanContext.vertexBuffer };
-		VkDeviceSize offsets[] = { 0 };
-		m_devFuncs->vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
-		m_devFuncs->vkCmdBindIndexBuffer(cmdBuf, m_vulkanContext.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
-		m_devFuncs->vkCmdDrawIndexed(cmdBuf, indices.size(), 1, 0, 0, 0);
+		g_CoreContext.g_Scene.renderTick(m_vulkanContext, cmdBuf, m_window->currentSwapChainImageIndex(), g_CoreContext.g_deltaTime);
 
 		// submit queue
 		m_devFuncs->vkCmdEndRenderPass(cmdBuf);

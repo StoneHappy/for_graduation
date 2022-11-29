@@ -53,4 +53,25 @@ namespace GU
 		m_registry.destroy(entity);
 		m_entityMap.erase(entity.getUUID());
 	}
+
+	void Scene::renderTick(const VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime)
+	{
+		auto view = m_registry.view<MeshComponent, TransformComponent>();
+		for (auto entity : view)
+		{
+			auto&& [meshComponet, transform] = view.get<MeshComponent, TransformComponent>(entity);
+
+			for (auto& mesh : meshComponet.meshNode.m_meshs)
+			{
+				vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.graphicsPipeline);
+				vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.pipelineLayout, 0, 1, &vulkanContext.descriptorSets[currImageIndex], 0, nullptr);
+				VkBuffer vertexBuffers[] = { mesh.vertexBuffer };
+				VkDeviceSize offsets[] = { 0 };
+				vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
+				vkCmdBindIndexBuffer(cmdBuf, mesh.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+				vkCmdDrawIndexed(cmdBuf, mesh.m_indices.size(), 1, 0, 0, 0);
+			}
+			
+		}
+	}
 }
