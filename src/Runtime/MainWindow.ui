@@ -14,7 +14,7 @@
    <string>人群疏散引擎</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../resources/resources.qrc">
+   <iconset>
     <normaloff>:/images/多人-人群.png</normaloff>:/images/多人-人群.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget"/>
@@ -32,9 +32,8 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actNew"/>
-   <addaction name="actOpen"/>
-   <addaction name="actImportModel"/>
+   <addaction name="actNewProject"/>
+   <addaction name="actOpenProject"/>
   </widget>
   <widget class="QDockWidget" name="dockEntity">
    <property name="features">
@@ -69,7 +68,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="debugLogTab">
         <attribute name="title">
@@ -140,19 +139,22 @@
     </layout>
    </widget>
   </widget>
-  <action name="actOpen">
+  <action name="actOpenProject">
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/images/工程.png</normaloff>:/images/工程.png</iconset>
+     <normaloff>:/images/project.png</normaloff>:/images/project.png</iconset>
    </property>
    <property name="text">
-    <string>打开</string>
+    <string>打开工程</string>
+   </property>
+   <property name="toolTip">
+    <string>打开工程</string>
    </property>
   </action>
   <action name="actImportModel">
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/images/模型.png</normaloff>:/images/模型.png</iconset>
+     <normaloff>:/images/model.png</normaloff>:/images/model.png</iconset>
    </property>
    <property name="text">
     <string>导入模型</string>
@@ -167,7 +169,7 @@
    </property>
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/images/树状图.png</normaloff>:/images/树状图.png</iconset>
+     <normaloff>:/images/tree.png</normaloff>:/images/tree.png</iconset>
    </property>
    <property name="text">
     <string>显示视图</string>
@@ -182,7 +184,7 @@
    </property>
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/images/日志.png</normaloff>:/images/日志.png</iconset>
+     <normaloff>:/images/about.png</normaloff>:/images/about.png</iconset>
    </property>
    <property name="text">
     <string>显示信息</string>
@@ -191,7 +193,7 @@
   <action name="actSelPopMenu">
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/images/容器.png</normaloff>:/images/容器.png</iconset>
+     <normaloff>:/images/docker.png</normaloff>:/images/docker.png</iconset>
    </property>
    <property name="text">
     <string>容器显示</string>
@@ -209,7 +211,7 @@
   <action name="actPlay">
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/images/播放.png</normaloff>:/images/播放.png</iconset>
+     <normaloff>:/images/play.png</normaloff>:/images/play.png</iconset>
    </property>
    <property name="text">
     <string>启动</string>
@@ -218,7 +220,7 @@
   <action name="actPause">
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/images/暂停.png</normaloff>:/images/暂停.png</iconset>
+     <normaloff>:/images/pause.png</normaloff>:/images/pause.png</iconset>
    </property>
    <property name="text">
     <string>暂停</string>
@@ -227,7 +229,7 @@
   <action name="actStop">
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/images/停止.png</normaloff>:/images/停止.png</iconset>
+     <normaloff>:/images/stop.png</normaloff>:/images/stop.png</iconset>
    </property>
    <property name="text">
     <string>停止</string>
@@ -236,7 +238,7 @@
   <action name="actCreateEntity">
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/images/添加.png</normaloff>:/images/添加.png</iconset>
+     <normaloff>:/images/add.png</normaloff>:/images/add.png</iconset>
    </property>
    <property name="text">
     <string>创建实体</string>
@@ -248,7 +250,7 @@
   <action name="actDeleteEntity">
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/images/删除.png</normaloff>:/images/删除.png</iconset>
+     <normaloff>:/images/delete.png</normaloff>:/images/delete.png</iconset>
    </property>
    <property name="text">
     <string>删除实体</string>
@@ -260,7 +262,7 @@
   <action name="actCopyEntity">
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/images/复制.png</normaloff>:/images/复制.png</iconset>
+     <normaloff>:/images/copy.png</normaloff>:/images/copy.png</iconset>
    </property>
    <property name="text">
     <string>复制实体</string>
@@ -269,13 +271,16 @@
     <string>复制实体</string>
    </property>
   </action>
-  <action name="actNew">
+  <action name="actNewProject">
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/images/新建.png</normaloff>:/images/新建.png</iconset>
+     <normaloff>:/images/new.png</normaloff>:/images/new.png</iconset>
    </property>
    <property name="text">
-    <string>新建</string>
+    <string>新建工程</string>
+   </property>
+   <property name="toolTip">
+    <string>新建工程</string>
    </property>
   </action>
  </widget>

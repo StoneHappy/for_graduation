@@ -1,21 +1,21 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/模型.png</file>
-        <file>images/工程.png</file>
-        <file>images/多人-人群.png</file>
-        <file>images/树状图.png</file>
-        <file>images/日志.png</file>
-        <file>images/容器.png</file>
         <file>images/about.png</file>
-        <file>images/播放.png</file>
-        <file>images/暂停.png</file>
-        <file>images/停止.png</file>
-        <file>images/校徽.png</file>
         <file>images/entity.png</file>
         <file>images/root.png</file>
-        <file>images/复制.png</file>
-        <file>images/删除.png</file>
-        <file>images/添加.png</file>
-        <file>images/新建.png</file>
+        <file>images/add.png</file>
+        <file>images/copy.png</file>
+        <file>images/delete.png</file>
+        <file>images/docker.png</file>
+        <file>images/log.png</file>
+        <file>images/model.png</file>
+        <file>images/multicrowd.png</file>
+        <file>images/new.png</file>
+        <file>images/pause.png</file>
+        <file>images/play.png</file>
+        <file>images/project.png</file>
+        <file>images/stop.png</file>
+        <file>images/SUES.png</file>
+        <file>images/tree.png</file>
     </qresource>
 </RCC>

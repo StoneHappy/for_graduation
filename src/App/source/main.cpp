@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 	// Global Context
 	GU::g_CoreContext.g_Log = GU::QtDebugLogFunction();
 
-	QPixmap pixmap(QString::fromLocal8Bit(":/images/校徽.png"));
+	QPixmap pixmap(QString::fromLocal8Bit(":/images/SUES.png"));
 	QSplashScreen splash(pixmap);
 	splash.show();
 	splash.showMessage(QString::fromLocal8Bit("程序正在加载...."));

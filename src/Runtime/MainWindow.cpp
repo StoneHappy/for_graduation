@@ -19,6 +19,7 @@
 #include <Widgets/CPropertyHeader.h>
 #include <Widgets/CDoubleProperty.h>
 #include <Widgets/CStringProperty.h>
+#include <Widgets/NewProjectDialog.h>
 #include <QFileDialog>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
@@ -229,11 +230,16 @@ void MainWindow::on_actShowInfoDock_triggered()
 	else
 		ui->dockInfo->hide();
 }
-void MainWindow::on_actNew_triggered()
+void MainWindow::on_actNewProject_triggered()
 {
-	QFileDialog* fileDlg = new QFileDialog(this, QString::fromLocal8Bit("工程路径"), QDir::currentPath(), QString::fromLocal8Bit("工程文件(*.gu);;"));
-	auto filename = fileDlg->exec();
+	NewProjectDialog* newProjectDlg = new NewProjectDialog(this);
 
+	auto rnt = newProjectDlg->exec();
+
+	if (rnt == QDialog::Accepted)
+	{
+
+	}
 }
 
 void MainWindow::on_actAbout_triggered()

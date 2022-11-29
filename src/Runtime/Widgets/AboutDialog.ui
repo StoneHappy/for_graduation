@@ -14,7 +14,7 @@
    <string>关于</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../../resources/resources.qrc">
+   <iconset>
     <normaloff>:/images/多人-人群.png</normaloff>:/images/多人-人群.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -37,7 +37,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="../../../resources/resources.qrc">:/images/多人-人群.png</pixmap>
+      <pixmap resource="../../../resources/resources.qrc">:/images/multicrowd.png</pixmap>
      </property>
     </widget>
    </item>
