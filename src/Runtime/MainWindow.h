@@ -40,6 +40,7 @@ private slots:
     void on_actShowViewDock_triggered();
     void on_actShowInfoDock_triggered();
     void on_actAbout_triggered();
+    void on_actNew_triggered();
     void on_actPlay_triggered();
     void on_actPause_triggered();
     void on_actStop_triggered();

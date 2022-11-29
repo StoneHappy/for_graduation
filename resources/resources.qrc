@@ -16,5 +16,6 @@
         <file>images/复制.png</file>
         <file>images/删除.png</file>
         <file>images/添加.png</file>
+        <file>images/新建.png</file>
     </qresource>
 </RCC>

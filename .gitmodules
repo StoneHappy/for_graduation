@@ -16,3 +16,6 @@
 [submodule "src/Vendors/entt"]
 	path = src/Vendors/entt
 	url = https://github.com/skypjack/entt.git
+[submodule "src/Vendors/yaml-cpp"]
+	path = src/Vendors/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git
