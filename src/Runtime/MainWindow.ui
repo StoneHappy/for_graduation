@@ -34,6 +34,7 @@
    </attribute>
    <addaction name="actNewProject"/>
    <addaction name="actOpenProject"/>
+   <addaction name="actSaveProject"/>
   </widget>
   <widget class="QDockWidget" name="dockEntity">
    <property name="features">
@@ -281,6 +282,21 @@
    </property>
    <property name="toolTip">
     <string>新建工程</string>
+   </property>
+  </action>
+  <action name="actSaveProject">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>保存工程</string>
+   </property>
+   <property name="toolTip">
+    <string>保存工程</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>

@@ -21,6 +21,7 @@
 #include <Widgets/CStringProperty.h>
 #include <Widgets/NewProjectDialog.h>
 #include <QFileDialog>
+#include <Core/Project.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 
@@ -238,8 +239,7 @@ void MainWindow::on_actNewProject_triggered()
 
 	if (rnt == QDialog::Accepted)
 	{
-		QString projectPath = newProjectDlg->m_ProjectPath;
-		qDebug(QString("projectPath: %1").arg(projectPath).toUtf8());
+		GU::g_CoreContext.g_projectPath = newProjectDlg->m_projectPath.toStdString();
 	}
 }
 void MainWindow::on_actOpenProject_triggered()
@@ -250,6 +250,13 @@ void MainWindow::on_actOpenProject_triggered()
 	if (rnt == QDialog::Accepted)
 	{
 		auto projectPath = fileDlg->FileName;
+	}
+}
+void MainWindow::on_actSaveProject_triggered()
+{
+	if (!GU::g_CoreContext.g_projectPath.empty())
+	{
+		GU::saveProject(GU::g_CoreContext.g_projectPath);
 	}
 }
 
@@ -293,7 +300,7 @@ void MainWindow::on_actStop_triggered()
 
 void MainWindow::on_actCreateEntity_triggered()
 {
-	auto entity =  GU::g_CoreContext.g_Scene.createEntity();
+	auto entity =  GU::g_CoreContext.g_scene.createEntity();
 	auto uuid = entity.getComponent<GU::IDComponent>().ID;
 	auto name = entity.getComponent<GU::TagComponent>().Tag;
 	QStandardItem* item = new QStandardItem(name.c_str());
@@ -331,7 +338,7 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 	auto item = m_entityTreeModel->itemFromIndex(currentIndex);
 	UINT64 uuid = item->data().toLongLong();
 	if (uuid == 0) return;
-	auto entity = GU::g_CoreContext.g_Scene.getEntityByUUID(uuid);
+	auto entity = GU::g_CoreContext.g_scene.getEntityByUUID(uuid);
 
 	if (entity.hasComponent<GU::TagComponent>())
 	{
@@ -393,7 +400,7 @@ void MainWindow::slot_tagPropertyChanged()
 	uint64_t uuid;
 	sscanf(uuidstring.c_str(), "%llu", &uuid);
 	if (uuid == 0) return;
-	auto entity = GU::g_CoreContext.g_Scene.getEntityByUUID(uuid);
+	auto entity = GU::g_CoreContext.g_scene.getEntityByUUID(uuid);
 	auto tag = entity.getComponent<GU::TagComponent>().Tag;
 	item->setText(tag.c_str());
 }

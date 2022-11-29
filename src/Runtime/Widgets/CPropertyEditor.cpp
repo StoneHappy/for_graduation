@@ -1,4 +1,4 @@
-#include "CPropertyEditor.h"
+﻿#include "CPropertyEditor.h"
 #include "CBoolProperty.h"
 #include "CIntegerProperty.h"
 
@@ -21,7 +21,7 @@ void CPropertyEditor::init()
     setColumnCount(2);
 
     QStringList labels;
-    labels << tr(QString::fromLocal8Bit("����").toUtf8()) << tr(QString::fromLocal8Bit("״̬/ֵ").toUtf8());
+    labels << tr(QString::fromLocal8Bit("属性").toUtf8()) << tr(QString::fromLocal8Bit("状态/值").toUtf8());
     setHeaderLabels(labels);
 
     header()->setSectionsMovable(false);
@@ -180,7 +180,7 @@ void CPropertyEditor::onItemChanged(QTreeWidgetItem *item, int column)
             uint64_t uuid;
             sscanf(uuidstring.c_str(), "%llu", &uuid);
             if (uuid == 0) return;
-            auto entity = GU::g_CoreContext.g_Scene.getEntityByUUID(uuid);
+            auto entity = GU::g_CoreContext.g_scene.getEntityByUUID(uuid);
             if (prop->getId() == "tagProperty")
             {
                 QString qsTag = prop->getVariantValue().toString();

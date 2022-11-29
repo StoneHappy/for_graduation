@@ -42,6 +42,7 @@ private slots:
     void on_actAbout_triggered();
     void on_actNewProject_triggered();
     void on_actOpenProject_triggered();
+    void on_actSaveProject_triggered();
     void on_actPlay_triggered();
     void on_actPause_triggered();
     void on_actStop_triggered();

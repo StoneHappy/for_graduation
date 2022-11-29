@@ -2,6 +2,7 @@
 #define NEWPROJECTDIALOG_H
 
 #include <QDialog>
+#include <QString>
 namespace Ui {
 class NewProjectDialog;
 }
@@ -16,8 +17,9 @@ class NewProjectDialog : public QDialog
 public:
     explicit NewProjectDialog(QWidget *parent = nullptr);
     ~NewProjectDialog();
-    QString m_ProjectDir;
-    QString m_ProjectPath;
+    QString m_projectDir;
+    QString m_projectPath;
+    QString m_projectName;
 private slots:
     void on_projectDirView_clicked(const QModelIndex& index);
     void slot_accept();

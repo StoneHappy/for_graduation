@@ -23,25 +23,11 @@ endif()
 if(NOT TARGET stblib)
     add_subdirectory(stblib)
     set_target_properties(stblib PROPERTIES FOLDER Vendors/stb)
-    if(MSVC)
-        target_compile_options(stblib PUBLIC
-                $<$<CONFIG:>:/MT> #---------|
-                $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
-                $<$<CONFIG:Release>:/MT> #--|
-            )
-    endif()
 endif()
 
 if(NOT TARGET tinyobjloader)
     add_subdirectory(tinyobjloader)
     set_target_properties(tinyobjloader PROPERTIES FOLDER Vendors/tinyobjloaderp)
-    if(MSVC)
-        target_compile_options(tinyobjloader PUBLIC
-                $<$<CONFIG:>:/MT> #---------|
-                $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
-                $<$<CONFIG:Release>:/MT> #--|
-            )
-    endif()
 endif()
 
 if(NOT TARGET assimp)
@@ -118,7 +104,7 @@ if(NOT TARGET assimp)
     "Don't call git to get the hash."
     OFF
     )
-    option(USE_STATIC_CRT "Link against the static runtime libraries." ON)
+    option(USE_STATIC_CRT "Link against the static runtime libraries." OFF)
     add_subdirectory(Assimp)
     set_target_properties(assimp PROPERTIES FOLDER Vendors/Assimp)
     set_target_properties(UpdateAssimpLibsDebugSymbolsAndDLLs PROPERTIES FOLDER Vendors/Assimp)

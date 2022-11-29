@@ -3,6 +3,7 @@
 #include <chrono>
 #include <Scene/Scene.h>
 #include <Renderer/VulkanContext.h>
+#include <filesystem>
 namespace GU
 {
 	class CoreContext;
@@ -21,7 +22,8 @@ namespace GU
 		bool g_isPlay = false;
 		bool g_isStop = true;
 		float g_winWidth = 1280.0, g_winHeight = 720.0;
-		Scene g_Scene;
+		Scene g_scene;
+		std::filesystem::path g_projectPath;
 		void timeTick();
 		VulkanContext g_vulkanContext;
 	};

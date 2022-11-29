@@ -26,7 +26,7 @@ namespace GU
 		m_vulkanContext.commandPool = m_window->graphicsCommandPool();
 		m_vulkanContext.graphicsQueue = m_window->graphicsQueue();
 		m_vulkanContext.renderPass = m_window->defaultRenderPass();
-		Entity entity = g_CoreContext.g_Scene.createEntity();
+		Entity entity = g_CoreContext.g_scene.createEntity();
 		auto& meshcomponent = entity.addComponent<MeshComponent>();
 		readMesh(m_vulkanContext, meshcomponent.meshNode, "./assets/models/viking_room.obj");
 
@@ -119,7 +119,7 @@ namespace GU
 		m_devFuncs->vkCmdDraw(cmdBuf, 24, 1, 0, 0);
 
 		// 3D model
-		g_CoreContext.g_Scene.renderTick(m_vulkanContext, cmdBuf, m_window->currentSwapChainImageIndex(), g_CoreContext.g_deltaTime);
+		g_CoreContext.g_scene.renderTick(m_vulkanContext, cmdBuf, m_window->currentSwapChainImageIndex(), g_CoreContext.g_deltaTime);
 
 		// submit queue
 		m_devFuncs->vkCmdEndRenderPass(cmdBuf);

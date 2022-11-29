@@ -17,7 +17,7 @@ NewProjectDialog::NewProjectDialog(QWidget *parent) :
 
 void NewProjectDialog::on_projectDirView_clicked(const QModelIndex& index)
 {
-     m_ProjectDir =  m_model->filePath(index);
+     m_projectDir =  m_model->filePath(index);
 }
 
 
@@ -28,7 +28,7 @@ NewProjectDialog::~NewProjectDialog()
 
 void NewProjectDialog::slot_accept()
 {
-    QString projectName = ui->projectNameEdit->text();
-    if (projectName.isEmpty()) projectName = "project";
-    m_ProjectPath = m_ProjectDir + "/" + projectName + ".gu";
+    m_projectName = ui->projectNameEdit->text();
+    if (m_projectName.isEmpty()) m_projectName = QString::fromLocal8Bit("project");
+    m_projectPath = QString::fromLocal8Bit("%1/%2.gu").arg(m_projectDir).arg(m_projectName);
 }
