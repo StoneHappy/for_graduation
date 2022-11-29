@@ -238,7 +238,8 @@ void MainWindow::on_actNewProject_triggered()
 
 	if (rnt == QDialog::Accepted)
 	{
-
+		QString projectPath = newProjectDlg->m_ProjectPath;
+		qDebug(QString("projectPath: %1").arg(projectPath).toUtf8());
 	}
 }
 void MainWindow::on_actOpenProject_triggered()
