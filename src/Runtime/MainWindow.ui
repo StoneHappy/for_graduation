@@ -35,6 +35,8 @@
    <addaction name="actNewProject"/>
    <addaction name="actOpenProject"/>
    <addaction name="actSaveProject"/>
+   <addaction name="separator"/>
+   <addaction name="actNavmeshParam"/>
   </widget>
   <widget class="QDockWidget" name="dockEntity">
    <property name="features">
@@ -297,6 +299,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actNavmeshParam">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/Params.png</normaloff>:/images/Params.png</iconset>
+   </property>
+   <property name="text">
+    <string>导航网格参数</string>
+   </property>
+   <property name="toolTip">
+    <string>导航网格参数</string>
    </property>
   </action>
  </widget>

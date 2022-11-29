@@ -13,6 +13,7 @@ class QLabel;
 class QStandardItem;
 class QStandardItemModel;
 class QItemSelectionModel;
+class QProgressBar;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -30,7 +31,8 @@ private:
     Ui::MainWindow *ui;
     GU::VulkanWindow* m_vulkanWindow;
     QVulkanInstance* inst;
-    QLabel* m_mousePosition;
+    QLabel* m_statusInfo;
+    QProgressBar* m_progressBar;
     std::unordered_map<GU::UUID, QStandardItem*> m_entityMap;
     QStandardItemModel* m_entityTreeModel;
     QItemSelectionModel* m_entityTreeSelectModel;
@@ -49,6 +51,7 @@ private slots:
     void on_actCreateEntity_triggered();
     void on_actCopyEntity_triggered();
     void on_actDeleteEntity_triggered();
+    void on_actNavmeshParam_triggered();
     void slot_tagPropertyChanged();
     void slot_treeviewEntity_customcontextmenu(const QPoint&);
     void slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&, const QModelIndex&);

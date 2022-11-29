@@ -17,12 +17,7 @@ namespace GU
 		VkDeviceMemory							vertexMemory;
 		VkBuffer								indexBuffer;
 		VkDeviceMemory							indexMemory;
-
-		bool isRoot = false;
-		bool isLeaf = false;
 		uint32_t id;
-		uint32_t parent;
-		std::vector<uint32_t> child;
 	};
 	class MeshNode
 	{

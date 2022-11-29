@@ -38,6 +38,7 @@ namespace GU
 
 			createVertexBuffer(vulkanContext, mesh.m_vertices, mesh.vertexBuffer, mesh.vertexMemory);
 			createIndexBuffer(vulkanContext, mesh.m_indices, mesh.indexBuffer, mesh.indexMemory);
+			mesh.id = meshnode.m_meshs.size();
 			meshnode.m_meshs.emplace_back(std::move(mesh));
 		}
 		return true;

@@ -18,5 +18,6 @@
         <file>images/SUES.png</file>
         <file>images/tree.png</file>
         <file>images/save.png</file>
+        <file>images/Params.png</file>
     </qresource>
 </RCC>

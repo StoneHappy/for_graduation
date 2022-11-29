@@ -22,6 +22,8 @@
 #include <Widgets/NewProjectDialog.h>
 #include <QFileDialog>
 #include <Core/Project.h>
+#include <QProgressBar>
+#include <Widgets/NavMeshParamsDlg.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 
@@ -109,10 +111,14 @@ MainWindow::MainWindow(QWidget *parent) :
 	createEntityView();
 	craeteComponentView();
 	// statusbar
-	m_mousePosition = new QLabel(this);
-	m_mousePosition->setText(QString::fromLocal8Bit("正在加载程序..."));
-	ui->statusbar->addWidget(m_mousePosition);
-
+	m_statusInfo = new QLabel(this);
+	m_progressBar = new QProgressBar(this);
+	m_progressBar->setMaximumWidth(500);
+	m_statusInfo->setText(QString::fromLocal8Bit("暂停"));
+	//m_progressBar->hide();
+	ui->statusbar->addWidget(m_statusInfo);
+	ui->statusbar->addWidget(m_progressBar);
+	m_progressBar->setValue(50);
 }
 
 MainWindow::~MainWindow()
@@ -321,6 +327,17 @@ void MainWindow::on_actCopyEntity_triggered()
 void MainWindow::on_actDeleteEntity_triggered()
 {
 
+}
+
+void MainWindow::on_actNavmeshParam_triggered()
+{
+	NavMeshParamsDlg* navmeshdlg = new NavMeshParamsDlg(this);
+	auto rnt = navmeshdlg->exec();
+
+	if (rnt == QDialog::Accepted)
+	{
+
+	}
 }
 
 void MainWindow::slot_treeviewEntity_customcontextmenu(const QPoint& point)
