@@ -15,7 +15,7 @@ namespace GU
 	{
 	public:
 		CoreContext();
-		LogFunc g_Log = STDDebugLogFunction();
+		QtDebugLogFunction g_Log = QtDebugLogFunction();
 		std::chrono::steady_clock::time_point g_lastTimePoint;
 		float g_deltaTime = 0;
 		float g_editDeltaTime = 0;
@@ -31,10 +31,10 @@ namespace GU
 	};
 
 }
-#define DEBUG_LOG(msg) ::GU::g_CoreContext.g_Log(::GU::LogType::Debug ,msg)
-#define WARNING_LOG(msg) ::GU::g_CoreContext.g_Log(::GU::LogType::Warning ,msg)
-#define CRITICAL_LOG(msg) ::GU::g_CoreContext.g_Log(::GU::LogType::Critical ,msg)
-#define FATAL_LOG(msg) ::GU::g_CoreContext.g_Log(::GU::LogType::Fatal ,msg)
+#define DEBUG_LOG(msg, ...) ::GU::g_CoreContext.g_Log(::GU::LogType::Debug ,msg, __VA_ARGS__)
+#define WARNING_LOG(msg, ...) ::GU::g_CoreContext.g_Log(::GU::LogType::Warning ,msg, __VA_ARGS__)
+#define CRITICAL_LOG(msg, ...) ::GU::g_CoreContext.g_Log(::GU::LogType::Critical ,msg, __VA_ARGS__)
+#define FATAL_LOG(msg, ...) ::GU::g_CoreContext.g_Log(::GU::LogType::Fatal ,msg, __VA_ARGS__)
 
 #define GLOBAL_ASSET ::GU::g_CoreContext.g_asset
 #define GLOBAL_VULKAN_CONTEXT ::GU::g_CoreContext.g_vulkanContext
