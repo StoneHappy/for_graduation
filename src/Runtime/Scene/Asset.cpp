@@ -1,6 +1,7 @@
 #include "Asset.h"
 #include <Renderer/Mesh.h>
 #include <Global/CoreContext.h>
+#include <Global/CoreContext.h>
 namespace GU
 {
     UUID Asset::insertMesh(const std::filesystem::path& filepath)
@@ -12,6 +13,7 @@ namespace GU
         MeshNode::read(g_CoreContext.g_vulkanContext, meshnode, filepath);
         UUID id;
         m_meshMap[id] = meshnode;
+        m_loadedModelMap[filepath] = id;
         return id;
     }
     std::shared_ptr<MeshNode> Asset::getMeshWithUUID(UUID uuid)

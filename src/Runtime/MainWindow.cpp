@@ -347,18 +347,17 @@ void MainWindow::on_actImportModel_triggered()
 
 	if (!qfilename.isEmpty())
 	{
+		std::filesystem::path filepath = qfilename.toStdString();
 		std::filesystem::path filename = qfilename.toStdString();
-		qDebug(filename.parent_path().string().c_str());
-		qDebug(filename.replace_extension().string().c_str());
-		qDebug(filename.replace_extension().filename().string().c_str());
-		auto parentname = filename.replace_extension().filename();
-		qDebug((GLOBAL_ASSET_PATH / "models/" / parentname).string().c_str());
-		std::filesystem::create_directory(GLOBAL_ASSET_PATH / "models");
-		std::filesystem::create_directory(GLOBAL_ASSET_PATH / "models" / parentname);
-		std::filesystem::copy(filename.parent_path(), GLOBAL_ASSET_PATH / "models" / parentname);
-		/*auto parentname = filename.replace_extension().filename();
-		std::filesystem::copy(filename.parent_path(), GLOBAL_ASSET_PATH / parentname);
-		GLOBAL_ASSET.insertMesh(filename.generic_string());*/
+		auto parentname = filepath.replace_extension().filename();
+		std::filesystem::create_directory(filepath.parent_path(), GLOBAL_ASSET_PATH / "models" / parentname);
+		if (!std::filesystem::exists(GLOBAL_ASSET_PATH / parentname / filename.filename()))
+		{
+			std::filesystem::create_directory(filepath.parent_path(), GLOBAL_ASSET_PATH / "models" / parentname);
+			std::filesystem::copy(filepath.parent_path(), GLOBAL_ASSET_PATH / parentname);
+		}
+
+		GLOBAL_ASSET.insertMesh((GLOBAL_ASSET_PATH / parentname / filename.filename()).generic_string());
 	}
 }
 
