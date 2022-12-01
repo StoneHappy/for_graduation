@@ -40,6 +40,7 @@ namespace GU
 		createTextureImageView(GLOBAL_VULKANCONTEXT, vkImage);
 		createTextureSampler(GLOBAL_VULKANCONTEXT, vkImage);
 		createUniformBuffers(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.uniformBuffers, GLOBAL_VULKANCONTEXT.uniformBuffersMemory, GLOBAL_VULKANCONTEXT.uniformBuffersMapped);
+		createMeshUniformBuffers(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.meshUniformBuffers, GLOBAL_VULKANCONTEXT.meshUniformBuffersMemory, GLOBAL_VULKANCONTEXT.meshUniformBuffersMapped);
 		createDescriptorPool(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.descriptorPool);
 		createDescriptorSets(GLOBAL_VULKANCONTEXT, vkImage, GLOBAL_VULKANCONTEXT.descriptorSetLayout, GLOBAL_VULKANCONTEXT.descriptorPool, GLOBAL_VULKANCONTEXT.descriptorSets);
 		createBackgroundPipeline(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.backgroudPipeline);
@@ -75,6 +76,7 @@ namespace GU
 		m_Camera.updateProjection();
 		GLOBAL_VULKANCONTEXT.swapChainExtent = { (unsigned int)m_window->swapChainImageSize().width(),(unsigned int)m_window->swapChainImageSize().height() };
 		updateUniformBuffer(GLOBAL_VULKANCONTEXT, m_Camera, m_window->currentSwapChainImageIndex(), GLOBAL_VULKANCONTEXT.uniformBuffersMapped);
+		//updateMeshUniformBuffer(GLOBAL_VULKANCONTEXT, glm::mat4(1), m_window->currentSwapChainImageIndex(), GLOBAL_VULKANCONTEXT.meshUniformBuffersMapped);
 		const QSize sz = m_window->swapChainImageSize();
 		VkClearColorValue clearColor = { { 0.0f, 0.0f, 0.0f, 1.0f } };
 		VkClearDepthStencilValue clearDS = { 1.0f, 0.0f };

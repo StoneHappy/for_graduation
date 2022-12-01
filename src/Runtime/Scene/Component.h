@@ -39,7 +39,7 @@ namespace GU
 		TransformComponent(const glm::vec3& translation)
 			: Translation(translation) {}
 
-		glm::mat4 GetTransform() const
+		glm::mat4 getTransform() const
 		{
 			glm::mat4 rotation = glm::toMat4(glm::quat(Rotation));
 

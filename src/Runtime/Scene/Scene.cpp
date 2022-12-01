@@ -1,6 +1,7 @@
 #include <Scene/Scene.h>
 #include <Scene/Entity.h>
 #include <Scene/Component.h>
+#include <Renderer/VulkanBuffer.h>
 namespace GU
 {
 
@@ -60,7 +61,7 @@ namespace GU
 		for (auto entity : view)
 		{
 			auto&& [meshComponet, transform] = view.get<MeshComponent, TransformComponent>(entity);
-
+			updateMeshUniformBuffer(GLOBAL_VULKANCONTEXT, transform.getTransform(), currImageIndex, GLOBAL_VULKANCONTEXT.meshUniformBuffersMapped);
 			for (auto& mesh : GLOBAL_ASSET.getMeshWithUUID(meshComponet.meshID)->meshs)
 			{
 				vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.graphicsPipeline);

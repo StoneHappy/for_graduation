@@ -19,9 +19,15 @@ namespace GU
 		VkPipeline								boundingboxPipeline;
 		VkDescriptorPool						descriptorPool;
 		std::vector<VkDescriptorSet>			descriptorSets;
+
 		std::vector<VkBuffer>					uniformBuffers;
 		std::vector<VkDeviceMemory>				uniformBuffersMemory;
 		std::vector<void*>						uniformBuffersMapped;
+
+		std::vector<VkBuffer>					meshUniformBuffers;
+		std::vector<VkDeviceMemory>				meshUniformBuffersMemory;
+		std::vector<void*>						meshUniformBuffersMapped;
+
 		VkDescriptorSetLayout					descriptorSetLayout;
 		VkBuffer								vertexBuffer;
 		VkDeviceMemory							vertexMemory;

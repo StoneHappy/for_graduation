@@ -70,6 +70,22 @@ namespace GU
 		}
 	}
 
+	void createMeshUniformBuffers(VulkanContext& vkContext, std::vector<VkBuffer>& uniformBuffers, std::vector<VkDeviceMemory>& uniformBuffersMemory, std::vector<void*>& uniformBuffersMapped)
+	{
+		DEBUG_LOG("正在创建MeshUniformBuffers...");
+		VkDeviceSize bufferSize = sizeof(MeshUniformBufferObject);
+
+		uniformBuffers.resize(VulkanContext::MAX_FRAMES_IN_FLIGHT);
+		uniformBuffersMemory.resize(VulkanContext::MAX_FRAMES_IN_FLIGHT);
+		uniformBuffersMapped.resize(VulkanContext::MAX_FRAMES_IN_FLIGHT);
+
+		for (size_t i = 0; i < VulkanContext::MAX_FRAMES_IN_FLIGHT; i++) {
+			createBuffer(vkContext, bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers[i], uniformBuffersMemory[i]);
+
+			vkMapMemory(vkContext.logicalDevice, uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
+		}
+	}
+
 	
 
 	void createBuffer(VulkanContext& vkContext, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
@@ -128,10 +144,7 @@ namespace GU
 	}
 	void updateUniformBuffer(VulkanContext& vkContext, uint32_t currentImage, std::vector<void*>& uniformBuffersMapped) {
 		
-		float rotateGreed = g_CoreContext.g_timeIntegral;
-
 		UniformBufferObject ubo{};
-		ubo.model = glm::rotate(glm::mat4(1.0f), rotateGreed * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		ubo.proj = glm::perspective(glm::radians(45.0f), vkContext.swapChainExtent.width / (float)vkContext.swapChainExtent.height, 0.1f, 10.0f);
 		ubo.proj[1][1] *= -1;
@@ -143,11 +156,16 @@ namespace GU
 	{
 		float rotateGreed = 1.0f;
 		UniformBufferObject ubo{};
-		ubo.model = glm::rotate(glm::mat4(1.0f), rotateGreed * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		ubo.view = camera.getViewMatrix();
 		ubo.proj = camera.getProjectionMatrix();
 		ubo.proj[1][1] *= -1;
 		memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 	}
-	
+	void updateMeshUniformBuffer(VulkanContext& vkContext, const glm::mat4& model, uint32_t currentImage, std::vector<void*>& uniformBuffersMapped)
+	{
+		float rotateGreed = 1.0f;
+		MeshUniformBufferObject ubo{};
+		ubo.model = model;
+		memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
+	}
 }
