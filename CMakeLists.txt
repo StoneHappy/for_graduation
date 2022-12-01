@@ -10,7 +10,7 @@ option(ENABLE_DOCS "Enable doxygen docs" ON)
 if(MSVC)
     message("Compiler: MSVC")
     # 在Release模式下 不显示后台
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /subsystem:windows /entry:mainCRTStartup")
+    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /subsystem:windows /entry:mainCRTStartup")
 endif()
 
 # just for qt

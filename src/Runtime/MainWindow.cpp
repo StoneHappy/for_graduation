@@ -27,7 +27,6 @@
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 
-
 /*******************************Property***********************************************/ 
 // Tag Component
 CStringProperty* tagProperty;
@@ -77,6 +76,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     m_vulkanWindow(new GU::VulkanWindow())
 {
+
+	qRegisterMetaType<uint64_t>("uint64_t");
     ui->setupUi(this);
 
 	// Debug log
@@ -106,10 +107,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	m_vulkanWindow->setVulkanInstance(inst);
 	setCentralWidget(vulkanWindowWrapper);
 
-	// pop Menu
+	// init ui
 	createPopMenu();
 	createEntityView();
 	craeteComponentView();
+	craeteMeshResourceView();
+
 	// statusbar
 	m_statusInfo = new QLabel(this);
 	m_progressBar = new QProgressBar(this);
@@ -165,6 +168,8 @@ void MainWindow::createEntityView()
 	m_treeviewEntityRoot->setIcon(icon);
 	m_entityTreeModel->appendRow(m_treeviewEntityRoot);
 
+	
+
 	connect(m_entityTreeSelectModel, SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&, const QModelIndex&)));
 	connect(ui->componentTreeWidget,
 		SIGNAL(tagChanged()),
@@ -199,6 +204,17 @@ void MainWindow::craeteComponentView()
 
 	//ui->componentTreeWidget->adjustToContents();
 }
+void MainWindow::craeteMeshResourceView()
+{
+	m_meshTableModel = new QStandardItemModel(50, 15, this);
+	m_meshTableSelectModel = new QItemSelectionModel(m_meshTableModel, this);
+	ui->modelTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	ui->modelTableView->setModel(m_meshTableModel);
+	ui->modelTableView->setSelectionModel(m_meshTableSelectModel);
+	ui->modelTableView->horizontalHeader()->hide();
+	ui->modelTableView->verticalHeader()->hide();
+	connect(this, SIGNAL(signal_importMesh2Table(QString, uint64_t)), this, SLOT(slot_importMesh2Table(QString, uint64_t)));
+}
 
 void MainWindow::clearAllComponentProperty()
 {
@@ -219,6 +235,11 @@ void MainWindow::clearAllComponentProperty()
 	ui->componentTreeWidget->remove(sxProperty);
 	ui->componentTreeWidget->remove(syProperty);
 	ui->componentTreeWidget->remove(szProperty);
+}
+
+void MainWindow::importMesh2Table(QString filename, uint64_t uuid)
+{
+	emit signal_importMesh2Table(filename, uuid);
 }
 
 
@@ -355,9 +376,10 @@ void MainWindow::on_actImportModel_triggered()
 		{
 			std::filesystem::create_directory(filepath.parent_path(), GLOBAL_ASSET_PATH / "models" / parentname);
 			std::filesystem::copy(filepath.parent_path(), GLOBAL_ASSET_PATH / parentname);
+			GU::g_CoreContext.g_threadPool.enqueue([=]() {
+			GLOBAL_ASSET.insertMesh((GLOBAL_ASSET_PATH / parentname / filename.filename()).generic_string());
+				});
 		}
-
-		GLOBAL_ASSET.insertMesh((GLOBAL_ASSET_PATH / parentname / filename.filename()).generic_string());
 	}
 }
 
@@ -430,6 +452,17 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 
 	}
 	ui->componentTreeWidget->adjustToContents();
+}
+
+void MainWindow::slot_importMesh2Table(QString filename, uint64_t uuid)
+{
+	QStandardItem* item = new QStandardItem(filename);
+	item->setEditable(false);
+	item->setIcon(QIcon(":/images/model.png"));
+	item->setData(uuid);
+	m_meshTableModel->setItem(m_numMeshInTable / 15, m_numMeshInTable % 15, item);
+	ui->modelTableView->update();
+	m_numMeshInTable++;
 }
 void MainWindow::slot_tagPropertyChanged()
 {

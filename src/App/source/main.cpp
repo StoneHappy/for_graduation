@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 #endif
 	
 	MainWindow w;
-
+	GU::g_CoreContext.g_p_mainWindow = &w;
 	w.showMaximized();
 
 	splash.finish(&w);

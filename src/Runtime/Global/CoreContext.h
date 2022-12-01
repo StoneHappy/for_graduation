@@ -5,10 +5,11 @@
 #include <Scene/Asset.h>
 #include <Renderer/VulkanContext.h>
 #include <filesystem>
+#include <Core/ThreadPool.h>
+class MainWindow;
 namespace GU
 {
 	class CoreContext;
-
 	extern CoreContext g_CoreContext;
 
 	class CoreContext
@@ -28,6 +29,8 @@ namespace GU
 		void timeTick();
 		VulkanContext g_vulkanContext;
 		Asset g_asset;
+		ThreadPool g_threadPool{8};
+		MainWindow* g_p_mainWindow;
 	};
 
 }
@@ -37,6 +40,7 @@ namespace GU
 #define FATAL_LOG(msg, ...) ::GU::g_CoreContext.g_Log(::GU::LogType::Fatal ,msg, __VA_ARGS__)
 
 #define GLOBAL_ASSET ::GU::g_CoreContext.g_asset
+#define GLOBAL_MAINWINDOW ::GU::g_CoreContext.g_p_mainWindow
 #define GLOBAL_VULKAN_CONTEXT ::GU::g_CoreContext.g_vulkanContext
 #define GLOBAL_DELTATIME ::GU::g_CoreContext.g_deltaTime
 #define GLOBAL_PLAY ::GU::g_CoreContext.g_isPlay
