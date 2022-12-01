@@ -113,6 +113,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	craeteComponentView();
 	craeteMeshResourceView();
 
+	ui->actImportModel->setEnabled(false);
+	ui->actSaveProject->setEnabled(false);
+	ui->actNavmeshParam->setEnabled(false);
+
 	// statusbar
 	m_statusInfo = new QLabel(this);
 	m_progressBar = new QProgressBar(this);
@@ -268,6 +272,10 @@ void MainWindow::on_actNewProject_triggered()
 	{
 		GLOBAL_PROJECT_FILE_PATH = newProjectDlg->m_projectPath.toStdString();
 		GU::saveProject(GLOBAL_PROJECT_FILE_PATH);
+
+		ui->actImportModel->setEnabled(true);
+		ui->actSaveProject->setEnabled(true);
+		ui->actNavmeshParam->setEnabled(true);
 	}
 }
 void MainWindow::on_actOpenProject_triggered()
