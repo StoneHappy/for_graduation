@@ -2,7 +2,7 @@
 
 namespace GU
 {
-    VkCommandBuffer beginSingleTimeCommands(const VulkanContext& vulkanContext) {
+    VkCommandBuffer beginSingleTimeCommands(VulkanContext& vulkanContext) {
         VkCommandBufferAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
@@ -17,7 +17,7 @@ namespace GU
         return commandBuffer;
     }
 
-    void endSingleTimeCommands(const VulkanContext& vulkanContext, VkCommandBuffer& commandBuffer) {
+    void endSingleTimeCommands(VulkanContext& vulkanContext, VkCommandBuffer& commandBuffer) {
         vkEndCommandBuffer(commandBuffer);
 
         VkSubmitInfo submitInfo{};

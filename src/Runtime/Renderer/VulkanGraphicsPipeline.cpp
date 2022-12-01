@@ -10,7 +10,7 @@
 
 namespace GU
 {
-    void createBackgroundPipeline(const VulkanContext& vulkanContext, VkPipeline& backgroudPipeline)
+    void createBackgroundPipeline(VulkanContext& vulkanContext, VkPipeline& backgroudPipeline)
     {
         VkShaderModule vertexShader = createShader(vulkanContext.logicalDevice, shader_backgroud_vert, sizeof(shader_backgroud_vert));
         VkShaderModule fragShader = createShader(vulkanContext.logicalDevice, shader_backgroud_frag, sizeof(shader_backgroud_frag));
@@ -117,7 +117,7 @@ namespace GU
             throw std::runtime_error("failed to create graphics pipeline!");
         }
     }
-    void createBoundingBoxPipeline(const VulkanContext& vulkanContext, VkPipeline& wireframePipeline)
+    void createBoundingBoxPipeline(VulkanContext& vulkanContext, VkPipeline& wireframePipeline)
     {
         VkShaderModule vertexShader = createShader(vulkanContext.logicalDevice, shader_boundingbox_vert, sizeof(shader_boundingbox_vert));
         VkShaderModule fragShader = createShader(vulkanContext.logicalDevice, shader_boundingbox_frag, sizeof(shader_boundingbox_frag));
@@ -224,7 +224,7 @@ namespace GU
             throw std::runtime_error("failed to create graphics pipeline!");
         }
     }
-    void createGraphicsPipeline(const VulkanContext& vulkanContext, const std::vector<VkPipelineShaderStageCreateInfo>& shaderStages, const VkPipelineLayout& pipelineLayout, VkPipeline& graphicsPipeline)
+    void createGraphicsPipeline(VulkanContext& vulkanContext, const std::vector<VkPipelineShaderStageCreateInfo>& shaderStages, const VkPipelineLayout& pipelineLayout, VkPipeline& graphicsPipeline)
 	{
         DEBUG_LOG("正在创建渲染管线");
         // vertex input
@@ -335,7 +335,7 @@ namespace GU
 	}
 
 
-    void createPipelineLayout(const VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout, VkPipelineLayout& pipelineLayout)
+    void createPipelineLayout(VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout, VkPipelineLayout& pipelineLayout)
     {
         DEBUG_LOG("正在创建PipelineLayout...");
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
@@ -349,7 +349,7 @@ namespace GU
         }
     }
 
-    void createDescriptorSetLayout(const VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout)
+    void createDescriptorSetLayout(VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout)
     {
         DEBUG_LOG("正在创建descriptorSetLayout");
         VkDescriptorSetLayoutBinding uboLayoutBinding{};
@@ -378,7 +378,7 @@ namespace GU
         }
     }
 
-    void createDescriptorPool(const VulkanContext& vkContext, VkDescriptorPool& descriptorPool)
+    void createDescriptorPool(VulkanContext& vkContext, VkDescriptorPool& descriptorPool)
     {
         DEBUG_LOG("正在创建DescriptorPool...");
         std::array<VkDescriptorPoolSize, 2> poolSizes{};
@@ -399,7 +399,7 @@ namespace GU
         }
     }
 
-    void createDescriptorSets(const VulkanContext& vkContext, VulkanImage& vulkanImage, VkDescriptorSetLayout& descriptorSetLayout, VkDescriptorPool& descriptorPool, std::vector<VkDescriptorSet>& descriptorSets)
+    void createDescriptorSets(VulkanContext& vkContext, VulkanImage& vulkanImage, VkDescriptorSetLayout& descriptorSetLayout, VkDescriptorPool& descriptorPool, std::vector<VkDescriptorSet>& descriptorSets)
     {
         DEBUG_LOG("正在创建DescriptorSet...");
         std::vector<VkDescriptorSetLayout> layouts(VulkanContext::MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);

@@ -22,7 +22,7 @@ namespace GU
 		Entity getEntityByUUID(UUID uuid);
 		void destroyEntity(Entity entity);
 
-		void renderTick(const VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime);
+		void renderTick(VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime);
 	public:
 		entt::registry m_registry;
 		std::unordered_map<UUID, entt::entity> m_entityMap;

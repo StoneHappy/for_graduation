@@ -3,6 +3,6 @@
 #include <Renderer/VulkanContext.h>
 namespace GU
 {
-    VkCommandBuffer beginSingleTimeCommands(const VulkanContext& vulkanContext);
-    void endSingleTimeCommands(const VulkanContext& vulkanContext, VkCommandBuffer& commandBuffer);
+    VkCommandBuffer beginSingleTimeCommands(VulkanContext& vulkanContext);
+    void endSingleTimeCommands(VulkanContext& vulkanContext, VkCommandBuffer& commandBuffer);
 }

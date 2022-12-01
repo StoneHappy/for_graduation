@@ -39,7 +39,7 @@ namespace GU
 		std::vector<Mesh> meshs;
 		MeshTree root;
 
-		static bool read(const VulkanContext& vulkanContext, std::shared_ptr<MeshNode> meshnode, const std::filesystem::path& filepath);
+		static bool read(VulkanContext& vulkanContext, std::shared_ptr<MeshNode> meshnode, const std::filesystem::path& filepath);
 	};
 
 }

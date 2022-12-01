@@ -8,7 +8,7 @@
 #include <Global/CoreContext.h>
 namespace GU
 {
-	void createVertexBuffer(const VulkanContext& vkContext, const std::vector<Vertex>& vertices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
+	void createVertexBuffer(VulkanContext& vkContext, const std::vector<Vertex>& vertices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
 		DEBUG_LOG("正在创建VertexBuffer...");
 		VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
@@ -31,7 +31,7 @@ namespace GU
 		vkFreeMemory(vkContext.logicalDevice, stagingBufferMemory, nullptr);
 	}
 
-	void createIndexBuffer(const VulkanContext& vkContext, const std::vector<uint32_t>& indices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
+	void createIndexBuffer(VulkanContext& vkContext, const std::vector<uint32_t>& indices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
 		DEBUG_LOG("正在创建IndexBuffer...");
 		VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
@@ -54,7 +54,7 @@ namespace GU
 		vkFreeMemory(vkContext.logicalDevice, stagingBufferMemory, nullptr);
 	}
 
-	void createUniformBuffers(const VulkanContext& vkContext, std::vector<VkBuffer>& uniformBuffers, std::vector<VkDeviceMemory>& uniformBuffersMemory, std::vector<void*>& uniformBuffersMapped)
+	void createUniformBuffers(VulkanContext& vkContext, std::vector<VkBuffer>& uniformBuffers, std::vector<VkDeviceMemory>& uniformBuffersMemory, std::vector<void*>& uniformBuffersMapped)
 	{
 		DEBUG_LOG("正在创建UniformBuffers...");
 		VkDeviceSize bufferSize = sizeof(UniformBufferObject);
@@ -72,7 +72,7 @@ namespace GU
 
 	
 
-	void createBuffer(const VulkanContext& vkContext, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
+	void createBuffer(VulkanContext& vkContext, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
 		DEBUG_LOG("正在创建Buffer...");
 		VkBufferCreateInfo bufferInfo = {};
@@ -104,7 +104,7 @@ namespace GU
 		vkBindBufferMemory(vkContext.logicalDevice, buffer, bufferMemory, 0);
 	}
 
-	void copyBuffer(const VulkanContext& vkContext, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
+	void copyBuffer(VulkanContext& vkContext, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
 	{
 		DEBUG_LOG("正在拷贝Buffer...");
 		VkCommandBuffer commandBuffer = beginSingleTimeCommands(vkContext);
@@ -126,7 +126,7 @@ namespace GU
 		FATAL_LOG("failed to find suitable memory type!");
 		throw std::runtime_error("failed to find suitable memory type!");
 	}
-	void updateUniformBuffer(const VulkanContext& vkContext, uint32_t currentImage, std::vector<void*>& uniformBuffersMapped) {
+	void updateUniformBuffer(VulkanContext& vkContext, uint32_t currentImage, std::vector<void*>& uniformBuffersMapped) {
 		
 		float rotateGreed = g_CoreContext.g_timeIntegral;
 
@@ -139,7 +139,7 @@ namespace GU
 		memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 	}
 
-	void updateUniformBuffer(const VulkanContext& vkContext, EditCamera& camera, uint32_t currentImage, std::vector<void*>& uniformBuffersMapped)
+	void updateUniformBuffer(VulkanContext& vkContext, EditCamera& camera, uint32_t currentImage, std::vector<void*>& uniformBuffersMapped)
 	{
 		float rotateGreed = 1.0f;
 		UniformBufferObject ubo{};

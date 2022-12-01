@@ -21,7 +21,7 @@ namespace GU
 		}
 	}
 
-	bool buildMeshs(const VulkanContext& vulkanContext, const aiScene* scene, std::vector<Mesh>& meshs)
+	bool buildMeshs(VulkanContext& vulkanContext, const aiScene* scene, std::vector<Mesh>& meshs)
 	{
 		meshs.reserve(scene->mNumMeshes);
 		for (size_t i = 0; i < scene->mNumMeshes; i++)
@@ -67,7 +67,7 @@ namespace GU
 	{
 	}
 
-	bool MeshNode::read(const VulkanContext& vulkanContext, std::shared_ptr<MeshNode> meshnode,const std::filesystem::path& filepath)
+	bool MeshNode::read(VulkanContext& vulkanContext, std::shared_ptr<MeshNode> meshnode,const std::filesystem::path& filepath)
 	{
 		::Assimp::Importer import;
 		const aiScene* scene = import.ReadFile(filepath.generic_string(), aiProcessPreset_TargetRealtime_MaxQuality);

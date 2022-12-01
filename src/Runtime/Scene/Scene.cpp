@@ -54,7 +54,7 @@ namespace GU
 		m_entityMap.erase(entity.getUUID());
 	}
 
-	void Scene::renderTick(const VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime)
+	void Scene::renderTick(VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime)
 	{
 		auto view = m_registry.view<MeshComponent, TransformComponent>();
 		for (auto entity : view)
