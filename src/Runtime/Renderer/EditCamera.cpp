@@ -25,7 +25,7 @@ namespace GU
 
     glm::quat EditCamera::getOrientation() const
     {
-        return glm::quat(glm::vec3(-m_pitch, -m_yaw, 0.0f));
+        return glm::quat(glm::vec3(-m_pitch, 0.0f, -m_yaw));
     }
 
     glm::vec3 EditCamera::getForwardDirection() const
@@ -85,8 +85,8 @@ namespace GU
 
     void EditCamera::mouseRotate(const glm::vec2& delta)
     {
-        float yawSign = getUpDirection().y < 0 ? -1.0f : 1.0f;
-        m_yaw += yawSign * delta.x * 0.8f;
+        //float yawSign = getUpDirection().y < 0 ? -1.0f : 1.0f;
+        m_yaw += delta.x * 0.8f;
         m_pitch += delta.y * 0.8f;
     }
 
