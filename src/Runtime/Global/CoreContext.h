@@ -35,3 +35,12 @@ namespace GU
 #define WARNING_LOG(msg) ::GU::g_CoreContext.g_Log(::GU::LogType::Warning ,msg)
 #define CRITICAL_LOG(msg) ::GU::g_CoreContext.g_Log(::GU::LogType::Critical ,msg)
 #define FATAL_LOG(msg) ::GU::g_CoreContext.g_Log(::GU::LogType::Fatal ,msg)
+
+#define GLOBAL_ASSET ::GU::g_CoreContext.g_asset
+#define GLOBAL_VULKANCONTEXT ::GU::g_CoreContext.g_vulkanContext
+#define GLOBAL_DELTATIME ::GU::g_CoreContext.g_deltaTime
+#define GLOBAL_PLAY ::GU::g_CoreContext.g_isPlay
+#define GLOBAL_STOP ::GU::g_CoreContext.g_isStop
+#define GLOBAL_SCENE ::GU::g_CoreContext.g_scene
+#define GLOBAL_PROJECTPATH ::GU::g_CoreContext.g_projectPath
+#define GLOBAL_TIMETICK() ::GU::g_CoreContext.timeTick()

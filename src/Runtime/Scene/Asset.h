@@ -12,8 +12,8 @@ namespace GU
 		Asset() = default;
 		~Asset() = default;
 
-		UUID insertMesh(std::filesystem::path filepath);
-		UUID getMeshWithUUID(UUID uuid);
+		UUID insertMesh(const std::filesystem::path& filepath);
+		std::shared_ptr<MeshNode> getMeshWithUUID(UUID uuid);
 	private:
 		std::unordered_map<UUID, std::shared_ptr<MeshNode>> m_meshMap;
 		std::unordered_map<std::filesystem::path, UUID> m_loadedModelMap;

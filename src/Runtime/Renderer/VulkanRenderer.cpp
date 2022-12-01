@@ -21,32 +21,34 @@ namespace GU
 		qDebug("initResources");
 
 		m_devFuncs = m_window->vulkanInstance()->deviceFunctions(m_window->device());
-		m_vulkanContext.physicalDevice = m_window->physicalDevice();
-		m_vulkanContext.logicalDevice = m_window->device();
-		m_vulkanContext.commandPool = m_window->graphicsCommandPool();
-		m_vulkanContext.graphicsQueue = m_window->graphicsQueue();
-		m_vulkanContext.renderPass = m_window->defaultRenderPass();
-		Entity entity = g_CoreContext.g_scene.createEntity();
-		auto& meshcomponent = entity.addComponent<MeshComponent>();
-		meshcomponent.meshnode = std::make_shared<MeshNode>();
-		MeshNode::read(m_vulkanContext, meshcomponent.meshnode, "./assets/models/viking_room.obj");
+		GLOBAL_VULKANCONTEXT.physicalDevice = m_window->physicalDevice();
+		GLOBAL_VULKANCONTEXT.logicalDevice = m_window->device();
+		GLOBAL_VULKANCONTEXT.commandPool = m_window->graphicsCommandPool();
+		GLOBAL_VULKANCONTEXT.graphicsQueue = m_window->graphicsQueue();
+		GLOBAL_VULKANCONTEXT.renderPass = m_window->defaultRenderPass();
+		
 
 		VkShaderModule vertexShader = createShader(m_window->device(), shader_texture_vert, sizeof(shader_texture_vert));
 		VkShaderModule fragShader = createShader(m_window->device(), shader_texture_frag, sizeof(shader_texture_frag));
-		createShaderStageInfo(vertexShader, fragShader, m_vulkanContext.shaderStage);
-		createDescriptorSetLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayout);
-		createPipelineLayout(m_vulkanContext, m_vulkanContext.descriptorSetLayout, m_vulkanContext.pipelineLayout);
-		createGraphicsPipeline(m_vulkanContext, m_vulkanContext.shaderStage, m_vulkanContext.pipelineLayout, m_vulkanContext.graphicsPipeline);
+		createShaderStageInfo(vertexShader, fragShader, GLOBAL_VULKANCONTEXT.shaderStage);
+		createDescriptorSetLayout(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.descriptorSetLayout);
+		createPipelineLayout(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.descriptorSetLayout, GLOBAL_VULKANCONTEXT.pipelineLayout);
+		createGraphicsPipeline(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.shaderStage, GLOBAL_VULKANCONTEXT.pipelineLayout, GLOBAL_VULKANCONTEXT.graphicsPipeline);
 		//loadModel("assets/models/viking_room.obj", vertices, indices);
 		VulkanImage vkImage;
-		createTextureImage(m_vulkanContext, "./assets/models/viking_room.png", vkImage);
-		createTextureImageView(m_vulkanContext, vkImage);
-		createTextureSampler(m_vulkanContext, vkImage);
-		createUniformBuffers(m_vulkanContext, m_vulkanContext.uniformBuffers, m_vulkanContext.uniformBuffersMemory, m_vulkanContext.uniformBuffersMapped);
-		createDescriptorPool(m_vulkanContext, m_vulkanContext.descriptorPool);
-		createDescriptorSets(m_vulkanContext, vkImage, m_vulkanContext.descriptorSetLayout, m_vulkanContext.descriptorPool, m_vulkanContext.descriptorSets);
-		createBackgroundPipeline(m_vulkanContext, m_vulkanContext.backgroudPipeline);
-		createBoundingBoxPipeline(m_vulkanContext, m_vulkanContext.boundingboxPipeline);
+		createTextureImage(GLOBAL_VULKANCONTEXT, "./assets/models/viking_room.png", vkImage);
+		createTextureImageView(GLOBAL_VULKANCONTEXT, vkImage);
+		createTextureSampler(GLOBAL_VULKANCONTEXT, vkImage);
+		createUniformBuffers(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.uniformBuffers, GLOBAL_VULKANCONTEXT.uniformBuffersMemory, GLOBAL_VULKANCONTEXT.uniformBuffersMapped);
+		createDescriptorPool(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.descriptorPool);
+		createDescriptorSets(GLOBAL_VULKANCONTEXT, vkImage, GLOBAL_VULKANCONTEXT.descriptorSetLayout, GLOBAL_VULKANCONTEXT.descriptorPool, GLOBAL_VULKANCONTEXT.descriptorSets);
+		createBackgroundPipeline(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.backgroudPipeline);
+		createBoundingBoxPipeline(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.boundingboxPipeline);
+
+		GLOBAL_VULKANCONTEXT = GLOBAL_VULKANCONTEXT;
+		Entity entity = GLOBAL_SCENE.createEntity();
+		auto& meshcomponent = entity.addComponent<MeshComponent>();
+		meshcomponent.meshID = GLOBAL_ASSET.insertMesh("./assets/models/viking_room.obj");
 	}
 
 	void VulkanRenderer::initSwapChainResources()
@@ -66,13 +68,13 @@ namespace GU
 
 	void VulkanRenderer::startNextFrame()
 	{
-		g_CoreContext.timeTick();
+		GLOBAL_TIMETICK();
 		g_CoreContext.g_winWidth = m_window->swapChainImageSize().width();
 		g_CoreContext.g_winHeight = m_window->swapChainImageSize().height();
 		m_Camera.updateView();
 		m_Camera.updateProjection();
-		m_vulkanContext.swapChainExtent = { (unsigned int)m_window->swapChainImageSize().width(),(unsigned int)m_window->swapChainImageSize().height() };
-		updateUniformBuffer(m_vulkanContext, m_Camera, m_window->currentSwapChainImageIndex(), m_vulkanContext.uniformBuffersMapped);
+		GLOBAL_VULKANCONTEXT.swapChainExtent = { (unsigned int)m_window->swapChainImageSize().width(),(unsigned int)m_window->swapChainImageSize().height() };
+		updateUniformBuffer(GLOBAL_VULKANCONTEXT, m_Camera, m_window->currentSwapChainImageIndex(), GLOBAL_VULKANCONTEXT.uniformBuffersMapped);
 		const QSize sz = m_window->swapChainImageSize();
 		VkClearColorValue clearColor = { { 0.0f, 0.0f, 0.0f, 1.0f } };
 		VkClearDepthStencilValue clearDS = { 1.0f, 0.0f };
@@ -111,16 +113,16 @@ namespace GU
 		m_devFuncs->vkCmdSetScissor(cmdBuf, 0, 1, &scissor);
 
 		// BackgroundColor
-		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.backgroudPipeline);
+		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKANCONTEXT.backgroudPipeline);
 		m_devFuncs->vkCmdDraw(cmdBuf, 6, 1, 0, 0);
 
 		// Wireframe
-		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.boundingboxPipeline);
-		m_devFuncs->vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vulkanContext.pipelineLayout, 0, 1, &m_vulkanContext.descriptorSets[m_window->currentSwapChainImageIndex()], 0, nullptr);
+		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKANCONTEXT.boundingboxPipeline);
+		m_devFuncs->vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKANCONTEXT.pipelineLayout, 0, 1, &GLOBAL_VULKANCONTEXT.descriptorSets[m_window->currentSwapChainImageIndex()], 0, nullptr);
 		m_devFuncs->vkCmdDraw(cmdBuf, 24, 1, 0, 0);
 
 		// 3D model
-		g_CoreContext.g_scene.renderTick(m_vulkanContext, cmdBuf, m_window->currentSwapChainImageIndex(), g_CoreContext.g_deltaTime);
+		GLOBAL_SCENE.renderTick(GLOBAL_VULKANCONTEXT, cmdBuf, m_window->currentSwapChainImageIndex(), GLOBAL_DELTATIME);
 
 		// submit queue
 		m_devFuncs->vkCmdEndRenderPass(cmdBuf);

@@ -51,6 +51,6 @@ namespace GU
 
 	struct MeshComponent
 	{
-		std::shared_ptr<MeshNode> meshnode;
+		UUID meshID;
 	};
 }
