@@ -33,6 +33,7 @@ namespace GU
 			{
 				Vertex vertex{};
 				vertex.pos = { aimesh->mVertices[j].x , aimesh->mVertices[j].y, aimesh->mVertices[j].z };
+				vertex.normal = { aimesh->mNormals[j].x , aimesh->mNormals[j].y, aimesh->mNormals[j].z};
 				vertex.texCoord = { aimesh->mTextureCoords[0] == nullptr ? 0 : aimesh->mTextureCoords[0][j].x,1 - (aimesh->mTextureCoords[0] == nullptr ? 0 : aimesh->mTextureCoords[0][j].y) };
 				mesh.m_vertices.push_back(vertex);
 			}

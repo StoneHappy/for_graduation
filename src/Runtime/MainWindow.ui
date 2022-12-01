@@ -35,6 +35,7 @@
    <addaction name="actNewProject"/>
    <addaction name="actOpenProject"/>
    <addaction name="actSaveProject"/>
+   <addaction name="actImportModel"/>
    <addaction name="separator"/>
    <addaction name="actNavmeshParam"/>
   </widget>
@@ -71,7 +72,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="debugLogTab">
         <attribute name="title">
@@ -97,7 +98,7 @@
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <property name="elideMode">
             <enum>Qt::ElideNone</enum>
@@ -106,6 +107,11 @@
             <attribute name="title">
              <string>模型</string>
             </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QTableView" name="modelTableView"/>
+             </item>
+            </layout>
            </widget>
            <widget class="QWidget" name="tabtexture">
             <attribute name="title">
@@ -161,6 +167,9 @@
    </property>
    <property name="text">
     <string>导入模型</string>
+   </property>
+   <property name="toolTip">
+    <string>导入模型到资源管理器</string>
    </property>
   </action>
   <action name="actShowViewDock">

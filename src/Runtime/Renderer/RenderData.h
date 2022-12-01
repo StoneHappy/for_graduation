@@ -16,7 +16,7 @@ namespace GU
 	// Vertex
 	struct Vertex {
 		glm::vec3 pos;
-		glm::vec3 color;
+		glm::vec3 normal;
 		glm::vec2 texCoord;
 
 		static VkVertexInputBindingDescription getBindingDescription();
@@ -24,7 +24,7 @@ namespace GU
 		static ::std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions();
 
 		bool operator==(const Vertex& other) const {
-			return pos == other.pos && color == other.color && texCoord == other.texCoord;
+			return pos == other.pos && normal == other.normal && texCoord == other.texCoord;
 		}
 	};
 	
@@ -47,12 +47,11 @@ namespace GU
 		VkSampler		sampler;
 	};
 
-	void loadModel(::std::filesystem::path filePath, std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
 }
 namespace std {
 	template<> struct hash<GU::Vertex> {
 		size_t operator()(GU::Vertex const& vertex) const {
-			return ((hash<glm::vec3>()(vertex.pos) ^ (hash<glm::vec3>()(vertex.color) << 1)) >> 1) ^ (hash<glm::vec2>()(vertex.texCoord) << 1);
+			return ((hash<glm::vec3>()(vertex.pos) ^ (hash<glm::vec3>()(vertex.normal) << 1)) >> 1) ^ (hash<glm::vec2>()(vertex.texCoord) << 1);
 		}
 	};
 }

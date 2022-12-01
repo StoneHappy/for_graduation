@@ -31,12 +31,15 @@ namespace GU
 		VkShaderModule vertexShader = createShader(m_window->device(), shader_texture_vert, sizeof(shader_texture_vert));
 		VkShaderModule fragShader = createShader(m_window->device(), shader_texture_frag, sizeof(shader_texture_frag));
 		createShaderStageInfo(vertexShader, fragShader, GLOBAL_VULKANCONTEXT.shaderStage);
+		// descript binding point
 		createDescriptorSetLayout(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.descriptorSetLayout);
+		// create graphicspipeline according to descriptor and qt default pipelinelayout
 		createPipelineLayout(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.descriptorSetLayout, GLOBAL_VULKANCONTEXT.pipelineLayout);
+		// create graphicspipeline according to layout
 		createGraphicsPipeline(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.shaderStage, GLOBAL_VULKANCONTEXT.pipelineLayout, GLOBAL_VULKANCONTEXT.graphicsPipeline);
-		//loadModel("assets/models/viking_room.obj", vertices, indices);
+
 		VulkanImage vkImage;
-		createTextureImage(GLOBAL_VULKANCONTEXT, "./assets/models/viking_room.png", vkImage);
+		createTextureImage(GLOBAL_VULKANCONTEXT, "./assets/grid.jpg", vkImage);
 		createTextureImageView(GLOBAL_VULKANCONTEXT, vkImage);
 		createTextureSampler(GLOBAL_VULKANCONTEXT, vkImage);
 		createUniformBuffers(GLOBAL_VULKANCONTEXT, GLOBAL_VULKANCONTEXT.uniformBuffers, GLOBAL_VULKANCONTEXT.uniformBuffersMemory, GLOBAL_VULKANCONTEXT.uniformBuffersMapped);
