@@ -6,6 +6,7 @@
 #include <Renderer/VulkanContext.h>
 #include <filesystem>
 #include <Core/ThreadPool.h>
+#include <Core/Project.h>
 class MainWindow;
 namespace GU
 {
@@ -25,12 +26,12 @@ namespace GU
 		bool g_isStop = true;
 		float g_winWidth = 1280.0, g_winHeight = 720.0;
 		Scene g_scene;
-		std::filesystem::path g_projectFilePath;
 		void timeTick();
 		VulkanContext g_vulkanContext;
 		Asset g_asset;
 		ThreadPool g_threadPool{8};
 		MainWindow* g_p_mainWindow;
+		Project g_Proejct;
 	};
 
 }
@@ -46,7 +47,9 @@ namespace GU
 #define GLOBAL_PLAY ::GU::g_CoreContext.g_isPlay
 #define GLOBAL_STOP ::GU::g_CoreContext.g_isStop
 #define GLOBAL_SCENE ::GU::g_CoreContext.g_scene
-#define GLOBAL_PROJECT_FILE_PATH ::GU::g_CoreContext.g_projectFilePath
-#define GLOBAL_PROJECT_PATH ::GU::g_CoreContext.g_projectFilePath.parent_path()
-#define GLOBAL_ASSET_PATH ::GU::g_CoreContext.g_projectFilePath.parent_path() / "assets/"
+#define GLOBAL_SAVE_PROJECT(projectfile) ::GU::g_CoreContext.g_Proejct.save(projectfile)
+#define GLOBAL_OPEN_PROJECT(projectfile) ::GU::g_CoreContext.g_Proejct.open(projectfile)
+#define GLOBAL_PROJECT_FILE_PATH ::GU::g_CoreContext.g_Proejct.projectFilePath
+#define GLOBAL_PROJECT_PATH ::GU::g_CoreContext.g_Proejct.projectDirPath
+#define GLOBAL_ASSET_PATH ::GU::g_CoreContext.g_Proejct.assetDirPath
 #define GLOBAL_TIME_TICK() ::GU::g_CoreContext.timeTick()

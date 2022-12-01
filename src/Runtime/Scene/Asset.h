@@ -9,6 +9,7 @@ namespace GU
 	class Asset
 	{
 	public:
+		friend class Project;
 		Asset() = default;
 		~Asset() = default;
 

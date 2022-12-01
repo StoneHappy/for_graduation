@@ -2,6 +2,14 @@
 #include <filesystem>
 namespace GU
 {
-	void saveProject(std::filesystem::path projectPath);
-	void openProject(std::filesystem::path projectPath);
+	class Project
+	{
+	public:
+		void save(std::filesystem::path projectPath);
+		void open(std::filesystem::path projectPath);
+
+		std::filesystem::path projectFilePath;
+		std::filesystem::path projectDirPath;
+		std::filesystem::path assetDirPath;
+	};
 }

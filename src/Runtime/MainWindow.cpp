@@ -270,9 +270,8 @@ void MainWindow::on_actNewProject_triggered()
 
 	if (rnt == QDialog::Accepted)
 	{
-		GLOBAL_PROJECT_FILE_PATH = newProjectDlg->m_projectPath.toStdString();
-		GU::saveProject(GLOBAL_PROJECT_FILE_PATH);
-
+		std::string projectfile = newProjectDlg->m_projectPath.toStdString();
+		GLOBAL_SAVE_PROJECT(projectfile);
 		ui->actImportModel->setEnabled(true);
 		ui->actSaveProject->setEnabled(true);
 		ui->actNavmeshParam->setEnabled(true);
@@ -290,9 +289,9 @@ void MainWindow::on_actOpenProject_triggered()
 }
 void MainWindow::on_actSaveProject_triggered()
 {
-	if (!GU::g_CoreContext.g_projectFilePath.empty())
+	if (!GLOBAL_PROJECT_FILE_PATH.empty())
 	{
-		GU::saveProject(GLOBAL_PROJECT_FILE_PATH);
+		GLOBAL_SAVE_PROJECT(GLOBAL_PROJECT_FILE_PATH);
 	}
 }
 
