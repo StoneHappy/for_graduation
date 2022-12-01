@@ -61,7 +61,7 @@ namespace GU
 		for (auto entity : view)
 		{
 			auto&& [meshComponet, transform] = view.get<MeshComponent, TransformComponent>(entity);
-			updateMeshUniformBuffer(GLOBAL_VULKANCONTEXT, transform.getTransform(), currImageIndex, GLOBAL_VULKANCONTEXT.meshUniformBuffersMapped);
+			updateMeshUniformBuffer(GLOBAL_VULKAN_CONTEXT, transform.getTransform(), currImageIndex, GLOBAL_VULKAN_CONTEXT.meshUniformBuffersMapped);
 			for (auto& mesh : GLOBAL_ASSET.getMeshWithUUID(meshComponet.meshID)->meshs)
 			{
 				vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.graphicsPipeline);

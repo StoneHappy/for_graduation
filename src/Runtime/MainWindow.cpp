@@ -245,7 +245,8 @@ void MainWindow::on_actNewProject_triggered()
 
 	if (rnt == QDialog::Accepted)
 	{
-		GU::g_CoreContext.g_projectPath = newProjectDlg->m_projectPath.toStdString();
+		GLOBAL_PROJECT_FILE_PATH = newProjectDlg->m_projectPath.toStdString();
+		GU::saveProject(GLOBAL_PROJECT_FILE_PATH);
 	}
 }
 void MainWindow::on_actOpenProject_triggered()
@@ -260,9 +261,9 @@ void MainWindow::on_actOpenProject_triggered()
 }
 void MainWindow::on_actSaveProject_triggered()
 {
-	if (!GU::g_CoreContext.g_projectPath.empty())
+	if (!GU::g_CoreContext.g_projectFilePath.empty())
 	{
-		GU::saveProject(GU::g_CoreContext.g_projectPath);
+		GU::saveProject(GLOBAL_PROJECT_FILE_PATH);
 	}
 }
 
@@ -337,6 +338,27 @@ void MainWindow::on_actNavmeshParam_triggered()
 	if (rnt == QDialog::Accepted)
 	{
 
+	}
+}
+
+void MainWindow::on_actImportModel_triggered()
+{
+	QString qfilename = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("打开模型"), QDir::currentPath(), QString::fromLocal8Bit("obj模型(*.obj)"));
+
+	if (!qfilename.isEmpty())
+	{
+		std::filesystem::path filename = qfilename.toStdString();
+		qDebug(filename.parent_path().string().c_str());
+		qDebug(filename.replace_extension().string().c_str());
+		qDebug(filename.replace_extension().filename().string().c_str());
+		auto parentname = filename.replace_extension().filename();
+		qDebug((GLOBAL_ASSET_PATH / "models/" / parentname).string().c_str());
+		std::filesystem::create_directory(GLOBAL_ASSET_PATH / "models");
+		std::filesystem::create_directory(GLOBAL_ASSET_PATH / "models" / parentname);
+		std::filesystem::copy(filename.parent_path(), GLOBAL_ASSET_PATH / "models" / parentname);
+		/*auto parentname = filename.replace_extension().filename();
+		std::filesystem::copy(filename.parent_path(), GLOBAL_ASSET_PATH / parentname);
+		GLOBAL_ASSET.insertMesh(filename.generic_string());*/
 	}
 }
 

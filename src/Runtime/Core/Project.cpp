@@ -19,7 +19,11 @@ void GU::saveProject(std::filesystem::path projectPath)
     }
     fout.close();
     std::filesystem::path assetPath = projectPath.parent_path() / "assets";
+    std::filesystem::path modelPath = assetPath / "models";
+    std::filesystem::path texturePath = assetPath / "textures";
     std::filesystem::create_directory(assetPath.generic_string());
+    std::filesystem::create_directory(modelPath.generic_string());
+    std::filesystem::create_directory(texturePath.generic_string());
 }
 
 void GU::openProject(std::filesystem::path projectPath)
