@@ -3,6 +3,7 @@
 #include <vulkan/vulkan.h>
 #include <Renderer/VulkanImage.h>
 #include <Renderer/VulkanContext.h>
+#include <memory>
 namespace GU
 {
 	class Mesh
@@ -22,8 +23,23 @@ namespace GU
 	class MeshNode
 	{
 	public:
-		std::vector<Mesh> m_meshs;
+		MeshNode();
+		~MeshNode();
+
+	public:
+		struct MeshTree
+		{
+			uint32_t parentID = 0;
+			uint32_t id = 0;
+			std::vector<uint32_t> childrenIDs;
+			std::vector<MeshTree> childrens;
+			bool isRoot = false;
+			bool isLeft = false;
+		};
+		std::vector<Mesh> meshs;
+		MeshTree root;
+
+		static bool read(const VulkanContext& vulkanContext, std::shared_ptr<MeshNode> meshnode, const std::filesystem::path& filepath);
 	};
 
-	bool readMesh(const VulkanContext& vulkanContext, MeshNode& meshnode, const char* filePath);
 }

@@ -61,7 +61,7 @@ namespace GU
 		{
 			auto&& [meshComponet, transform] = view.get<MeshComponent, TransformComponent>(entity);
 
-			for (auto& mesh : meshComponet.meshNode.m_meshs)
+			for (auto& mesh : meshComponet.meshnode->meshs)
 			{
 				vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.graphicsPipeline);
 				vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.pipelineLayout, 0, 1, &vulkanContext.descriptorSets[currImageIndex], 0, nullptr);

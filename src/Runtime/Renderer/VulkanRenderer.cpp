@@ -28,7 +28,8 @@ namespace GU
 		m_vulkanContext.renderPass = m_window->defaultRenderPass();
 		Entity entity = g_CoreContext.g_scene.createEntity();
 		auto& meshcomponent = entity.addComponent<MeshComponent>();
-		readMesh(m_vulkanContext, meshcomponent.meshNode, "./assets/models/viking_room.obj");
+		meshcomponent.meshnode = std::make_shared<MeshNode>();
+		MeshNode::read(m_vulkanContext, meshcomponent.meshnode, "./assets/models/viking_room.obj");
 
 		VkShaderModule vertexShader = createShader(m_window->device(), shader_texture_vert, sizeof(shader_texture_vert));
 		VkShaderModule fragShader = createShader(m_window->device(), shader_texture_frag, sizeof(shader_texture_frag));

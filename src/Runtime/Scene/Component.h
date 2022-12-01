@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <Renderer/Mesh.h>
+#include <memory>
 namespace GU
 {
 	struct IDComponent
@@ -50,6 +51,6 @@ namespace GU
 
 	struct MeshComponent
 	{
-		MeshNode meshNode;
+		std::shared_ptr<MeshNode> meshnode;
 	};
 }

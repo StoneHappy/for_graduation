@@ -2,6 +2,7 @@
 #include <Core/Type.h>
 #include <chrono>
 #include <Scene/Scene.h>
+#include <Scene/Asset.h>
 #include <Renderer/VulkanContext.h>
 #include <filesystem>
 namespace GU
@@ -26,6 +27,7 @@ namespace GU
 		std::filesystem::path g_projectPath;
 		void timeTick();
 		VulkanContext g_vulkanContext;
+		Asset g_asset;
 	};
 
 }
