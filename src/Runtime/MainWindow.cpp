@@ -46,6 +46,10 @@ CDoubleProperty* rzProperty;
 CDoubleProperty* sxProperty;
 CDoubleProperty* syProperty;
 CDoubleProperty* szProperty;
+
+CPropertyHeader* meshheader;
+CStringProperty* meshProperty;
+CStringProperty* meshuuidProperty;
 /*******************************Property***********************************************/
 
 static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& msg)
@@ -208,6 +212,11 @@ void MainWindow::craeteComponentView()
 	syProperty = new CDoubleProperty(sclheader, "syProperty", "y:", 0, 0, -1000.0, 1000.0);
 	szProperty = new CDoubleProperty(sclheader, "szProperty", "z:", 0, 0, -1000.0, 1000.0);
 
+	meshheader = new CPropertyHeader("meshheader", QString::fromLocal8Bit("网格组件"));
+	meshProperty = new CStringProperty(meshheader, "meshProperty", QString::fromLocal8Bit("模型名称"), QString::fromLocal8Bit(""));
+	meshuuidProperty = new CStringProperty(meshheader, "meshuuidProperty", QString::fromLocal8Bit("模型id"), QString::fromLocal8Bit(""));
+	meshProperty->setDisabled(true);
+	meshuuidProperty->setDisabled(true);
 	//ui->componentTreeWidget->adjustToContents();
 }
 void MainWindow::craeteResourceView()
@@ -252,6 +261,10 @@ void MainWindow::clearAllComponentProperty()
 	ui->componentTreeWidget->remove(sxProperty);
 	ui->componentTreeWidget->remove(syProperty);
 	ui->componentTreeWidget->remove(szProperty);
+
+	ui->componentTreeWidget->remove(meshheader);
+	ui->componentTreeWidget->remove(meshProperty);
+	ui->componentTreeWidget->remove(meshuuidProperty);
 }
 
 void MainWindow::importResource2Table(QString filename, uint64_t uuid, int type)
@@ -449,6 +462,7 @@ void MainWindow::on_actAddModelToEntity_triggered()
 		auto& meshComponent = entity.addComponent<GU::MeshComponent>();
 		meshComponent.meshID = modelitem->data().toULongLong();
 	}
+	slot_on_entityTreeSelectModel_currentChanged(m_entityTreeSelectModel->currentIndex(), m_entityTreeSelectModel->currentIndex());
 }
 
 
@@ -519,8 +533,20 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 		ui->componentTreeWidget->add(sxProperty);
 		ui->componentTreeWidget->add(syProperty);
 		ui->componentTreeWidget->add(szProperty);
-
+		ui->componentTreeWidget->add(szProperty);
 	}
+
+	if (entity.hasComponent<GU::MeshComponent>())
+	{
+		auto uuid = entity.getComponent<GU::MeshComponent>().meshID;
+		meshuuidProperty->setValue(QString::number(uuid));
+		meshProperty->setValue(GLOBAL_ASSET.getMeshPathWithUUID(uuid).string().c_str());
+		ui->componentTreeWidget->add(meshheader);
+		ui->componentTreeWidget->add(meshProperty);
+		ui->componentTreeWidget->add(meshuuidProperty);
+	}
+	
+
 	ui->componentTreeWidget->adjustToContents();
 }
 

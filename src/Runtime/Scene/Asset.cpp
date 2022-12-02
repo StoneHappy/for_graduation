@@ -51,6 +51,17 @@ namespace GU
         m_loadedTextureMap[filepath] = id;
         return id;
     }
+    std::filesystem::path Asset::getMeshPathWithUUID(UUID uuid)
+    {
+        for(auto && m : m_loadedModelMap)
+        {
+            if (m.second == uuid)
+            {
+                return m.first;
+            }
+        }
+        return "";
+    }
     UUID Asset::insertTextureWithUUID(const std::filesystem::path& filepath, UUID uuid)
     {
         auto found = m_loadedTextureMap.find(filepath);
