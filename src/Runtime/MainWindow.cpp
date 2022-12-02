@@ -211,6 +211,7 @@ void MainWindow::craeteComponentView()
 }
 void MainWindow::craeteResourceView()
 {
+	// mesh table init
 	m_meshTableModel = new QStandardItemModel(50, 15, this);
 	m_meshTableSelectModel = new QItemSelectionModel(m_meshTableModel, this);
 	ui->modelTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -220,6 +221,15 @@ void MainWindow::craeteResourceView()
 	ui->modelTableView->verticalHeader()->hide();
 	connect(this, SIGNAL(signal_importResource2Table(QString, uint64_t, int)), this, SLOT(slot_importResource2Table(QString, uint64_t, int)));
 	connect(m_meshTableSelectModel, SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(slot_on_meshTableSelectModel_currentChanged(const QModelIndex&, const QModelIndex&)));
+
+	// texture table init
+	m_textureTableModel = new QStandardItemModel(50, 15, this);
+	m_textureTableSelectModel = new QItemSelectionModel(m_textureTableModel, this);
+	ui->textureTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	ui->textureTableView->setModel(m_textureTableModel);
+	ui->textureTableView->setSelectionModel(m_textureTableSelectModel);
+	ui->textureTableView->horizontalHeader()->hide();
+	ui->textureTableView->verticalHeader()->hide();
 }
 
 void MainWindow::clearAllComponentProperty()

@@ -51,6 +51,10 @@ private:
     QItemSelectionModel*    m_meshTableSelectModel;
     uint32_t m_numMeshInTable = 0;
 
+    QStandardItemModel* m_textureTableModel;
+    QItemSelectionModel* m_textureTableSelectModel;
+    uint32_t m_numTextureInTable = 0;
+
     int m_progressTaskNum = 0;
     int m_currentTaskNo = 0;
 
