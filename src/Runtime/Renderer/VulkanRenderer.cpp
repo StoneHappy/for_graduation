@@ -50,9 +50,9 @@ namespace GU
 		createBoundingBoxPipeline(GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT.boundingboxPipeline);
 
 		GLOBAL_VULKAN_CONTEXT = GLOBAL_VULKAN_CONTEXT;
-		Entity entity = GLOBAL_SCENE.createEntity();
+		/*Entity entity = GLOBAL_SCENE.createEntity();
 		auto& meshcomponent = entity.addComponent<MeshComponent>();
-		meshcomponent.meshID = GLOBAL_ASSET.insertMesh("./assets/models/viking_room.obj");
+		meshcomponent.meshID = GLOBAL_ASSET.insertMesh("models/viking_room.obj");*/
 	}
 
 	void VulkanRenderer::initSwapChainResources()

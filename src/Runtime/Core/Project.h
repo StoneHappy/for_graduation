@@ -11,5 +11,6 @@ namespace GU
 		std::filesystem::path projectFilePath;
 		std::filesystem::path projectDirPath;
 		std::filesystem::path assetDirPath;
+		std::filesystem::path modelDirPath;
 	};
 }

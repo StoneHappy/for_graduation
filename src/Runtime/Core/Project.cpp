@@ -4,6 +4,7 @@
 #include<fstream>
 #include <Core/UUID.h>
 #include <Renderer/Mesh.h>
+#include <MainWindow.h>
 YAML::Emitter& operator << (YAML::Emitter& emitter, const std::unordered_map<std::filesystem::path, GU::UUID>& m) {
     emitter << YAML::BeginMap;
     for (const auto& v : m)
@@ -19,7 +20,7 @@ namespace GU
         projectFilePath = projectPath;
         projectDirPath = projectPath.parent_path();
         assetDirPath = projectDirPath / "assets";
-
+        modelDirPath = assetDirPath / "models";
         YAML::Emitter out;
         out << YAML::BeginMap;
         out << YAML::Key << "ProjectName" << YAML::Value << projectPath.filename().string();
@@ -52,13 +53,18 @@ namespace GU
         projectFilePath = projectPath;
         projectDirPath = projectPath.parent_path();
         assetDirPath = projectDirPath / "assets";
+        modelDirPath = assetDirPath / "models";
 
         YAML::Node config = YAML::LoadFile(projectPath.string());
         auto assets = config["Assets"];
         auto models = assets["Models"];
+        GLOBAL_MAINWINDOW->progressBegin(models.size());
         for (auto mesh : models)
         {
-            GLOBAL_ASSET.insertMeshWithUUID(mesh.first.as<std::string>(), mesh.second.as<uint64_t>());
+            GLOBAL_THREAD_POOL.enqueue([=]() {
+                GLOBAL_MAINWINDOW->progressTick();
+                GLOBAL_ASSET.insertMeshWithUUID(mesh.first.as<std::string>(), mesh.second.as<uint64_t>());
+            });
         }
     }
 }

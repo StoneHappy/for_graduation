@@ -7,16 +7,14 @@ namespace GU
 {
     UUID Asset::insertMesh(const std::filesystem::path& filepath)
     {
-        DEBUG_LOG("loading mesh %s", filepath.string().c_str());
         auto found = m_loadedModelMap.find(filepath);
         if (found != m_loadedModelMap.end())
         {
-            DEBUG_LOG("mesh(%s) has been loaded!", filepath.string().c_str());
             return found->second;
         }
 
         std::shared_ptr<MeshNode> meshnode = std::make_shared<MeshNode>();
-        MeshNode::read(g_CoreContext.g_vulkanContext, meshnode, filepath);
+        MeshNode::read(g_CoreContext.g_vulkanContext, meshnode, (GLOBAL_MODEL_PATH / filepath).generic_string());
         UUID id;
         GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::Mesh);
         m_meshMap[id] = meshnode;
@@ -25,16 +23,14 @@ namespace GU
     }
     UUID Asset::insertMeshWithUUID(const std::filesystem::path& filepath, UUID uuid)
     {
-        DEBUG_LOG("loading mesh %s", filepath.string().c_str());
         auto found = m_loadedModelMap.find(filepath);
         if (found != m_loadedModelMap.end())
         {
-            DEBUG_LOG("mesh(%s) has been loaded!", filepath.string().c_str());
             return found->second;
         }
 
         std::shared_ptr<MeshNode> meshnode = std::make_shared<MeshNode>();
-        MeshNode::read(g_CoreContext.g_vulkanContext, meshnode, filepath);
+        MeshNode::read(g_CoreContext.g_vulkanContext, meshnode, (GLOBAL_MODEL_PATH / filepath).generic_string());
         UUID id = uuid;
         GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::Mesh);
         m_meshMap[id] = meshnode;
@@ -43,11 +39,9 @@ namespace GU
     }
     UUID Asset::insertTexture(const std::filesystem::path& filepath)
     {
-        DEBUG_LOG("loading texture %s", filepath.string().c_str());
         auto found = m_loadedTextureMap.find(filepath);
         if (found != m_loadedTextureMap.end())
         {
-            DEBUG_LOG("mesh(%s) has been loaded!", filepath.string().c_str());
             return found->second;
         }
 
@@ -59,11 +53,9 @@ namespace GU
     }
     UUID Asset::insertTextureWithUUID(const std::filesystem::path& filepath, UUID uuid)
     {
-        DEBUG_LOG("loading texture %s", filepath.string().c_str());
         auto found = m_loadedTextureMap.find(filepath);
         if (found != m_loadedTextureMap.end())
         {
-            DEBUG_LOG("mesh(%s) has been loaded!", filepath.string().c_str());
             return found->second;
         }
 

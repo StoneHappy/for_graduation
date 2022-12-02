@@ -308,6 +308,9 @@ void MainWindow::on_actOpenProject_triggered()
 	QString qfilename = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("打开工程"), QDir::currentPath(), QString::fromLocal8Bit("工程文件(*.gu)"));
 	std::string filename = qfilename.toStdString();
 	GLOBAL_OPEN_PROJECT(filename);
+	ui->actImportModel->setEnabled(true);
+	ui->actSaveProject->setEnabled(true);
+	ui->actNavmeshParam->setEnabled(true);
 }
 void MainWindow::on_actSaveProject_triggered()
 {
@@ -401,12 +404,14 @@ void MainWindow::on_actImportModel_triggered()
 		std::filesystem::path filename = qfilename.toStdString();
 		auto parentname = filepath.replace_extension().filename();
 		std::filesystem::create_directory(filepath.parent_path(), GLOBAL_ASSET_PATH / "models" / parentname);
-		if (!std::filesystem::exists(GLOBAL_ASSET_PATH / parentname / filename.filename()))
+		if (!std::filesystem::exists(GLOBAL_ASSET_PATH / "models" / parentname / filename.filename()))
 		{
 			std::filesystem::create_directory(filepath.parent_path(), GLOBAL_ASSET_PATH / "models" / parentname);
-			std::filesystem::copy(filepath.parent_path(), GLOBAL_ASSET_PATH / parentname);
-			GU::g_CoreContext.g_threadPool.enqueue([=]() {
-			GLOBAL_ASSET.insertMesh((GLOBAL_ASSET_PATH / parentname / filename.filename()).generic_string());
+			std::filesystem::copy(filepath.parent_path(), GLOBAL_ASSET_PATH / "models" / parentname);
+			
+		}
+		GLOBAL_THREAD_POOL.enqueue([=]() {
+			GLOBAL_ASSET.insertMesh((parentname / filename.filename()).generic_string());
 #if 0 // test progress bar
 			GLOBAL_MAINWINDOW->progressBegin(5);
 			for (size_t i = 0; i < 5; i++)
@@ -416,8 +421,7 @@ void MainWindow::on_actImportModel_triggered()
 			}
 			GLOBAL_MAINWINDOW->progressEnd();
 #endif
-				});
-		}
+		});
 	}
 }
 
