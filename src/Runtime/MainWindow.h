@@ -24,6 +24,11 @@ public:
     ~MainWindow();
     void importResource2Table(QString, uint64_t, int type);
     void setStatus(const QString& );
+
+    void progressBegin(int tasknum);
+    void progressTick();
+    void progressEnd();
+
 private:
     void createPopMenu();
     void createEntityView();
@@ -46,8 +51,12 @@ private:
     QItemSelectionModel*    m_meshTableSelectModel;
     uint32_t m_numMeshInTable = 0;
 
+    int m_progressTaskNum = 0;
+    int m_currentTaskNo = 0;
+
 Q_SIGNALS:
     void signal_importResource2Table(QString, uint64_t, int type);
+    void signal_progressTick(int max);
 
 private slots:
     void on_actShowViewDock_triggered();
@@ -69,6 +78,7 @@ private slots:
     void slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&, const QModelIndex&);
     void slot_on_meshTableSelectModel_currentChanged(const QModelIndex&, const QModelIndex&);
     void slot_importResource2Table(QString, uint64_t, int type);
+    void slot_progressTick(int max);
 };
 
 #endif // MAINWINDOW_H

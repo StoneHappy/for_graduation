@@ -121,11 +121,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	m_statusInfo = new QLabel(this);
 	m_progressBar = new QProgressBar(this);
 	m_progressBar->setMaximumWidth(500);
+	connect(this, SIGNAL(signal_progressTick(int)), this, SLOT(slot_progressTick(int)));
 	m_statusInfo->setText(QString::fromLocal8Bit("暂停"));
-	m_progressBar->hide();
+	//m_progressBar->hide();
 	ui->statusbar->addWidget(m_statusInfo);
 	ui->statusbar->addWidget(m_progressBar);
-	m_progressBar->setValue(50);
+	//m_progressBar->setValue(50);
 }
 
 MainWindow::~MainWindow()
@@ -250,6 +251,25 @@ void MainWindow::importResource2Table(QString filename, uint64_t uuid, int type)
 void MainWindow::setStatus(const QString& text)
 {
 	m_statusInfo->setText(text);
+}
+
+void MainWindow::progressBegin(int tasknum)
+{
+	/*m_progressBar->show();
+	m_progressTaskNum = tasknum;
+	m_progressBar->setMaximum(tasknum);
+	m_progressBar->setValue(0);*/
+	emit signal_progressTick(tasknum);
+}
+
+void MainWindow::progressTick()
+{
+	emit signal_progressTick(0);
+}
+
+void MainWindow::progressEnd()
+{
+	emit signal_progressTick(-1);
 }
 
 
@@ -387,6 +407,15 @@ void MainWindow::on_actImportModel_triggered()
 			std::filesystem::copy(filepath.parent_path(), GLOBAL_ASSET_PATH / parentname);
 			GU::g_CoreContext.g_threadPool.enqueue([=]() {
 			GLOBAL_ASSET.insertMesh((GLOBAL_ASSET_PATH / parentname / filename.filename()).generic_string());
+#if 0 // test progress bar
+			GLOBAL_MAINWINDOW->progressBegin(5);
+			for (size_t i = 0; i < 5; i++)
+			{
+				std::this_thread::sleep_for(std::chrono::seconds(3));
+				GLOBAL_MAINWINDOW->progressTick();
+			}
+			GLOBAL_MAINWINDOW->progressEnd();
+#endif
 				});
 		}
 	}
@@ -498,6 +527,30 @@ void MainWindow::slot_importResource2Table(QString filename, uint64_t uuid, int 
 		break;
 	default:
 		break;
+	}
+}
+void MainWindow::slot_progressTick(int max)
+{
+	if (max != 0 && max != -1)
+	{
+		m_progressTaskNum = max;
+		m_progressBar->setMaximum(max);
+		m_progressBar->setValue(0);
+		m_progressBar->show();
+	}
+
+	m_currentTaskNo++;
+
+	if (m_currentTaskNo > m_progressTaskNum || max == -1)
+	{
+		m_currentTaskNo = 0;
+		m_progressTaskNum = 0;
+		m_progressBar->setMaximum(0);
+		m_progressBar->hide();
+	}
+	else
+	{
+		m_progressBar->setValue(m_currentTaskNo);
 	}
 }
 void MainWindow::slot_tagPropertyChanged()
