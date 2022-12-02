@@ -22,13 +22,13 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void importMesh2Table(QString, uint64_t);
+    void importResource2Table(QString, uint64_t, int type);
 
 private:
     void createPopMenu();
     void createEntityView();
     void craeteComponentView();
-    void craeteMeshResourceView();
+    void craeteResourceView();
     void clearAllComponentProperty();
 private:
     Ui::MainWindow *ui;
@@ -47,7 +47,7 @@ private:
     uint32_t m_numMeshInTable = 0;
 
 Q_SIGNALS:
-    void signal_importMesh2Table(QString, uint64_t);
+    void signal_importResource2Table(QString, uint64_t, int type);
 
 private slots:
     void on_actShowViewDock_triggered();
@@ -67,7 +67,7 @@ private slots:
     void slot_tagPropertyChanged();
     void slot_treeviewEntity_customcontextmenu(const QPoint&);
     void slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&, const QModelIndex&);
-    void slot_importMesh2Table(QString, uint64_t uuid);
+    void slot_importResource2Table(QString, uint64_t, int type);
 };
 
 #endif // MAINWINDOW_H

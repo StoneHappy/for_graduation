@@ -12,13 +12,12 @@ namespace GU
 		Mesh() = default;
 		std::vector<Vertex> m_vertices;
 		std::vector<uint32_t> m_indices;
-		VulkanImage m_Texture;
-		VkPipeline m_Pipeline;
 		VkBuffer								vertexBuffer;
 		VkDeviceMemory							vertexMemory;
 		VkBuffer								indexBuffer;
 		VkDeviceMemory							indexMemory;
 		uint32_t id;
+		uint64_t textureID;
 	};
 	class MeshNode
 	{

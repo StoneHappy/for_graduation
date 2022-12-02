@@ -111,7 +111,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	createPopMenu();
 	createEntityView();
 	craeteComponentView();
-	craeteMeshResourceView();
+	craeteResourceView();
 
 	ui->actImportModel->setEnabled(false);
 	ui->actSaveProject->setEnabled(false);
@@ -208,7 +208,7 @@ void MainWindow::craeteComponentView()
 
 	//ui->componentTreeWidget->adjustToContents();
 }
-void MainWindow::craeteMeshResourceView()
+void MainWindow::craeteResourceView()
 {
 	m_meshTableModel = new QStandardItemModel(50, 15, this);
 	m_meshTableSelectModel = new QItemSelectionModel(m_meshTableModel, this);
@@ -217,7 +217,7 @@ void MainWindow::craeteMeshResourceView()
 	ui->modelTableView->setSelectionModel(m_meshTableSelectModel);
 	ui->modelTableView->horizontalHeader()->hide();
 	ui->modelTableView->verticalHeader()->hide();
-	connect(this, SIGNAL(signal_importMesh2Table(QString, uint64_t)), this, SLOT(slot_importMesh2Table(QString, uint64_t)));
+	connect(this, SIGNAL(signal_importResource2Table(QString, uint64_t, int)), this, SLOT(slot_importResource2Table(QString, uint64_t, int)));
 }
 
 void MainWindow::clearAllComponentProperty()
@@ -241,9 +241,9 @@ void MainWindow::clearAllComponentProperty()
 	ui->componentTreeWidget->remove(szProperty);
 }
 
-void MainWindow::importMesh2Table(QString filename, uint64_t uuid)
+void MainWindow::importResource2Table(QString filename, uint64_t uuid, int type)
 {
-	emit signal_importMesh2Table(filename, uuid);
+	emit signal_importResource2Table(filename, uuid, type);
 }
 
 
@@ -457,15 +457,27 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 	ui->componentTreeWidget->adjustToContents();
 }
 
-void MainWindow::slot_importMesh2Table(QString filename, uint64_t uuid)
+void MainWindow::slot_importResource2Table(QString filename, uint64_t uuid, int type)
 {
 	QStandardItem* item = new QStandardItem(filename);
 	item->setEditable(false);
 	item->setIcon(QIcon(":/images/model.png"));
 	item->setData(uuid);
-	m_meshTableModel->setItem(m_numMeshInTable / 15, m_numMeshInTable % 15, item);
-	ui->modelTableView->update();
-	m_numMeshInTable++;
+
+	::GU::Asset::AssetType assettype = (::GU::Asset::AssetType)type;
+
+	switch (assettype)
+	{
+	case GU::Asset::AssetType::Mesh:
+		m_meshTableModel->setItem(m_numMeshInTable / 15, m_numMeshInTable % 15, item);
+		ui->modelTableView->update();
+		m_numMeshInTable++;
+		break;
+	case GU::Asset::AssetType::Texture:
+		break;
+	default:
+		break;
+	}
 }
 void MainWindow::slot_tagPropertyChanged()
 {
