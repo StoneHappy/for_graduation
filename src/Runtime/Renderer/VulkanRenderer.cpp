@@ -6,6 +6,7 @@
 
 #include <Renderer/VulkanGraphicsPipeline.h>
 #include <Renderer/VulkanBuffer.h>
+#include <Renderer/VulkanDescriptor.h>
 #include <Renderer/VulkanImage.h>
 #include <Renderer/Mesh.h>
 #include <Scene/Entity.h>
@@ -48,11 +49,6 @@ namespace GU
 		createDescriptorSets(GLOBAL_VULKAN_CONTEXT, vkImage, GLOBAL_VULKAN_CONTEXT.descriptorSetLayout, GLOBAL_VULKAN_CONTEXT.descriptorPool, GLOBAL_VULKAN_CONTEXT.descriptorSets);
 		createBackgroundPipeline(GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT.backgroudPipeline);
 		createBoundingBoxPipeline(GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT.boundingboxPipeline);
-
-		GLOBAL_VULKAN_CONTEXT = GLOBAL_VULKAN_CONTEXT;
-		/*Entity entity = GLOBAL_SCENE.createEntity();
-		auto& meshcomponent = entity.addComponent<MeshComponent>();
-		meshcomponent.meshID = GLOBAL_ASSET.insertMesh("models/viking_room.obj");*/
 	}
 
 	void VulkanRenderer::initSwapChainResources()
@@ -79,7 +75,6 @@ namespace GU
 		m_Camera.updateProjection();
 		GLOBAL_VULKAN_CONTEXT.swapChainExtent = { (unsigned int)m_window->swapChainImageSize().width(),(unsigned int)m_window->swapChainImageSize().height() };
 		updateUniformBuffer(GLOBAL_VULKAN_CONTEXT, m_Camera, m_window->currentSwapChainImageIndex(), GLOBAL_VULKAN_CONTEXT.uniformBuffersMapped);
-		//updateMeshUniformBuffer(GLOBAL_VULKAN_CONTEXT, glm::mat4(1), m_window->currentSwapChainImageIndex(), GLOBAL_VULKAN_CONTEXT.meshUniformBuffersMapped);
 		const QSize sz = m_window->swapChainImageSize();
 		VkClearColorValue clearColor = { { 0.0f, 0.0f, 0.0f, 1.0f } };
 		VkClearDepthStencilValue clearDS = { 1.0f, 0.0f };

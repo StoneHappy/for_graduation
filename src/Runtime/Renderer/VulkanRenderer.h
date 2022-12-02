@@ -21,9 +21,6 @@ namespace GU
 	private:
 		QVulkanWindow* m_window;
 		QVulkanDeviceFunctions* m_devFuncs;
-		VulkanContext m_vulkanContext;
-		std::vector<Vertex> vertices;
-		std::vector<uint32_t> indices;
 		EditCamera m_Camera;
 	};
 }
