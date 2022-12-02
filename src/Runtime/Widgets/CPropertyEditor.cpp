@@ -9,6 +9,7 @@
 #include <Global/CoreContext.h>
 #include <Scene/Entity.h>
 #include <Scene/Component.h>
+#include <Core/Type.h>
 CPropertyEditor::CPropertyEditor(QWidget *parent) :
     QTreeWidget(parent),
     m_addingItem(false)
@@ -163,6 +164,26 @@ void CPropertyEditor::onItemClicked(QTreeWidgetItem *item, int column)
     }
 }
 
+#define PROP_TRANSLATION(prop, axis) if (prop->getId() == TO_STRING(p##axis##Property)) \
+{\
+    double qdPos##axis## = prop->getVariantValue().toDouble();\
+    entity.getComponent<GU::TransformComponent>().Translation.##axis## = qdPos##axis##;\
+    emit tagChanged();\
+}
+
+#define PROP_ROTATION(prop, axis) if (prop->getId() == TO_STRING(r##axis##Property)) \
+{\
+    double qdRot##axis## = prop->getVariantValue().toDouble();\
+    entity.getComponent<GU::TransformComponent>().Rotation.##axis## = qdRot##axis##;\
+    emit tagChanged();\
+}
+
+#define PROP_SCALE(prop, axis) if (prop->getId() == TO_STRING(s##axis##Property)) \
+{\
+    double qdScale##axis## = prop->getVariantValue().toDouble();\
+    entity.getComponent<GU::TransformComponent>().Scale.##axis## = qdScale##axis##;\
+    emit tagChanged();\
+}
 
 void CPropertyEditor::onItemChanged(QTreeWidgetItem *item, int column)
 {
@@ -187,7 +208,17 @@ void CPropertyEditor::onItemChanged(QTreeWidgetItem *item, int column)
                 entity.getComponent<GU::TagComponent>().Tag = qsTag.toStdString();
                 emit tagChanged();
             }
+            PROP_TRANSLATION(prop, x);
+            PROP_TRANSLATION(prop, y);
+            PROP_TRANSLATION(prop, z);
 
+            PROP_ROTATION(prop, x);
+            PROP_ROTATION(prop, y);
+            PROP_ROTATION(prop, z);
+
+            PROP_SCALE(prop, x);
+            PROP_SCALE(prop, y);
+            PROP_SCALE(prop, z);
         }
         else
         {
