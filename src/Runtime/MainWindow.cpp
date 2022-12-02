@@ -24,6 +24,7 @@
 #include <Core/Project.h>
 #include <QProgressBar>
 #include <Widgets/NavMeshParamsDlg.h>
+#include <Widgets/AddMeshToEntityDlg.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 
@@ -435,12 +436,29 @@ void MainWindow::on_actImportModel_triggered()
 	}
 }
 
+void MainWindow::on_actAddModelToEntity_triggered()
+{
+	auto addMeshToEntityDlg = new AddMeshToEntityDlg(m_meshTableModel, m_meshTableSelectModel, m_textureTableModel, m_textureTableSelectModel, this);
+	auto rnt = addMeshToEntityDlg->exec();
+	if (rnt == QDialog::Accepted)
+	{
+		auto entityitem = m_entityTreeModel->itemFromIndex(m_entityTreeSelectModel->currentIndex());
+		auto modelitem = m_meshTableModel->itemFromIndex(m_meshTableSelectModel->currentIndex());
+		uint64_t uuid = entityitem->data().toULongLong();
+		auto entity = GLOBAL_SCENE.getEntityByUUID(uuid);
+		auto& meshComponent = entity.addComponent<GU::MeshComponent>();
+		meshComponent.meshID = modelitem->data().toULongLong();
+	}
+}
+
+
 void MainWindow::slot_treeviewEntity_customcontextmenu(const QPoint& point)
 {
 	QMenu* menu = new QMenu(this);
 	menu->addAction(ui->actCreateEntity);
 	menu->addAction(ui->actCopyEntity);
 	menu->addAction(ui->actDeleteEntity);
+	menu->addAction(ui->actAddModelToEntity);
 	menu->exec(QCursor::pos());
 }
 
@@ -448,7 +466,7 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 {
 	clearAllComponentProperty();
 	auto item = m_entityTreeModel->itemFromIndex(currentIndex);
-	UINT64 uuid = item->data().toLongLong();
+	UINT64 uuid = item->data().toULongLong();
 	if (uuid == 0) return;
 	auto entity = GU::g_CoreContext.g_scene.getEntityByUUID(uuid);
 

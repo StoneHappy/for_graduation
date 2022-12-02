@@ -327,6 +327,18 @@
     <string>导航网格参数</string>
    </property>
   </action>
+  <action name="actAddModelToEntity">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/model.png</normaloff>:/images/model.png</iconset>
+   </property>
+   <property name="text">
+    <string>添加模型到实体</string>
+   </property>
+   <property name="toolTip">
+    <string>添加模型到实体</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
