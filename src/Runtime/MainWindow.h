@@ -23,7 +23,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void importResource2Table(QString, uint64_t, int type);
-
+    void setStatus(const QString& );
 private:
     void createPopMenu();
     void createEntityView();
@@ -67,6 +67,7 @@ private slots:
     void slot_tagPropertyChanged();
     void slot_treeviewEntity_customcontextmenu(const QPoint&);
     void slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&, const QModelIndex&);
+    void slot_on_meshTableSelectModel_currentChanged(const QModelIndex&, const QModelIndex&);
     void slot_importResource2Table(QString, uint64_t, int type);
 };
 

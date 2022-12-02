@@ -122,7 +122,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	m_progressBar = new QProgressBar(this);
 	m_progressBar->setMaximumWidth(500);
 	m_statusInfo->setText(QString::fromLocal8Bit("暂停"));
-	//m_progressBar->hide();
+	m_progressBar->hide();
 	ui->statusbar->addWidget(m_statusInfo);
 	ui->statusbar->addWidget(m_progressBar);
 	m_progressBar->setValue(50);
@@ -218,6 +218,7 @@ void MainWindow::craeteResourceView()
 	ui->modelTableView->horizontalHeader()->hide();
 	ui->modelTableView->verticalHeader()->hide();
 	connect(this, SIGNAL(signal_importResource2Table(QString, uint64_t, int)), this, SLOT(slot_importResource2Table(QString, uint64_t, int)));
+	connect(m_meshTableSelectModel, SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(slot_on_meshTableSelectModel_currentChanged(const QModelIndex&, const QModelIndex&)));
 }
 
 void MainWindow::clearAllComponentProperty()
@@ -244,6 +245,11 @@ void MainWindow::clearAllComponentProperty()
 void MainWindow::importResource2Table(QString filename, uint64_t uuid, int type)
 {
 	emit signal_importResource2Table(filename, uuid, type);
+}
+
+void MainWindow::setStatus(const QString& text)
+{
+	m_statusInfo->setText(text);
 }
 
 
@@ -456,6 +462,21 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 	}
 	ui->componentTreeWidget->adjustToContents();
 }
+
+void MainWindow::slot_on_meshTableSelectModel_currentChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+
+	auto item = m_meshTableModel->itemFromIndex(current);
+	if (item->text().isEmpty())
+	{
+		setStatus("");
+	}
+	else
+	{
+		setStatus(QString::fromLocal8Bit("当前选择模型: %1 uuid: %2").arg(item->text()).arg(item->data().toString()));
+	}
+}
+
 
 void MainWindow::slot_importResource2Table(QString filename, uint64_t uuid, int type)
 {
