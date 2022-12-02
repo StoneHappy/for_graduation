@@ -24,13 +24,12 @@ namespace GU
         out << YAML::BeginMap;
         out << YAML::Key << "ProjectName" << YAML::Value << projectPath.filename().string();
 
-        out << YAML::Key << "Assets" << YAML::Value << YAML::BeginSeq;
-
-        out << YAML::Key << "Models" << YAML::Value << YAML::BeginSeq;
+        out << YAML::Key << "Assets" << YAML::Value;
+        out << YAML::BeginMap;
+        out << YAML::Key << "Models" << YAML::Value;
         out << GLOBAL_ASSET.m_loadedModelMap;
+        out << YAML::EndMap;
 
-        out << YAML::EndSeq;
-        out << YAML::EndSeq;
         out << YAML::EndMap;
        
         std::ofstream fout(projectPath);
@@ -50,7 +49,17 @@ namespace GU
 
     void Project::open(std::filesystem::path projectPath)
     {
+        projectFilePath = projectPath;
+        projectDirPath = projectPath.parent_path();
+        assetDirPath = projectDirPath / "assets";
 
+        YAML::Node config = YAML::LoadFile(projectPath.string());
+        auto assets = config["Assets"];
+        auto models = assets["Models"];
+        for (auto mesh : models)
+        {
+            GLOBAL_ASSET.insertMeshWithUUID(mesh.first.as<std::string>(), mesh.second.as<uint64_t>());
+        }
     }
 }
 
