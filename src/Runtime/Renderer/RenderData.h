@@ -36,7 +36,6 @@ namespace GU
 	struct ModelUBO {
 		glm::mat4 model;
 	};
-
 	// Image
 	struct VulkanImage
 	{
