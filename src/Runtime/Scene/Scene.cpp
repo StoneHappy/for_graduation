@@ -52,8 +52,9 @@ namespace GU
 
 	void Scene::destroyEntity(Entity entity)
 	{
+		auto uuid = entity.getUUID();
 		m_registry.destroy(entity);
-		m_entityMap.erase(entity.getUUID());
+		m_entityMap.erase(uuid);
 	}
 
 	void Scene::renderTick(VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime)

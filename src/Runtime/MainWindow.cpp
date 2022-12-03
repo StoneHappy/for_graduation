@@ -425,7 +425,20 @@ void MainWindow::on_actCopyEntity_triggered()
 
 void MainWindow::on_actDeleteEntity_triggered()
 {
-
+	auto item = m_entityTreeModel->itemFromIndex(m_entityTreeSelectModel->currentIndex());
+	uint64_t uuid = item->data().toULongLong();
+	GLOBAL_SCENE->destroyEntity(GLOBAL_SCENE->getEntityByUUID(uuid));
+	//item->index().row();
+	//m_treeviewEntityRoot->removeRow(item->index().row());
+	for (size_t i = 0; i < m_treeviewEntityRoot->rowCount(); i++)
+	{
+		auto tvitem = m_treeviewEntityRoot->child(i);
+		if (tvitem = item)
+		{
+			m_treeviewEntityRoot->removeRow(i);
+		}
+	}
+	
 }
 
 void MainWindow::on_actNavmeshParam_triggered()
@@ -523,6 +536,10 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 {
 	clearAllComponentProperty();
 	auto item = m_entityTreeModel->itemFromIndex(currentIndex);
+	if (item == nullptr)
+	{
+		return;
+	}
 	UINT64 uuid = item->data().toULongLong();
 	if (uuid == 0) return;
 	auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
