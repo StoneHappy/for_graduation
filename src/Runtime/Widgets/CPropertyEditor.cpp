@@ -201,7 +201,7 @@ void CPropertyEditor::onItemChanged(QTreeWidgetItem *item, int column)
             uint64_t uuid;
             sscanf(uuidstring.c_str(), "%llu", &uuid);
             if (uuid == 0) return;
-            auto entity = GU::g_CoreContext.g_scene.getEntityByUUID(uuid);
+            auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
             if (prop->getId() == "tagProperty")
             {
                 QString qsTag = prop->getVariantValue().toString();

@@ -3,6 +3,7 @@
 #include <Global/CoreContext.h>
 #include <MainWindow.h>
 #include <Renderer/Texture.h>
+#include <Core/Project.h>
 namespace GU
 {
     UUID Asset::insertMesh(const std::filesystem::path& filepath)
@@ -14,7 +15,7 @@ namespace GU
         }
 
         std::shared_ptr<MeshNode> meshnode = std::make_shared<MeshNode>();
-        MeshNode::read(g_CoreContext.g_vulkanContext, meshnode, (GLOBAL_MODEL_PATH / filepath).generic_string());
+        MeshNode::read(*GLOBAL_VULKAN_CONTEXT, meshnode, (GLOBAL_MODEL_PATH / filepath).generic_string());
         UUID id;
         GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::Mesh);
         m_meshMap[id] = meshnode;
@@ -30,7 +31,7 @@ namespace GU
         }
 
         std::shared_ptr<MeshNode> meshnode = std::make_shared<MeshNode>();
-        MeshNode::read(g_CoreContext.g_vulkanContext, meshnode, (GLOBAL_MODEL_PATH / filepath).generic_string());
+        MeshNode::read(*GLOBAL_VULKAN_CONTEXT, meshnode, (GLOBAL_MODEL_PATH / filepath).generic_string());
         UUID id = uuid;
         GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::Mesh);
         m_meshMap[id] = meshnode;

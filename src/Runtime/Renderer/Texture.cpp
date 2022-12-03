@@ -1,6 +1,7 @@
 #include "Texture.h"
 #include <Renderer/VulkanImage.h>
 #include <Global/CoreContext.h>
+#include <Renderer/VulkanContext.h>
 namespace GU
 {
 	Texture::Texture()
@@ -15,7 +16,7 @@ namespace GU
 	std::shared_ptr<Texture> Texture::read(const std::filesystem::path& filepath)
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		createTextureImage(GLOBAL_VULKAN_CONTEXT, filepath.string().c_str(), *texture->m_image);
+		createTextureImage(*GLOBAL_VULKAN_CONTEXT, filepath.string().c_str(), *texture->m_image);
 		return texture;
 	}
 }

@@ -25,6 +25,8 @@
 #include <QProgressBar>
 #include <Widgets/NavMeshParamsDlg.h>
 #include <Widgets/AddMeshToEntityDlg.h>
+#include <Core/ThreadPool.h>
+#include <Scene/Asset.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 
@@ -384,7 +386,7 @@ void MainWindow::on_actStop_triggered()
 
 void MainWindow::on_actCreateEntity_triggered()
 {
-	auto entity =  GU::g_CoreContext.g_scene.createEntity();
+	auto entity =  GLOBAL_SCENE->createEntity();
 	auto uuid = entity.getComponent<GU::IDComponent>().ID;
 	auto name = entity.getComponent<GU::TagComponent>().Tag;
 	QStandardItem* item = new QStandardItem(name.c_str());
@@ -434,8 +436,8 @@ void MainWindow::on_actImportModel_triggered()
 			std::filesystem::copy(filepath.parent_path(), GLOBAL_ASSET_PATH / "models" / parentname);
 			
 		}
-		GLOBAL_THREAD_POOL.enqueue([=]() {
-			GLOBAL_ASSET.insertMesh((parentname / filename.filename()).generic_string());
+		GLOBAL_THREAD_POOL->enqueue([=]() {
+			GLOBAL_ASSET->insertMesh((parentname / filename.filename()).generic_string());
 #if 0 // test progress bar
 			GLOBAL_MAINWINDOW->progressBegin(5);
 			for (size_t i = 0; i < 5; i++)
@@ -458,7 +460,7 @@ void MainWindow::on_actAddModelToEntity_triggered()
 		auto entityitem = m_entityTreeModel->itemFromIndex(m_entityTreeSelectModel->currentIndex());
 		auto modelitem = m_meshTableModel->itemFromIndex(m_meshTableSelectModel->currentIndex());
 		uint64_t uuid = entityitem->data().toULongLong();
-		auto entity = GLOBAL_SCENE.getEntityByUUID(uuid);
+		auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
 		auto& meshComponent = entity.addComponent<GU::MeshComponent>();
 		meshComponent.meshID = modelitem->data().toULongLong();
 	}
@@ -482,8 +484,8 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 	auto item = m_entityTreeModel->itemFromIndex(currentIndex);
 	UINT64 uuid = item->data().toULongLong();
 	if (uuid == 0) return;
-	auto entity = GU::g_CoreContext.g_scene.getEntityByUUID(uuid);
-
+	auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
+	
 	if (entity.hasComponent<GU::TagComponent>())
 	{
 		auto tag = entity.getComponent<GU::TagComponent>().Tag.c_str();
@@ -540,7 +542,7 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 	{
 		auto uuid = entity.getComponent<GU::MeshComponent>().meshID;
 		meshuuidProperty->setValue(QString::number(uuid));
-		meshProperty->setValue(GLOBAL_ASSET.getMeshPathWithUUID(uuid).string().c_str());
+		meshProperty->setValue(GLOBAL_ASSET->getMeshPathWithUUID(uuid).string().c_str());
 		ui->componentTreeWidget->add(meshheader);
 		ui->componentTreeWidget->add(meshProperty);
 		ui->componentTreeWidget->add(meshuuidProperty);
@@ -618,7 +620,7 @@ void MainWindow::slot_tagPropertyChanged()
 	uint64_t uuid;
 	sscanf(uuidstring.c_str(), "%llu", &uuid);
 	if (uuid == 0) return;
-	auto entity = GU::g_CoreContext.g_scene.getEntityByUUID(uuid);
+	auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
 	auto tag = entity.getComponent<GU::TagComponent>().Tag;
 	item->setText(tag.c_str());
 }

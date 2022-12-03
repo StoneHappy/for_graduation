@@ -1,11 +1,28 @@
 #include "CoreContext.h"
-
+#include <Core/Type.h>
+#include <chrono>
+#include <Scene/Scene.h>
+#include <Scene/Asset.h>
+#include <Renderer/VulkanContext.h>
+#include <filesystem>
+#include <Core/ThreadPool.h>
+#include <Core/Project.h>
 namespace GU
 {
 	CoreContext g_CoreContext;
 	CoreContext::CoreContext()
 	{
 		g_lastTimePoint = std::chrono::high_resolution_clock::now();
+
+		g_scene = std::make_shared<Scene>();
+		g_vulkanContext = std::make_shared<VulkanContext>();
+		g_asset = std::make_shared<Asset>();
+		g_Proejct = std::make_shared<Project>();
+		g_threadPool = std::make_shared<::ThreadPool>(8);
+	}
+	CoreContext::~CoreContext()
+	{
+
 	}
 	void CoreContext::timeTick()
 	{

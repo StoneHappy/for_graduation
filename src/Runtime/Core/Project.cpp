@@ -5,6 +5,8 @@
 #include <Core/UUID.h>
 #include <Renderer/Mesh.h>
 #include <MainWindow.h>
+#include <Scene/Asset.h>
+#include <Core/ThreadPool.h>
 YAML::Emitter& operator << (YAML::Emitter& emitter, const std::unordered_map<std::filesystem::path, GU::UUID>& m) {
     emitter << YAML::BeginMap;
     for (const auto& v : m)
@@ -28,7 +30,7 @@ namespace GU
         out << YAML::Key << "Assets" << YAML::Value;
         out << YAML::BeginMap;
         out << YAML::Key << "Models" << YAML::Value;
-        out << GLOBAL_ASSET.m_loadedModelMap;
+        out << GLOBAL_ASSET->m_loadedModelMap;
         out << YAML::EndMap;
 
         out << YAML::EndMap;
@@ -61,9 +63,9 @@ namespace GU
         GLOBAL_MAINWINDOW->progressBegin(models.size());
         for (auto mesh : models)
         {
-            GLOBAL_THREAD_POOL.enqueue([=]() {
+            GLOBAL_THREAD_POOL->enqueue([=]() {
                 GLOBAL_MAINWINDOW->progressTick();
-                GLOBAL_ASSET.insertMeshWithUUID(mesh.first.as<std::string>(), mesh.second.as<uint64_t>());
+                GLOBAL_ASSET->insertMeshWithUUID(mesh.first.as<std::string>(), mesh.second.as<uint64_t>());
             });
         }
     }
