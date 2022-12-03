@@ -46,8 +46,9 @@ namespace GU
             return found->second;
         }
 
-        std::shared_ptr<Texture> texture = Texture::read(filepath);
+        std::shared_ptr<Texture> texture = Texture::read((GLOBAL_TEXTURE_PATH / filepath).generic_string());
         UUID id;
+        GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::Texture);
         m_textureMap[id] = texture;
         m_loadedTextureMap[filepath] = id;
         return id;
@@ -71,8 +72,9 @@ namespace GU
             return found->second;
         }
 
-        std::shared_ptr<Texture> texture = Texture::read(filepath);
+        std::shared_ptr<Texture> texture = Texture::read((GLOBAL_TEXTURE_PATH / filepath).generic_string());
         UUID id = uuid;
+        GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::Texture);
         m_textureMap[id] = texture;
         m_loadedTextureMap[filepath] = id;
         return id;

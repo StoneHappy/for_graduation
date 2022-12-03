@@ -53,5 +53,6 @@ namespace GU
 #define GLOBAL_PROJECT_PATH ::GU::g_CoreContext.g_Proejct->projectDirPath
 #define GLOBAL_ASSET_PATH ::GU::g_CoreContext.g_Proejct->assetDirPath
 #define GLOBAL_MODEL_PATH ::GU::g_CoreContext.g_Proejct->modelDirPath
+#define GLOBAL_TEXTURE_PATH ::GU::g_CoreContext.g_Proejct->textureDirPath
 #define GLOBAL_THREAD_POOL ::GU::g_CoreContext.g_threadPool
 #define GLOBAL_TIME_TICK() ::GU::g_CoreContext.timeTick()

@@ -23,6 +23,7 @@ namespace GU
         projectDirPath = projectPath.parent_path();
         assetDirPath = projectDirPath / "assets";
         modelDirPath = assetDirPath / "models";
+        textureDirPath = assetDirPath / "textures";
         YAML::Emitter out;
         out << YAML::BeginMap;
         out << YAML::Key << "ProjectName" << YAML::Value << projectPath.filename().string();
@@ -56,6 +57,8 @@ namespace GU
         projectDirPath = projectPath.parent_path();
         assetDirPath = projectDirPath / "assets";
         modelDirPath = assetDirPath / "models";
+        textureDirPath = assetDirPath / "textures";
+
 
         YAML::Node config = YAML::LoadFile(projectPath.string());
         auto assets = config["Assets"];

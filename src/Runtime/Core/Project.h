@@ -12,5 +12,6 @@ namespace GU
 		std::filesystem::path projectDirPath;
 		std::filesystem::path assetDirPath;
 		std::filesystem::path modelDirPath;
+		std::filesystem::path textureDirPath;
 	};
 }
