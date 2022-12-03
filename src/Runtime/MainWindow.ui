@@ -36,6 +36,7 @@
    <addaction name="actOpenProject"/>
    <addaction name="actSaveProject"/>
    <addaction name="actImportModel"/>
+   <addaction name="actImportTexture"/>
    <addaction name="separator"/>
    <addaction name="actNavmeshParam"/>
   </widget>
@@ -337,6 +338,18 @@
    </property>
    <property name="toolTip">
     <string>添加模型到实体</string>
+   </property>
+  </action>
+  <action name="actImportTexture">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/texture.png</normaloff>:/images/texture.png</iconset>
+   </property>
+   <property name="text">
+    <string>导入贴图</string>
+   </property>
+   <property name="toolTip">
+    <string>导入贴图</string>
    </property>
   </action>
  </widget>

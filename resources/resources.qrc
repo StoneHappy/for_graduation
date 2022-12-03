@@ -19,5 +19,6 @@
         <file>images/tree.png</file>
         <file>images/save.png</file>
         <file>images/Params.png</file>
+        <file>images/texture.png</file>
     </qresource>
 </RCC>

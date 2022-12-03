@@ -78,6 +78,7 @@ private slots:
     void on_actNavmeshParam_triggered();
     void on_actImportModel_triggered();
     void on_actAddModelToEntity_triggered();
+    void on_actImportTexture_triggered();
 
     void slot_tagPropertyChanged();
     void slot_treeviewEntity_customcontextmenu(const QPoint&);

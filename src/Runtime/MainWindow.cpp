@@ -123,6 +123,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->actImportModel->setEnabled(false);
 	ui->actSaveProject->setEnabled(false);
 	ui->actNavmeshParam->setEnabled(false);
+	ui->actImportTexture->setEnabled(false);
 
 	// statusbar
 	m_statusInfo = new QLabel(this);
@@ -327,6 +328,7 @@ void MainWindow::on_actNewProject_triggered()
 		ui->actImportModel->setEnabled(true);
 		ui->actSaveProject->setEnabled(true);
 		ui->actNavmeshParam->setEnabled(true);
+		ui->actImportTexture->setEnabled(true);
 	}
 }
 void MainWindow::on_actOpenProject_triggered()
@@ -337,6 +339,7 @@ void MainWindow::on_actOpenProject_triggered()
 	ui->actImportModel->setEnabled(true);
 	ui->actSaveProject->setEnabled(true);
 	ui->actNavmeshParam->setEnabled(true);
+	ui->actImportTexture->setEnabled(true);
 }
 void MainWindow::on_actSaveProject_triggered()
 {
@@ -467,6 +470,23 @@ void MainWindow::on_actAddModelToEntity_triggered()
 	slot_on_entityTreeSelectModel_currentChanged(m_entityTreeSelectModel->currentIndex(), m_entityTreeSelectModel->currentIndex());
 }
 
+void MainWindow::on_actImportTexture_triggered()
+{
+	QString qfilename = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("打开模型"), QDir::currentPath(), QString::fromLocal8Bit("图片(*.png *.jpg);;"));
+	if (!qfilename.isEmpty())
+	{
+		std::filesystem::path filepath = qfilename.toStdString();
+		std::filesystem::create_directory(filepath.parent_path(), GLOBAL_ASSET_PATH / "textures");
+		if (!std::filesystem::exists(GLOBAL_ASSET_PATH / "textures" / filepath.filename()))
+		{
+			std::filesystem::copy(filepath, GLOBAL_TEXTURE_PATH);
+
+		}
+		GLOBAL_THREAD_POOL->enqueue([=]() {
+			GLOBAL_ASSET->insertTexture(filepath.filename());
+			});
+	}
+}
 
 void MainWindow::slot_treeviewEntity_customcontextmenu(const QPoint& point)
 {
@@ -584,6 +604,9 @@ void MainWindow::slot_importResource2Table(QString filename, uint64_t uuid, int 
 		m_numMeshInTable++;
 		break;
 	case GU::Asset::AssetType::Texture:
+		m_textureTableModel->setItem(m_numTextureInTable / 15, m_numTextureInTable % 15, item);
+		ui->textureTableView->update();
+		m_numTextureInTable++;
 		break;
 	default:
 		break;
