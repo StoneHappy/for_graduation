@@ -43,8 +43,8 @@ namespace GU
 		createTextureImage(*GLOBAL_VULKAN_CONTEXT, "./assets/grid.jpg", vkImage);
 		createTextureImageView(*GLOBAL_VULKAN_CONTEXT, vkImage);
 		createTextureSampler(*GLOBAL_VULKAN_CONTEXT, vkImage);
-		createUniformBuffers(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->uniformBuffers, GLOBAL_VULKAN_CONTEXT->uniformBuffersMemory, GLOBAL_VULKAN_CONTEXT->uniformBuffersMapped);
-		createMeshUniformBuffers(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->meshUniformBuffers, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMemory, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMapped);
+		createUniformBuffers(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->uniformBuffers, GLOBAL_VULKAN_CONTEXT->uniformBuffersMemory, GLOBAL_VULKAN_CONTEXT->uniformBuffersMapped, sizeof(CameraUBO));
+		createUniformBuffers(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->meshUniformBuffers, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMemory, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMapped, sizeof(ModelUBO));
 		createDescriptorPool(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->descriptorPool);
 		createDescriptorSets(*GLOBAL_VULKAN_CONTEXT, vkImage, GLOBAL_VULKAN_CONTEXT->descriptorSetLayout, GLOBAL_VULKAN_CONTEXT->descriptorPool, GLOBAL_VULKAN_CONTEXT->descriptorSets);
 		createBackgroundPipeline(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->backgroudPipeline);

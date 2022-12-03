@@ -54,11 +54,8 @@ namespace GU
 		vkFreeMemory(vkContext.logicalDevice, stagingBufferMemory, nullptr);
 	}
 
-	void createUniformBuffers(VulkanContext& vkContext, std::vector<VkBuffer>& uniformBuffers, std::vector<VkDeviceMemory>& uniformBuffersMemory, std::vector<void*>& uniformBuffersMapped)
+	void createUniformBuffers(VulkanContext& vkContext, std::vector<VkBuffer>& uniformBuffers, std::vector<VkDeviceMemory>& uniformBuffersMemory, std::vector<void*>& uniformBuffersMapped, VkDeviceSize bufferSize)
 	{
-		DEBUG_LOG("正在创建UniformBuffers...");
-		VkDeviceSize bufferSize = sizeof(CameraUBO);
-
 		uniformBuffers.resize(VulkanContext::MAX_FRAMES_IN_FLIGHT);
 		uniformBuffersMemory.resize(VulkanContext::MAX_FRAMES_IN_FLIGHT);
 		uniformBuffersMapped.resize(VulkanContext::MAX_FRAMES_IN_FLIGHT);
@@ -69,24 +66,6 @@ namespace GU
 			vkMapMemory(vkContext.logicalDevice, uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
 		}
 	}
-
-	void createMeshUniformBuffers(VulkanContext& vkContext, std::vector<VkBuffer>& uniformBuffers, std::vector<VkDeviceMemory>& uniformBuffersMemory, std::vector<void*>& uniformBuffersMapped)
-	{
-		DEBUG_LOG("正在创建MeshUniformBuffers...");
-		VkDeviceSize bufferSize = sizeof(ModelUBO);
-
-		uniformBuffers.resize(VulkanContext::MAX_FRAMES_IN_FLIGHT);
-		uniformBuffersMemory.resize(VulkanContext::MAX_FRAMES_IN_FLIGHT);
-		uniformBuffersMapped.resize(VulkanContext::MAX_FRAMES_IN_FLIGHT);
-
-		for (size_t i = 0; i < VulkanContext::MAX_FRAMES_IN_FLIGHT; i++) {
-			createBuffer(vkContext, bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers[i], uniformBuffersMemory[i]);
-
-			vkMapMemory(vkContext.logicalDevice, uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
-		}
-	}
-
-	
 
 	void createBuffer(VulkanContext& vkContext, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
