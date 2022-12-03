@@ -28,12 +28,12 @@ namespace GU
 		}
 	};
 	
-	struct UniformBufferObject {
+	struct CameraUBO {
 		glm::mat4 view;
 		glm::mat4 proj;
 	};
 
-	struct MeshUniformBufferObject {
+	struct ModelUBO {
 		glm::mat4 model;
 	};
 

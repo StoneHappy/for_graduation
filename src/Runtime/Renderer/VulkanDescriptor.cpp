@@ -78,12 +78,12 @@ namespace GU
             VkDescriptorBufferInfo bufferInfo{};
             bufferInfo.buffer = vkContext.uniformBuffers[i];
             bufferInfo.offset = 0;
-            bufferInfo.range = sizeof(UniformBufferObject);
+            bufferInfo.range = sizeof(CameraUBO);
 
             VkDescriptorBufferInfo meshbufferInfo{};
             meshbufferInfo.buffer = vkContext.meshUniformBuffers[i];
             meshbufferInfo.offset = 0;
-            meshbufferInfo.range = sizeof(MeshUniformBufferObject);
+            meshbufferInfo.range = sizeof(ModelUBO);
 
             VkDescriptorImageInfo imageInfo{};
             imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;

@@ -1,11 +1,11 @@
 #version 450
 
-layout(binding = 0) uniform UniformBufferObject {
+layout(binding = 0) uniform CameraUBO {
     mat4 view;
     mat4 proj;
 } ubo;
 
-layout(binding = 1) uniform MeshUniformBufferObject {
+layout(binding = 1) uniform ModelUBO {
     mat4 model;
 } meshubo;
 
