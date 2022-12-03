@@ -14,6 +14,7 @@ namespace GU
 		T& addComponent(Args&&... args)
 		{
 			T& component = m_scene->m_registry.emplace<T>(m_entityHandle, std::forward<Args>(args)...);
+			m_scene->OnComponentAdded<T>(*this, component);
 			return component;
 		}
 
@@ -21,7 +22,7 @@ namespace GU
 		T& addOrReplaceComponent(Args&&... args)
 		{
 			T& component = m_scene->m_registry.emplace_or_replace<T>(m_entityHandle, std::forward<Args>(args)...);
-			//m_Scene->OnComponentAdded<T>(*this, component);
+			m_scene->OnComponentAdded<T>(*this, component);
 			return component;
 		}
 

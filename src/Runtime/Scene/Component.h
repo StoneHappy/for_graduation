@@ -8,6 +8,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <Renderer/Mesh.h>
 #include <memory>
+#include <Renderer/Material.h>
 namespace GU
 {
 	struct IDComponent
@@ -47,6 +48,13 @@ namespace GU
 				* rotation
 				* glm::scale(glm::mat4(1.0f), Scale);
 		}
+	};
+
+	struct MaterialComponent
+	{
+		Material materail;
+		MaterialComponent() = default;
+		MaterialComponent(const MaterialComponent&) = default;
 	};
 
 	struct MeshComponent

@@ -23,10 +23,17 @@ namespace GU
 		void destroyEntity(Entity entity);
 
 		void renderTick(VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime);
+
+		template<typename T>
+		void OnComponentAdded(Entity entity, T& component);
 	public:
 		entt::registry m_registry;
 		std::unordered_map<UUID, entt::entity> m_entityMap;
 		
 		friend class Entity;
 	};
+
+
+	
+
 }
