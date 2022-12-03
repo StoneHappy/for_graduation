@@ -58,15 +58,15 @@ namespace GU
 
 	void Scene::renderTick(VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime)
 	{
-		auto view = m_registry.view<MeshComponent, TransformComponent>();
+		auto view = m_registry.view<MeshComponent, MaterialComponent, TransformComponent>();
 		for (auto entity : view)
 		{
-			auto&& [meshComponet, transform] = view.get<MeshComponent, TransformComponent>(entity);
-			updateMeshUniformBuffer(*GLOBAL_VULKAN_CONTEXT, transform.getTransform(), currImageIndex, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMapped);
+			auto&& [meshComponet, materialComponent, transformComponent] = view.get<MeshComponent, MaterialComponent, TransformComponent>(entity);
+			vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.pipelineLayout, 0, 1, &materialComponent.material.descriptorSets[currImageIndex], 0, nullptr);
+			materialComponent.material.modelUBO->update({ transformComponent.getTransform() }, currImageIndex);
 			for (auto& mesh : GLOBAL_ASSET->getMeshWithUUID(meshComponet.meshID)->meshs)
 			{
 				vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.graphicsPipeline);
-				vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.pipelineLayout, 0, 1, &vulkanContext.descriptorSets[currImageIndex], 0, nullptr);
 				VkBuffer vertexBuffers[] = { mesh.vertexBuffer };
 				VkDeviceSize offsets[] = { 0 };
 				vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);

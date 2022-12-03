@@ -15,8 +15,8 @@ namespace GU
 	public:
 		Material();
 		~Material();
-		std::shared_ptr<Texture> m_diffuseTexture;
-		std::vector<VkDescriptorSet> m_descriptorSets;
-		std::shared_ptr<VulkanUniformBuffer<ModelUBO> > m_modelUBO;
+		std::shared_ptr<Texture> diffuseTexture;
+		std::vector<VkDescriptorSet> descriptorSets;
+		std::shared_ptr<VulkanUniformBuffer<ModelUBO> > modelUBO;
 	};
 }

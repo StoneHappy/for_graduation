@@ -84,6 +84,8 @@ private slots:
     void slot_treeviewEntity_customcontextmenu(const QPoint&);
     void slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&, const QModelIndex&);
     void slot_on_meshTableSelectModel_currentChanged(const QModelIndex&, const QModelIndex&);
+    void slot_on_textureTableSelectModel_currentChanged(const QModelIndex& current, const QModelIndex& previous);
+
     void slot_importResource2Table(QString, uint64_t, int type);
     void slot_progressTick(int max);
 };

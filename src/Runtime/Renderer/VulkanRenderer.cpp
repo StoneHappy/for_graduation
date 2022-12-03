@@ -45,7 +45,7 @@ namespace GU
 		VulkanImage vkImage;
 		createTextureImage(*GLOBAL_VULKAN_CONTEXT, "./assets/grid.jpg", vkImage);
 		createTextureImageView(*GLOBAL_VULKAN_CONTEXT, vkImage);
-		createTextureSampler(*GLOBAL_VULKAN_CONTEXT, vkImage);
+		createTextureSampler(*GLOBAL_VULKAN_CONTEXT, vkImage); 
 
 		createUniformBuffers(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->meshUniformBuffers, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMemory, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMapped, sizeof(ModelUBO));
 		createDescriptorPool(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->descriptorPool);
@@ -84,7 +84,7 @@ namespace GU
 		GLOBAL_VULKAN_CONTEXT->camearUBO->update(cubo, m_window->currentSwapChainImageIndex());
 		const QSize sz = m_window->swapChainImageSize();
 		VkClearColorValue clearColor = { { 0.0f, 0.0f, 0.0f, 1.0f } };
-		VkClearDepthStencilValue clearDS = { 1.0f, 0.0f };
+		VkClearDepthStencilValue clearDS = { 1.0f, 0 };
 		VkClearValue clearValues[2];
 		memset(clearValues, 0, sizeof(clearValues));
 		clearValues[0].color = clearColor;

@@ -52,7 +52,7 @@ namespace GU
 
 	struct MaterialComponent
 	{
-		Material materail;
+		Material material;
 		MaterialComponent() = default;
 		MaterialComponent(const MaterialComponent&) = default;
 	};

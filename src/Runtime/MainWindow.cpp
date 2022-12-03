@@ -232,8 +232,7 @@ void MainWindow::craeteResourceView()
 	ui->modelTableView->setSelectionModel(m_meshTableSelectModel);
 	ui->modelTableView->horizontalHeader()->hide();
 	ui->modelTableView->verticalHeader()->hide();
-	connect(this, SIGNAL(signal_importResource2Table(QString, uint64_t, int)), this, SLOT(slot_importResource2Table(QString, uint64_t, int)));
-	connect(m_meshTableSelectModel, SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(slot_on_meshTableSelectModel_currentChanged(const QModelIndex&, const QModelIndex&)));
+	
 
 	// texture table init
 	m_textureTableModel = new QStandardItemModel(50, 15, this);
@@ -243,6 +242,11 @@ void MainWindow::craeteResourceView()
 	ui->textureTableView->setSelectionModel(m_textureTableSelectModel);
 	ui->textureTableView->horizontalHeader()->hide();
 	ui->textureTableView->verticalHeader()->hide();
+
+	// connect
+	connect(this, SIGNAL(signal_importResource2Table(QString, uint64_t, int)), this, SLOT(slot_importResource2Table(QString, uint64_t, int)));
+	connect(m_meshTableSelectModel, SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(slot_on_meshTableSelectModel_currentChanged(const QModelIndex&, const QModelIndex&)));
+	connect(m_textureTableSelectModel, SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(slot_on_textureTableSelectModel_currentChanged(const QModelIndex&, const QModelIndex&)));
 }
 
 void MainWindow::clearAllComponentProperty()
@@ -581,6 +585,19 @@ void MainWindow::slot_on_meshTableSelectModel_currentChanged(const QModelIndex& 
 	}
 }
 
+void MainWindow::slot_on_textureTableSelectModel_currentChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+
+	auto item = m_textureTableModel->itemFromIndex(current);
+	if (item->text().isEmpty())
+	{
+		setStatus("");
+	}
+	else
+	{
+		setStatus(QString::fromLocal8Bit("当前选择贴图: %1 uuid: %2").arg(item->text()).arg(item->data().toString()));
+	}
+}
 
 void MainWindow::slot_importResource2Table(QString filename, uint64_t uuid, int type)
 {
