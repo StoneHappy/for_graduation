@@ -2,6 +2,7 @@
 #include <memory>
 #include <Renderer/Mesh.h>
 #include <Recast.h>
+#include <Function/AgentNav/rcMeshLoaderObj.h>
 namespace GU
 {
 	class NavMesh
@@ -9,8 +10,8 @@ namespace GU
 	public:
 		NavMesh();
 		~NavMesh();
-		std::shared_ptr<NavMesh> createFromGUMesh(const Mesh& mesh);
+		static std::shared_ptr<NavMesh> createFromGUMesh(const Mesh& mesh);
 
-
+		rcMeshLoaderObj rcMesh;
 	};
 }

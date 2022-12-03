@@ -57,6 +57,7 @@ namespace GU
 			mesh.id = meshs.size();
 			meshs.emplace_back(std::move(mesh));
 		}
+		return true;
 	}
 
 	MeshNode::MeshNode()
