@@ -13,8 +13,6 @@
 #include <Renderer/VulkanUniformBuffer.hpp>
 namespace GU
 {
-	VulkanUniformBuffer<CameraUBO>* aaa;
-
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)
 		:m_window(w)
 	{
@@ -30,7 +28,8 @@ namespace GU
 		GLOBAL_VULKAN_CONTEXT->commandPool = m_window->graphicsCommandPool();
 		GLOBAL_VULKAN_CONTEXT->graphicsQueue = m_window->graphicsQueue();
 		GLOBAL_VULKAN_CONTEXT->renderPass = m_window->defaultRenderPass();
-		
+		GLOBAL_VULKAN_CONTEXT->camearUBO = std::make_shared<VulkanUniformBuffer<CameraUBO> >();
+
 		VkShaderModule vertexShader = createShader(m_window->device(), shader_texture_vert, sizeof(shader_texture_vert));
 		VkShaderModule fragShader = createShader(m_window->device(), shader_texture_frag, sizeof(shader_texture_frag));
 		createShaderStageInfo(vertexShader, fragShader, GLOBAL_VULKAN_CONTEXT->shaderStage);
@@ -45,11 +44,7 @@ namespace GU
 		createTextureImage(*GLOBAL_VULKAN_CONTEXT, "./assets/grid.jpg", vkImage);
 		createTextureImageView(*GLOBAL_VULKAN_CONTEXT, vkImage);
 		createTextureSampler(*GLOBAL_VULKAN_CONTEXT, vkImage);
-		aaa = new VulkanUniformBuffer<CameraUBO>();
-		GLOBAL_VULKAN_CONTEXT->uniformBuffers = aaa->uniformBuffers;
-		GLOBAL_VULKAN_CONTEXT->uniformBuffersMemory = aaa->uniformBuffersMemory;
-		GLOBAL_VULKAN_CONTEXT->uniformBuffersMapped = aaa->uniformBuffersMapped;
-		//createUniformBuffers(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->uniformBuffers, GLOBAL_VULKAN_CONTEXT->uniformBuffersMemory, GLOBAL_VULKAN_CONTEXT->uniformBuffersMapped, sizeof(CameraUBO));
+
 		createUniformBuffers(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->meshUniformBuffers, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMemory, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMapped, sizeof(ModelUBO));
 		createDescriptorPool(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->descriptorPool);
 		createDescriptorSets(*GLOBAL_VULKAN_CONTEXT, vkImage, GLOBAL_VULKAN_CONTEXT->descriptorSetLayout, GLOBAL_VULKAN_CONTEXT->descriptorPool, GLOBAL_VULKAN_CONTEXT->descriptorSets);
@@ -80,7 +75,11 @@ namespace GU
 		m_Camera.updateView();
 		m_Camera.updateProjection();
 		GLOBAL_VULKAN_CONTEXT->swapChainExtent = { (unsigned int)m_window->swapChainImageSize().width(),(unsigned int)m_window->swapChainImageSize().height() };
-		aaa->update({ m_Camera.getViewMatrix(), m_Camera.getProjectionMatrix() }, m_window->currentSwapChainImageIndex());
+		CameraUBO cubo{};
+		cubo.view = m_Camera.getViewMatrix();
+		cubo.proj = m_Camera.getProjectionMatrix();
+		cubo.proj[1][1] *= -1;
+		GLOBAL_VULKAN_CONTEXT->camearUBO->update(cubo, m_window->currentSwapChainImageIndex());
 		const QSize sz = m_window->swapChainImageSize();
 		VkClearColorValue clearColor = { { 0.0f, 0.0f, 0.0f, 1.0f } };
 		VkClearDepthStencilValue clearDS = { 1.0f, 0.0f };

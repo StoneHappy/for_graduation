@@ -19,8 +19,6 @@ namespace GU
 		{
 			memcpy(uniformBuffersMapped[currentImage], &p_data, sizeof(p_data));
 		}
-	public:
-
 		std::vector<VkBuffer>					uniformBuffers;
 		std::vector<VkDeviceMemory>				uniformBuffersMemory;
 		std::vector<void*>						uniformBuffersMapped;

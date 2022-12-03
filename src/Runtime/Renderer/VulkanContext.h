@@ -1,8 +1,12 @@
 #pragma once
 #include <vulkan/vulkan.h>
 #include <vector>
+#include <memory>
 namespace GU
 {
+	template <class T>
+	class VulkanUniformBuffer;
+	struct CameraUBO;
 	class VulkanContext
 	{
 	public:
@@ -34,6 +38,7 @@ namespace GU
 		VkBuffer								indexBuffer;
 		VkDeviceMemory							indexMemory;
 		
+		std::shared_ptr<VulkanUniformBuffer<CameraUBO> > camearUBO;
 		static int MAX_FRAMES_IN_FLIGHT;
 	private:
 

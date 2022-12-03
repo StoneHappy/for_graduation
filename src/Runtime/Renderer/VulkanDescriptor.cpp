@@ -1,5 +1,6 @@
 #include "VulkanDescriptor.h"
 #include <Global/CoreContext.h>
+#include <Renderer/VulkanUniformBuffer.hpp>
 namespace GU
 {
     void createDescriptorSetLayout(VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout)
@@ -76,7 +77,7 @@ namespace GU
 
         for (size_t i = 0; i < VulkanContext::MAX_FRAMES_IN_FLIGHT; i++) {
             VkDescriptorBufferInfo bufferInfo{};
-            bufferInfo.buffer = vkContext.uniformBuffers[i];
+            bufferInfo.buffer = vkContext.camearUBO->uniformBuffers[i];
             bufferInfo.offset = 0;
             bufferInfo.range = sizeof(CameraUBO);
 
