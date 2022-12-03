@@ -19,3 +19,6 @@
 [submodule "src/Vendors/yaml-cpp"]
 	path = src/Vendors/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "src/Vendors/recastnavigation"]
+	path = src/Vendors/recastnavigation
+	url = https://github.com/recastnavigation/recastnavigation.git
