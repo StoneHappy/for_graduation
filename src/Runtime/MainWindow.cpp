@@ -429,18 +429,14 @@ void MainWindow::on_actImportModel_triggered()
 
 	if (!qfilename.isEmpty())
 	{
-		std::filesystem::path filepath = qfilename.toStdString();
 		std::filesystem::path filename = qfilename.toStdString();
-		auto parentname = filepath.replace_extension().filename();
-		std::filesystem::create_directory(filepath.parent_path(), GLOBAL_ASSET_PATH / "models" / parentname);
-		if (!std::filesystem::exists(GLOBAL_ASSET_PATH / "models" / parentname / filename.filename()))
+		if (!std::filesystem::exists(GLOBAL_MODEL_PATH / filename.filename()))
 		{
-			std::filesystem::create_directory(filepath.parent_path(), GLOBAL_ASSET_PATH / "models" / parentname);
-			std::filesystem::copy(filepath.parent_path(), GLOBAL_ASSET_PATH / "models" / parentname);
+			std::filesystem::copy(filename, GLOBAL_MODEL_PATH);
 			
 		}
 		GLOBAL_THREAD_POOL->enqueue([=]() {
-			GLOBAL_ASSET->insertMesh((parentname / filename.filename()).generic_string());
+			GLOBAL_ASSET->insertMesh(filename.filename());
 #if 0 // test progress bar
 			GLOBAL_MAINWINDOW->progressBegin(5);
 			for (size_t i = 0; i < 5; i++)
@@ -476,7 +472,6 @@ void MainWindow::on_actImportTexture_triggered()
 	if (!qfilename.isEmpty())
 	{
 		std::filesystem::path filepath = qfilename.toStdString();
-		std::filesystem::create_directory(filepath.parent_path(), GLOBAL_ASSET_PATH / "textures");
 		if (!std::filesystem::exists(GLOBAL_ASSET_PATH / "textures" / filepath.filename()))
 		{
 			std::filesystem::copy(filepath, GLOBAL_TEXTURE_PATH);

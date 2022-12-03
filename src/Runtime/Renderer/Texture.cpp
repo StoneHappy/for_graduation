@@ -17,6 +17,8 @@ namespace GU
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		createTextureImage(*GLOBAL_VULKAN_CONTEXT, filepath.string().c_str(), *texture->m_image);
+		createTextureImageView(*GLOBAL_VULKAN_CONTEXT, *texture->m_image);
+		createTextureSampler(*GLOBAL_VULKAN_CONTEXT, *texture->m_image);
 		return texture;
 	}
 }

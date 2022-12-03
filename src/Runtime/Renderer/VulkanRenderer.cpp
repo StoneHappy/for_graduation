@@ -11,6 +11,8 @@
 #include <Renderer/Mesh.h>
 #include <Scene/Entity.h>
 #include <Renderer/VulkanUniformBuffer.hpp>
+#include <Scene/Asset.h>
+#include <MainWindow.h>
 namespace GU
 {
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)

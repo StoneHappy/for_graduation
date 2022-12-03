@@ -32,6 +32,8 @@ namespace GU
         out << YAML::BeginMap;
         out << YAML::Key << "Models" << YAML::Value;
         out << GLOBAL_ASSET->m_loadedModelMap;
+        out << YAML::Key << "Textures" << YAML::Value;
+        out << GLOBAL_ASSET->m_loadedTextureMap;
         out << YAML::EndMap;
 
         out << YAML::EndMap;
@@ -63,12 +65,21 @@ namespace GU
         YAML::Node config = YAML::LoadFile(projectPath.string());
         auto assets = config["Assets"];
         auto models = assets["Models"];
+        auto textures = assets["Textures"];
         GLOBAL_MAINWINDOW->progressBegin(models.size());
         for (auto mesh : models)
         {
             GLOBAL_THREAD_POOL->enqueue([=]() {
                 GLOBAL_MAINWINDOW->progressTick();
                 GLOBAL_ASSET->insertMeshWithUUID(mesh.first.as<std::string>(), mesh.second.as<uint64_t>());
+            });
+        }
+
+        for (auto texture : textures)
+        {
+            GLOBAL_THREAD_POOL->enqueue([=]() {
+                GLOBAL_MAINWINDOW->progressTick();
+                GLOBAL_ASSET->insertTextureWithUUID(texture.first.as<std::string>(), texture.second.as<uint64_t>());
             });
         }
     }
