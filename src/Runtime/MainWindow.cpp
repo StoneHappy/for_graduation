@@ -350,6 +350,8 @@ void MainWindow::on_actNewProject_triggered()
 void MainWindow::on_actOpenProject_triggered()
 {
 	QString qfilename = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("打开工程"), QDir::currentPath(), QString::fromLocal8Bit("工程文件(*.gu)"));
+	if (qfilename.isEmpty()) return;
+
 	std::string filename = qfilename.toStdString();
 	GLOBAL_OPEN_PROJECT(filename);
 	ui->actImportModel->setEnabled(true);
