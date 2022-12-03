@@ -58,13 +58,13 @@ namespace GU
 
 	void Scene::renderTick(VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime)
 	{
-		auto view = m_registry.view<MeshComponent, MaterialComponent, TransformComponent>();
+		auto view = m_registry.view<MaterialComponent, TransformComponent>();
 		for (auto entity : view)
 		{
-			auto&& [meshComponet, materialComponent, transformComponent] = view.get<MeshComponent, MaterialComponent, TransformComponent>(entity);
+			auto&& [materialComponent, transformComponent] = view.get<MaterialComponent, TransformComponent>(entity);
 			vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.pipelineLayout, 0, 1, &materialComponent.material.descriptorSets[currImageIndex], 0, nullptr);
 			materialComponent.material.modelUBO->update({ transformComponent.getTransform() }, currImageIndex);
-			for (auto& mesh : GLOBAL_ASSET->getMeshWithUUID(meshComponet.meshID)->meshs)
+			for (auto& mesh : GLOBAL_ASSET->getMeshWithUUID(materialComponent.material.meshUUID)->meshs)
 			{
 				vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.graphicsPipeline);
 				VkBuffer vertexBuffers[] = { mesh.vertexBuffer };
@@ -95,11 +95,6 @@ namespace GU
 
 	template<>
 	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<MeshComponent>(Entity entity, MeshComponent& component)
 	{
 	}
 	template<>

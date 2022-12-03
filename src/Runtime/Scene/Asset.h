@@ -25,6 +25,7 @@ namespace GU
 		UUID insertMeshWithUUID(const std::filesystem::path& filepath, UUID uuid);
 
 		std::filesystem::path getMeshPathWithUUID(UUID uuid);
+		std::filesystem::path getTexturePathWithUUID(UUID uuid);
 
 		UUID insertTexture(const std::filesystem::path& filepath);
 		UUID insertTextureWithUUID(const std::filesystem::path& filepath, UUID uuid);

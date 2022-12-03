@@ -56,9 +56,4 @@ namespace GU
 		MaterialComponent() = default;
 		MaterialComponent(const MaterialComponent&) = default;
 	};
-
-	struct MeshComponent
-	{
-		UUID meshID;
-	};
 }

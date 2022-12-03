@@ -51,9 +51,11 @@ CDoubleProperty* sxProperty;
 CDoubleProperty* syProperty;
 CDoubleProperty* szProperty;
 
-CPropertyHeader* meshheader;
+CPropertyHeader* materialheader;
 CStringProperty* meshProperty;
 CStringProperty* meshuuidProperty;
+CStringProperty* textureProperty;
+CStringProperty* textureuuidProperty;
 /*******************************Property***********************************************/
 
 static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& msg)
@@ -217,11 +219,17 @@ void MainWindow::craeteComponentView()
 	syProperty = new CDoubleProperty(sclheader, "syProperty", "y:", 0, 0, -1000.0, 1000.0);
 	szProperty = new CDoubleProperty(sclheader, "szProperty", "z:", 0, 0, -1000.0, 1000.0);
 
-	meshheader = new CPropertyHeader("meshheader", QString::fromLocal8Bit("网格组件"));
-	meshProperty = new CStringProperty(meshheader, "meshProperty", QString::fromLocal8Bit("模型名称"), QString::fromLocal8Bit(""));
-	meshuuidProperty = new CStringProperty(meshheader, "meshuuidProperty", QString::fromLocal8Bit("模型id"), QString::fromLocal8Bit(""));
+	materialheader = new CPropertyHeader("材质", QString::fromLocal8Bit("材质组件"));
+	meshProperty = new CStringProperty(materialheader, "meshProperty", QString::fromLocal8Bit("网格名称"), QString::fromLocal8Bit(""));
+	meshuuidProperty = new CStringProperty(materialheader, "meshuuidProperty", QString::fromLocal8Bit("网格id"), QString::fromLocal8Bit(""));
+
+	textureProperty = new CStringProperty(materialheader, "textureProperty", QString::fromLocal8Bit("贴图名称"), QString::fromLocal8Bit(""));
+	textureuuidProperty = new CStringProperty(materialheader, "textureuuidProperty", QString::fromLocal8Bit("贴图id"), QString::fromLocal8Bit(""));
+
 	meshProperty->setDisabled(true);
 	meshuuidProperty->setDisabled(true);
+	textureProperty->setDisabled(true);
+	textureuuidProperty->setDisabled(true);
 	//ui->componentTreeWidget->adjustToContents();
 }
 void MainWindow::craeteResourceView()
@@ -271,9 +279,11 @@ void MainWindow::clearAllComponentProperty()
 	ui->componentTreeWidget->remove(syProperty);
 	ui->componentTreeWidget->remove(szProperty);
 
-	ui->componentTreeWidget->remove(meshheader);
+	ui->componentTreeWidget->remove(materialheader);
 	ui->componentTreeWidget->remove(meshProperty);
 	ui->componentTreeWidget->remove(meshuuidProperty);
+	ui->componentTreeWidget->remove(textureProperty);
+	ui->componentTreeWidget->remove(textureuuidProperty);
 }
 
 void MainWindow::importResource2Table(QString filename, uint64_t uuid, int type)
@@ -467,9 +477,8 @@ void MainWindow::on_actAddModelToEntity_triggered()
 		auto textureitem = m_textureTableModel->itemFromIndex(m_textureTableSelectModel->currentIndex());
 		uint64_t uuid = entityitem->data().toULongLong();
 		auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
-		auto& meshComponent = entity.addComponent<GU::MeshComponent>();
 		auto& materialComponent = entity.addComponent<GU::MaterialComponent>();
-		meshComponent.meshID = modelitem->data().toULongLong();
+		materialComponent.material.meshUUID = modelitem->data().toULongLong();
 		materialComponent.material.textureUUID = textureitem->data().toULongLong();
 		materialComponent.material.modelUBO = std::make_shared<::GU::VulkanUniformBuffer<::GU::ModelUBO> >();
 		::GU::createDescriptorSets(*GLOBAL_VULKAN_CONTEXT, \
@@ -570,14 +579,19 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 		ui->componentTreeWidget->add(szProperty);
 	}
 
-	if (entity.hasComponent<GU::MeshComponent>())
+	if (entity.hasComponent<GU::MaterialComponent>())
 	{
-		auto uuid = entity.getComponent<GU::MeshComponent>().meshID;
-		meshuuidProperty->setValue(QString::number(uuid));
-		meshProperty->setValue(GLOBAL_ASSET->getMeshPathWithUUID(uuid).string().c_str());
-		ui->componentTreeWidget->add(meshheader);
+		auto meshuuid = entity.getComponent<GU::MaterialComponent>().material.meshUUID;
+		auto textureuuid = entity.getComponent<GU::MaterialComponent>().material.textureUUID;
+		meshuuidProperty->setValue(QString::number(meshuuid));
+		meshProperty->setValue(GLOBAL_ASSET->getMeshPathWithUUID(meshuuid).string().c_str());
+		textureuuidProperty->setValue(QString::number(textureuuid));
+		textureProperty->setValue(GLOBAL_ASSET->getTexturePathWithUUID(textureuuid).string().c_str());
+		ui->componentTreeWidget->add(materialheader);
 		ui->componentTreeWidget->add(meshProperty);
 		ui->componentTreeWidget->add(meshuuidProperty);
+		ui->componentTreeWidget->add(textureProperty);
+		ui->componentTreeWidget->add(textureuuidProperty);
 	}
 	
 

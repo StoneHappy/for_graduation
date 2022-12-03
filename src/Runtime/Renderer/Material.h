@@ -16,6 +16,7 @@ namespace GU
 		Material();
 		~Material();
 		uint64_t textureUUID;
+		uint64_t meshUUID;
 		std::vector<VkDescriptorSet> descriptorSets;
 		std::shared_ptr<VulkanUniformBuffer<ModelUBO> > modelUBO;
 	};

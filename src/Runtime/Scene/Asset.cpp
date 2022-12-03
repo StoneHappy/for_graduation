@@ -64,6 +64,20 @@ namespace GU
         }
         return "";
     }
+
+    std::filesystem::path Asset::getTexturePathWithUUID(UUID uuid)
+    {
+        for (auto&& t : m_loadedTextureMap)
+        {
+            if (t.second == uuid)
+            {
+                return t.first;
+            }
+        }
+        return "";
+    }
+
+    
     UUID Asset::insertTextureWithUUID(const std::filesystem::path& filepath, UUID uuid)
     {
         auto found = m_loadedTextureMap.find(filepath);
