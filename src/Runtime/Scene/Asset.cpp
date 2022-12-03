@@ -83,4 +83,10 @@ namespace GU
     {
         return m_meshMap[uuid];
     }
+
+    std::shared_ptr<Texture> Asset::getTextureWithUUID(UUID uuid)
+    {
+        return m_textureMap[uuid];
+    }
+
 }

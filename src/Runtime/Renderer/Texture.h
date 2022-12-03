@@ -10,7 +10,6 @@ namespace GU
 		Texture();
 		~Texture();
 		static std::shared_ptr<Texture> read(const std::filesystem::path& filepath);
-	private:
-		std::shared_ptr<VulkanImage> m_image;
+		std::shared_ptr<VulkanImage> image;
 	};
 }

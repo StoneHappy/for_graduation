@@ -2,6 +2,7 @@
 #include <vulkan/vulkan.h>
 #include <string>
 #include <Global/CoreContext.h>
+#include <Renderer/VulkanBuffer.h>
 #include <vector>
 namespace GU
 {

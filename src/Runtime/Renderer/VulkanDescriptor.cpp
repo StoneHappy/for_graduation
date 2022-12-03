@@ -52,7 +52,7 @@ namespace GU
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
         poolInfo.pPoolSizes = poolSizes.data();
-        poolInfo.maxSets = static_cast<uint32_t>(VulkanContext::MAX_FRAMES_IN_FLIGHT);
+        poolInfo.maxSets = 1000;
 
         if (vkCreateDescriptorPool(vkContext.logicalDevice, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
             FATAL_LOG("failed to create descriptor pool!");
@@ -62,7 +62,6 @@ namespace GU
 
     void createDescriptorSets(VulkanContext& vkContext, VulkanImage& vulkanImage, std::vector<VkBuffer>& modelUBOs, VkDescriptorSetLayout& descriptorSetLayout, VkDescriptorPool& descriptorPool, std::vector<VkDescriptorSet>& descriptorSets)
     {
-        DEBUG_LOG("正在创建DescriptorSet...");
         std::vector<VkDescriptorSetLayout> layouts(VulkanContext::MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
@@ -82,7 +81,7 @@ namespace GU
             bufferInfo.range = sizeof(CameraUBO);
 
             VkDescriptorBufferInfo meshbufferInfo{};
-            meshbufferInfo.buffer = vkContext.meshUniformBuffers[i];
+            meshbufferInfo.buffer = modelUBOs[i];
             meshbufferInfo.offset = 0;
             meshbufferInfo.range = sizeof(ModelUBO);
 

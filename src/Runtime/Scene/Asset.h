@@ -30,6 +30,7 @@ namespace GU
 		UUID insertTextureWithUUID(const std::filesystem::path& filepath, UUID uuid);
 
 		std::shared_ptr<MeshNode> getMeshWithUUID(UUID uuid);
+		std::shared_ptr<Texture> getTextureWithUUID(UUID uuid);
 	private:
 		std::unordered_map<UUID, std::shared_ptr<MeshNode>> m_meshMap;
 		std::unordered_map<std::filesystem::path, UUID> m_loadedModelMap;

@@ -27,6 +27,8 @@
 #include <Widgets/AddMeshToEntityDlg.h>
 #include <Core/ThreadPool.h>
 #include <Scene/Asset.h>
+#include <Renderer/VulkanDescriptor.h>
+#include <Renderer/Texture.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 
@@ -462,10 +464,21 @@ void MainWindow::on_actAddModelToEntity_triggered()
 	{
 		auto entityitem = m_entityTreeModel->itemFromIndex(m_entityTreeSelectModel->currentIndex());
 		auto modelitem = m_meshTableModel->itemFromIndex(m_meshTableSelectModel->currentIndex());
+		auto textureitem = m_textureTableModel->itemFromIndex(m_textureTableSelectModel->currentIndex());
 		uint64_t uuid = entityitem->data().toULongLong();
 		auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
 		auto& meshComponent = entity.addComponent<GU::MeshComponent>();
+		auto& materialComponent = entity.addComponent<GU::MaterialComponent>();
 		meshComponent.meshID = modelitem->data().toULongLong();
+		materialComponent.material.textureUUID = textureitem->data().toULongLong();
+		materialComponent.material.modelUBO = std::make_shared<::GU::VulkanUniformBuffer<::GU::ModelUBO> >();
+		::GU::createDescriptorSets(*GLOBAL_VULKAN_CONTEXT, \
+			*GLOBAL_ASSET->getTextureWithUUID(materialComponent.material.textureUUID)->image,\
+			materialComponent.material.modelUBO->uniformBuffers, \
+			GLOBAL_VULKAN_CONTEXT->descriptorSetLayout, \
+			GLOBAL_VULKAN_CONTEXT->descriptorPool, \
+			materialComponent.material.descriptorSets);
+		;
 	}
 	slot_on_entityTreeSelectModel_currentChanged(m_entityTreeSelectModel->currentIndex(), m_entityTreeSelectModel->currentIndex());
 }

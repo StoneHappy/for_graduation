@@ -6,7 +6,7 @@ namespace GU
 {
 	Texture::Texture()
 	{
-		m_image = std::make_shared<VulkanImage>();
+		image = std::make_shared<VulkanImage>();
 	}
 	Texture::~Texture()
 	{
@@ -16,9 +16,9 @@ namespace GU
 	std::shared_ptr<Texture> Texture::read(const std::filesystem::path& filepath)
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		createTextureImage(*GLOBAL_VULKAN_CONTEXT, filepath.string().c_str(), *texture->m_image);
-		createTextureImageView(*GLOBAL_VULKAN_CONTEXT, *texture->m_image);
-		createTextureSampler(*GLOBAL_VULKAN_CONTEXT, *texture->m_image);
+		createTextureImage(*GLOBAL_VULKAN_CONTEXT, filepath.string().c_str(), *texture->image);
+		createTextureImageView(*GLOBAL_VULKAN_CONTEXT, *texture->image);
+		createTextureSampler(*GLOBAL_VULKAN_CONTEXT, *texture->image);
 		return texture;
 	}
 }
