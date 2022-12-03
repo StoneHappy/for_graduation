@@ -28,6 +28,7 @@ tinyobjloader
 assimp::assimp
 EnTT::EnTT
 yaml-cpp
+Recast
           )
 
 target_include_directories(
