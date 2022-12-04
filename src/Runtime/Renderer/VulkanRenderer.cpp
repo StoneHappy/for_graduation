@@ -42,14 +42,8 @@ namespace GU
 		// create graphicspipeline according to layout
 		createGraphicsPipeline(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->shaderStage, GLOBAL_VULKAN_CONTEXT->pipelineLayout, GLOBAL_VULKAN_CONTEXT->graphicsPipeline);
 
-		VulkanImage vkImage;
-		createTextureImage(*GLOBAL_VULKAN_CONTEXT, "./assets/grid.jpg", vkImage);
-		createTextureImageView(*GLOBAL_VULKAN_CONTEXT, vkImage);
-		createTextureSampler(*GLOBAL_VULKAN_CONTEXT, vkImage); 
-
 		createUniformBuffers(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->meshUniformBuffers, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMemory, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMapped, sizeof(ModelUBO));
 		createDescriptorPool(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->descriptorPool);
-		createDescriptorSets(*GLOBAL_VULKAN_CONTEXT, vkImage, GLOBAL_VULKAN_CONTEXT->meshUniformBuffers, GLOBAL_VULKAN_CONTEXT->descriptorSetLayout, GLOBAL_VULKAN_CONTEXT->descriptorPool, GLOBAL_VULKAN_CONTEXT->descriptorSets);
 		createBackgroundPipeline(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->backgroudPipeline);
 		createBoundingBoxPipeline(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->boundingboxPipeline);
 	}
@@ -124,9 +118,9 @@ namespace GU
 		m_devFuncs->vkCmdDraw(cmdBuf, 6, 1, 0, 0);
 
 		// Wireframe
-		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->boundingboxPipeline);
+		/*m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->boundingboxPipeline);
 		m_devFuncs->vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->pipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->descriptorSets[m_window->currentSwapChainImageIndex()], 0, nullptr);
-		m_devFuncs->vkCmdDraw(cmdBuf, 24, 1, 0, 0);
+		m_devFuncs->vkCmdDraw(cmdBuf, 24, 1, 0, 0);*/
 
 		// 3D model
 		GLOBAL_SCENE->renderTick(*GLOBAL_VULKAN_CONTEXT, cmdBuf, m_window->currentSwapChainImageIndex(), GLOBAL_DELTATIME);
