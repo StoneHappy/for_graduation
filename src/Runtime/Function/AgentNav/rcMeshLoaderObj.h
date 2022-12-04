@@ -21,9 +21,15 @@
 
 #include <string>
 
+namespace GU
+{
+	class NavMesh;
+}
+
 class rcMeshLoaderObj
 {
 public:
+	friend class ::GU::NavMesh;
 	rcMeshLoaderObj();
 	~rcMeshLoaderObj();
 

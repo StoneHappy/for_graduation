@@ -29,6 +29,7 @@
 #include <Scene/Asset.h>
 #include <Renderer/VulkanDescriptor.h>
 #include <Renderer/Texture.h>
+#include <Function/AgentNav/NavMesh.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 
@@ -450,7 +451,11 @@ void MainWindow::on_actNavmeshParam_triggered()
 
 	if (rnt == QDialog::Accepted)
 	{
-
+		auto item = m_meshTableModel->itemFromIndex(m_meshTableSelectModel->currentIndex());
+		auto uuid = item->data().toULongLong();
+		auto meshnode = GLOBAL_ASSET->getMeshWithUUID(uuid);
+		auto mesh =  meshnode->meshs[0];
+		auto navmesh = ::GU::NavMesh::createFromGUMesh(mesh);
 	}
 }
 
