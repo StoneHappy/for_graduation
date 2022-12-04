@@ -2,7 +2,7 @@
 #define NAVMESHPARAMSDLG_H
 
 #include <QDialog>
-
+#include <Recast.h>
 namespace Ui {
 class NavMeshParamsDlg;
 }
@@ -14,6 +14,9 @@ class NavMeshParamsDlg : public QDialog
 public:
     explicit NavMeshParamsDlg(QWidget *parent = nullptr);
     ~NavMeshParamsDlg();
+    rcConfig rc_cfg;
+private slots:
+    void slot_accept();
 
 private:
     Ui::NavMeshParamsDlg *ui;

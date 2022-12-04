@@ -456,6 +456,7 @@ void MainWindow::on_actNavmeshParam_triggered()
 		auto meshnode = GLOBAL_ASSET->getMeshWithUUID(uuid);
 		auto mesh =  meshnode->meshs[0];
 		auto navmesh = ::GU::NavMesh::createFromGUMesh(mesh);
+		auto rcconfig = navmeshdlg->rc_cfg;
 	}
 }
 

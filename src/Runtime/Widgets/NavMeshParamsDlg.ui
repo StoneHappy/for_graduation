@@ -61,7 +61,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox">
+       <widget class="QDoubleSpinBox" name="p_cs">
         <property name="minimum">
          <double>0.100000000000000</double>
         </property>
@@ -77,7 +77,7 @@
        </widget>
       </item>
       <item row="0" column="3">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+       <widget class="QDoubleSpinBox" name="p_ch">
         <property name="minimum">
          <double>0.100000000000000</double>
         </property>
@@ -109,7 +109,7 @@
        </widget>
       </item>
       <item row="0" column="3">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
+       <widget class="QDoubleSpinBox" name="p_agentRadius">
         <property name="minimum">
          <double>0.100000000000000</double>
         </property>
@@ -132,7 +132,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+       <widget class="QDoubleSpinBox" name="p_agentHeight">
         <property name="minimum">
          <double>0.100000000000000</double>
         </property>
@@ -155,7 +155,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
+       <widget class="QDoubleSpinBox" name="p_agentMaxClimb">
         <property name="minimum">
          <double>0.100000000000000</double>
         </property>
@@ -178,7 +178,7 @@
        </widget>
       </item>
       <item row="1" column="3">
-       <widget class="QSpinBox" name="spinBox_6"/>
+       <widget class="QSpinBox" name="p_agentMaxSlope"/>
       </item>
      </layout>
     </widget>
@@ -204,10 +204,10 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="spinBox_7"/>
+       <widget class="QSpinBox" name="p_regionMinSize"/>
       </item>
       <item row="1" column="1">
-       <widget class="QSpinBox" name="spinBox_8"/>
+       <widget class="QSpinBox" name="p_regionMergeSize"/>
       </item>
      </layout>
     </widget>
@@ -219,14 +219,14 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_6">
       <item row="0" column="1">
-       <widget class="QRadioButton" name="radioButton_2">
+       <widget class="QRadioButton" name="p_MONOTONE">
         <property name="text">
          <string>Monontone</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QRadioButton" name="radioButton">
+       <widget class="QRadioButton" name="p_WATERSHED">
         <property name="text">
          <string>分水领算法</string>
         </property>
@@ -236,7 +236,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QRadioButton" name="radioButton_3">
+       <widget class="QRadioButton" name="p_LAYERS">
         <property name="text">
          <string>Layers</string>
         </property>
@@ -252,7 +252,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="2">
-       <widget class="QCheckBox" name="checkBox_3">
+       <widget class="QCheckBox" name="p_filterLedgeSpans">
         <property name="text">
          <string>边缘高度域</string>
         </property>
@@ -269,7 +269,7 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="p_filterLowHangingObstacles">
         <property name="text">
          <string>低矮的悬浮障碍物</string>
         </property>
@@ -279,7 +279,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QCheckBox" name="checkBox_4">
+       <widget class="QCheckBox" name="p_m_filterWalkableLowHeightSpans">
         <property name="text">
          <string>低矮的悬浮障碍物</string>
         </property>
@@ -298,7 +298,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_8">
       <item row="0" column="3">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_12"/>
+       <widget class="QDoubleSpinBox" name="p_edgeMaxError"/>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_14">
@@ -308,7 +308,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="spinBox_11"/>
+       <widget class="QSpinBox" name="p_edgeMaxLen"/>
       </item>
       <item row="0" column="2">
        <widget class="QLabel" name="label_15">
@@ -325,7 +325,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QSpinBox" name="spinBox_12"/>
+       <widget class="QSpinBox" name="p_vertsPerPoly"/>
       </item>
      </layout>
     </widget>
@@ -351,10 +351,10 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="spinBox_9"/>
+       <widget class="QSpinBox" name="p_detailSampleDist"/>
       </item>
       <item row="0" column="3">
-       <widget class="QSpinBox" name="spinBox_10"/>
+       <widget class="QSpinBox" name="p_detailSampleMaxError"/>
       </item>
      </layout>
     </widget>
