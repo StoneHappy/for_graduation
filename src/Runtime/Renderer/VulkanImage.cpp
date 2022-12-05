@@ -8,7 +8,6 @@ namespace GU
         stbi_uc* pixels = stbi_load(picturePath, &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
         VkDeviceSize imageSize = texWidth * texHeight * 4;
         if (!pixels) {
-            FATAL_LOG("failed to load texture image!");
             throw std::runtime_error("failed to load texture image!");
         }
 
@@ -100,7 +99,6 @@ namespace GU
             destinationStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
         }
         else {
-            CRITICAL_LOG("unsupported layout transition!");
             throw std::invalid_argument("unsupported layout transition!");
         }
 
@@ -204,7 +202,6 @@ namespace GU
                 return ;
             }
         }
-        FATAL_LOG("failed to find supported format!");
         throw std::runtime_error("failed to find supported format!");
     }
     void findDepthFormat(VulkanContext& vulkanContext, VkFormat& format)

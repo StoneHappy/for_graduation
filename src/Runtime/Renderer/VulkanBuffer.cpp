@@ -10,7 +10,6 @@ namespace GU
 {
 	void createVertexBuffer(VulkanContext& vkContext, const std::vector<Vertex>& vertices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
-		DEBUG_LOG("正在创建VertexBuffer...");
 		VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
 		VkBuffer stagingBuffer;
@@ -33,7 +32,6 @@ namespace GU
 
 	void createIndexBuffer(VulkanContext& vkContext, const std::vector<uint32_t>& indices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
-		DEBUG_LOG("正在创建IndexBuffer...");
 		VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
 
 		VkBuffer stagingBuffer;
@@ -69,7 +67,6 @@ namespace GU
 
 	void createBuffer(VulkanContext& vkContext, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
-		DEBUG_LOG("正在创建Buffer...");
 		VkBufferCreateInfo bufferInfo = {};
 		bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 		bufferInfo.size = size;
@@ -78,7 +75,6 @@ namespace GU
 
 		if (vkCreateBuffer(vkContext.logicalDevice, &bufferInfo, nullptr, &buffer) != VK_SUCCESS)
 		{
-			FATAL_LOG("failed to create buffer!");
 			throw std::runtime_error("failed to create buffer!");
 		}
 
@@ -92,7 +88,6 @@ namespace GU
 
 		if (vkAllocateMemory(vkContext.logicalDevice, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS)
 		{
-			FATAL_LOG("failed to allocate buffer memory!");
 			throw std::runtime_error("failed to allocate buffer memory!");
 		}
 
@@ -101,7 +96,6 @@ namespace GU
 
 	void copyBuffer(VulkanContext& vkContext, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
 	{
-		DEBUG_LOG("正在拷贝Buffer...");
 		VkCommandBuffer commandBuffer = beginSingleTimeCommands(vkContext);
 		VkBufferCopy copyRegion = {};
 		copyRegion.size = size;
@@ -118,7 +112,6 @@ namespace GU
 		{
 			if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) return i;
 		}
-		FATAL_LOG("failed to find suitable memory type!");
 		throw std::runtime_error("failed to find suitable memory type!");
 	}
 	void updateUniformBuffer(VulkanContext& vkContext, uint32_t currentImage, std::vector<void*>& uniformBuffersMapped) {
