@@ -5,15 +5,17 @@
 namespace GU
 {
 	class Mesh;
+	class BuildContext;
+
 	class RCScheduler
 	{
 	public:
-		RCScheduler() = default;
+		RCScheduler();
 		~RCScheduler() = default;
 
 		void handelConfig(rcConfig rcconfig,Mesh* mesh);
 
-		void handelBuild();
+		bool handelBuild();
 
 	private:
 		void createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh);
@@ -29,5 +31,15 @@ namespace GU
 		rcConfig m_cfg;
 		rcPolyMeshDetail* m_dmesh;
 		rcMeshLoaderObj rcmesh;
+		BuildContext* m_ctx;
+		float m_meshBMin[3], m_meshBMax[3];
+	};
+
+
+	class BuildContext : public rcContext
+	{
+	public:
+		BuildContext() = default;
+		~BuildContext() = default;
 	};
 }

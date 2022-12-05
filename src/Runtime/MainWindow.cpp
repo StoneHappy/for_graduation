@@ -456,9 +456,13 @@ void MainWindow::on_actNavmeshParam_triggered()
 		auto meshnode = GLOBAL_ASSET->getMeshWithUUID(uuid);
 		auto& mesh =  meshnode->meshs[0];
 		auto rcconfig = navmeshdlg->rc_cfg;
-		rcVcopy(rcconfig.bmin, meshnode->meshs[0].bmin);
-		rcVcopy(rcconfig.bmax, meshnode->meshs[0].bmax);
+		
 		GLOBAL_RCSCHEDULER->handelConfig(rcconfig, &mesh);
+		if (!GLOBAL_RCSCHEDULER->handelBuild())
+		{
+			DEBUG_LOG("%s", "navmesh build failed!");
+		}
+
 	}
 }
 
