@@ -146,6 +146,129 @@ namespace GU
 			return false;
 		}
 		
+
+		// Partition the heightfield so that we can use simple algorithm later to triangulate the walkable areas.
+		// There are 3 martitioning methods, each with some pros and cons:
+		// 1) Watershed partitioning
+		//   - the classic Recast partitioning
+		//   - creates the nicest tessellation
+		//   - usually slowest
+		//   - partitions the heightfield into nice regions without holes or overlaps
+		//   - the are some corner cases where this method creates produces holes and overlaps
+		//      - holes may appear when a small obstacles is close to large open area (triangulation can handle this)
+		//      - overlaps may occur if you have narrow spiral corridors (i.e stairs), this make triangulation to fail
+		//   * generally the best choice if you precompute the nacmesh, use this if you have large open areas
+		// 2) Monotone partioning
+		//   - fastest
+		//   - partitions the heightfield into regions without holes and overlaps (guaranteed)
+		//   - creates long thin polygons, which sometimes causes paths with detours
+		//   * use this if you want fast navmesh generation
+		// 3) Layer partitoining
+		//   - quite fast
+		//   - partitions the heighfield into non-overlapping regions
+		//   - relies on the triangulation code to cope with holes (thus slower than monotone partitioning)
+		//   - produces better triangles than monotone partitioning
+		//   - does not have the corner cases of watershed partitioning
+		//   - can be slow and create a bit ugly tessellation (still better than monotone)
+		//     if you have large open areas with small obstacles (not a problem if you use tiles)
+		//   * good choice to use for tiled navmesh with medium and small sized tiles
+
+		if (rcparams.m_partitionType == SAMPLE_PARTITION_WATERSHED)
+		{
+			// Prepare for region partitioning, by calculating distance field along the walkable surface.
+			if (!rcBuildDistanceField(m_ctx, *m_chf))
+			{
+				m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not build distance field.");
+				return false;
+			}
+
+			// Partition the walkable surface into simple regions without holes.
+			if (!rcBuildRegions(m_ctx, *m_chf, 0, m_cfg.minRegionArea, m_cfg.mergeRegionArea))
+			{
+				m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not build watershed regions.");
+				return false;
+			}
+		}
+		else if (rcparams.m_partitionType == SAMPLE_PARTITION_MONOTONE)
+		{
+			// Partition the walkable surface into simple regions without holes.
+			// Monotone partitioning does not need distancefield.
+			if (!rcBuildRegionsMonotone(m_ctx, *m_chf, 0, m_cfg.minRegionArea, m_cfg.mergeRegionArea))
+			{
+				m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not build monotone regions.");
+				return false;
+			}
+		}
+		else // SAMPLE_PARTITION_LAYERS
+		{
+			// Partition the walkable surface into simple regions without holes.
+			if (!rcBuildLayerRegions(m_ctx, *m_chf, 0, m_cfg.minRegionArea))
+			{
+				m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not build layer regions.");
+				return false;
+			}
+		}
+
+
+		//
+		// Step 5. Trace and simplify region contours.
+		//
+
+		// Create contours.
+		m_cset = rcAllocContourSet();
+		if (!m_cset)
+		{
+			m_ctx->log(RC_LOG_ERROR, "buildNavigation: Out of memory 'cset'.");
+			return false;
+		}
+		if (!rcBuildContours(m_ctx, *m_chf, m_cfg.maxSimplificationError, m_cfg.maxEdgeLen, *m_cset))
+		{
+			m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not create contours.");
+			return false;
+		}
+
+		//
+		// Step 6. Build polygons mesh from contours.
+		//
+
+		// Build polygon navmesh from the contours.
+		m_pmesh = rcAllocPolyMesh();
+		if (!m_pmesh)
+		{
+			m_ctx->log(RC_LOG_ERROR, "buildNavigation: Out of memory 'pmesh'.");
+			return false;
+		}
+		if (!rcBuildPolyMesh(m_ctx, *m_cset, m_cfg.maxVertsPerPoly, *m_pmesh))
+		{
+			m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not triangulate contours.");
+			return false;
+		}
+
+		//
+		// Step 7. Create detail mesh which allows to access approximate height on each polygon.
+		//
+
+		m_dmesh = rcAllocPolyMeshDetail();
+		if (!m_dmesh)
+		{
+			m_ctx->log(RC_LOG_ERROR, "buildNavigation: Out of memory 'pmdtl'.");
+			return false;
+		}
+
+		if (!rcBuildPolyMeshDetail(m_ctx, *m_pmesh, *m_chf, m_cfg.detailSampleDist, m_cfg.detailSampleMaxError, *m_dmesh))
+		{
+			m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not build detail mesh.");
+			return false;
+		}
+
+		if (!rcparams.m_keepInterResults)
+		{
+			rcFreeCompactHeightfield(m_chf);
+			m_chf = 0;
+			rcFreeContourSet(m_cset);
+			m_cset = 0;
+		}
+
 		return true;
 	}
 	void RCScheduler::createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh)

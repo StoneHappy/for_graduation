@@ -32,6 +32,12 @@ namespace GU
 		rcMeshLoaderObj rcmesh;
 		BuildContext* m_ctx;
 		float m_meshBMin[3], m_meshBMax[3];
+		enum PartitionType
+		{
+			SAMPLE_PARTITION_WATERSHED,
+			SAMPLE_PARTITION_MONOTONE,
+			SAMPLE_PARTITION_LAYERS
+		};
 	};
 
 
