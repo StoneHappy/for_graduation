@@ -12,7 +12,7 @@ namespace GU
 			meshnode.isLeft = true;
 			return;
 		}
-		for (size_t i = 0; i < ainode->mNumChildren; i++)
+		for (size_t i = 0; i < ainode->mNumMeshes; i++)
 		{
 			MeshNode::MeshTree childnode;
 			childnode.id = ainode->mMeshes[i];

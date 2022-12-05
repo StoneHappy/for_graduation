@@ -28,7 +28,7 @@ void main()
 	vec4 ks = mat_specular * 0.1;
 	
 	// diffuse term
-	vec3 lightDir = normalize(vec3(10, 10, 0) - inPos);
+	vec3 lightDir = normalize(vec3(50, 50, 0) - inPos);
 	float NdotL = dot(n, lightDir);
 	
 	if (NdotL > 0.0)
