@@ -28,6 +28,10 @@ namespace GU
 		{
 			Mesh mesh;
 			aiMesh* aimesh = scene->mMeshes[i];
+			memset(mesh.bmin, 0, sizeof(float) * 3);
+			memset(mesh.bmax, 0, sizeof(float) * 3);
+			memcpy(mesh.bmin, &aimesh->mAABB.mMin, sizeof(float) * 3);
+			memcpy(mesh.bmax, &aimesh->mAABB.mMax, sizeof(float) * 3);
 			//apply_material(sc->mMaterials[mesh->mMaterialIndex]);
 			for (size_t j = 0; j < aimesh->mNumVertices; j++)
 			{
@@ -72,7 +76,7 @@ namespace GU
 	bool MeshNode::read(VulkanContext& vulkanContext, std::shared_ptr<MeshNode> meshnode,const std::filesystem::path& filepath)
 	{
 		::Assimp::Importer import;
-		const aiScene* scene = import.ReadFile(filepath.generic_string(), aiProcessPreset_TargetRealtime_MaxQuality);
+		const aiScene* scene = import.ReadFile(filepath.generic_string(), aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
 		aiNode* aimeshnode = scene->mRootNode;
 		
 		recursiveBuildMeshTree(aimeshnode, meshnode->root);

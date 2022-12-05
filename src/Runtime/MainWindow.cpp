@@ -457,6 +457,8 @@ void MainWindow::on_actNavmeshParam_triggered()
 		auto mesh =  meshnode->meshs[0];
 		auto navmesh = ::GU::NavMesh::createFromGUMesh(mesh);
 		auto rcconfig = navmeshdlg->rc_cfg;
+		rcVcopy(rcconfig.bmin, meshnode->meshs[0].bmin);
+		rcVcopy(rcconfig.bmax, meshnode->meshs[0].bmax);
 	}
 }
 

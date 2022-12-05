@@ -12,6 +12,8 @@ namespace GU
 		Mesh() = default;
 		std::vector<Vertex> m_vertices;
 		std::vector<uint32_t> m_indices;
+		float bmin[3];
+		float bmax[3];
 		VkBuffer								vertexBuffer;
 		VkDeviceMemory							vertexMemory;
 		VkBuffer								indexBuffer;
