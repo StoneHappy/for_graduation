@@ -2,6 +2,7 @@
 #include <Recast.h>
 #include <memory>
 #include "rcMeshLoaderObj.h"
+#include <Function/AgentNav/RCParams.h>
 namespace GU
 {
 	class Mesh;
@@ -13,9 +14,7 @@ namespace GU
 		RCScheduler();
 		~RCScheduler() = default;
 
-		void handelConfig(rcConfig rcconfig,Mesh* mesh);
-
-		bool handelBuild();
+		bool handelBuild(const RCParams& rcparams, Mesh* mesh);
 
 	private:
 		void createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh);

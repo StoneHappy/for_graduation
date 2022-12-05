@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <Recast.h>
+#include <Function/AgentNav/RCParams.h>
 namespace Ui {
 class NavMeshParamsDlg;
 }
@@ -14,7 +15,7 @@ class NavMeshParamsDlg : public QDialog
 public:
     explicit NavMeshParamsDlg(QWidget *parent = nullptr);
     ~NavMeshParamsDlg();
-    rcConfig rc_cfg;
+	::GU::RCParams rc_params;
 private slots:
     void slot_accept();
 

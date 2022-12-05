@@ -360,6 +360,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="p_keepInterResults">
+     <property name="text">
+      <string>是否保留中间结果</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="pushButtonOK">
      <property name="text">
       <string>构建</string>
