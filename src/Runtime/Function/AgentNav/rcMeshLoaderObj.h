@@ -23,13 +23,13 @@
 
 namespace GU
 {
-	class NavMesh;
+	class RCScheduler;
 }
 
 class rcMeshLoaderObj
 {
 public:
-	friend class ::GU::NavMesh;
+	friend class ::GU::RCScheduler;
 	rcMeshLoaderObj();
 	~rcMeshLoaderObj();
 

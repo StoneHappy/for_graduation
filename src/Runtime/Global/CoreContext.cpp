@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <Core/ThreadPool.h>
 #include <Core/Project.h>
+#include <Function/AgentNav/RCScheduler.h>
 namespace GU
 {
 	CoreContext g_CoreContext;
@@ -19,6 +20,7 @@ namespace GU
 		g_asset = std::make_shared<Asset>();
 		g_Proejct = std::make_shared<Project>();
 		g_threadPool = std::make_shared<::ThreadPool>(8);
+		g_rcScheduler = std::make_shared<RCScheduler>();
 	}
 	CoreContext::~CoreContext()
 	{

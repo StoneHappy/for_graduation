@@ -10,6 +10,7 @@ namespace GU
 	class VulkanContext;
 	class Project;
 	class Asset;
+	class RCScheduler;
 	extern CoreContext g_CoreContext;
 
 	class CoreContext
@@ -32,6 +33,7 @@ namespace GU
 		std::shared_ptr<ThreadPool> g_threadPool;
 		MainWindow* g_p_mainWindow;
 		std::shared_ptr<Project> g_Proejct;
+		std::shared_ptr<RCScheduler> g_rcScheduler;
 	};
 
 }
@@ -56,3 +58,4 @@ namespace GU
 #define GLOBAL_TEXTURE_PATH ::GU::g_CoreContext.g_Proejct->textureDirPath
 #define GLOBAL_THREAD_POOL ::GU::g_CoreContext.g_threadPool
 #define GLOBAL_TIME_TICK() ::GU::g_CoreContext.timeTick()
+#define GLOBAL_RCSCHEDULER ::GU::g_CoreContext.g_rcScheduler
