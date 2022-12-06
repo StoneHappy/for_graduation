@@ -9,7 +9,10 @@ namespace GU
 	template <class T>
 	class VulkanUniformBuffer {
 	public:
-		~VulkanUniformBuffer() = default;
+		~VulkanUniformBuffer()
+		{
+			destoryUniformBuffer(*GLOBAL_VULKAN_CONTEXT, uniformBuffers, uniformBuffersMemory, uniformBuffersMapped);
+		}
 
 		VulkanUniformBuffer()
 		{

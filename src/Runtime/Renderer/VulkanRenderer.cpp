@@ -42,10 +42,15 @@ namespace GU
 		// create graphicspipeline according to layout
 		createGraphicsPipeline(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->shaderStage, GLOBAL_VULKAN_CONTEXT->pipelineLayout, GLOBAL_VULKAN_CONTEXT->graphicsPipeline);
 
-		createUniformBuffers(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->meshUniformBuffers, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMemory, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMapped, sizeof(ModelUBO));
+		//createUniformBuffers(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->meshUniformBuffers, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMemory, GLOBAL_VULKAN_CONTEXT->meshUniformBuffersMapped, sizeof(ModelUBO));
 		createDescriptorPool(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->descriptorPool);
 		createBackgroundPipeline(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->backgroudPipeline);
-		createBoundingBoxPipeline(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->boundingboxPipeline);
+		//createBoundingBoxPipeline(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->boundingboxPipeline);
+
+		m_devFuncs->vkDestroyShaderModule(GLOBAL_VULKAN_CONTEXT->logicalDevice, vertexShader, nullptr);
+		m_devFuncs->vkDestroyShaderModule(GLOBAL_VULKAN_CONTEXT->logicalDevice, fragShader, nullptr);
+
+		GLOBAL_SCENE->initEntityResource();
 	}
 
 	void VulkanRenderer::initSwapChainResources()
@@ -61,6 +66,13 @@ namespace GU
 	void VulkanRenderer::releaseResources()
 	{
 		qDebug("releaseResources");
+		GLOBAL_VULKAN_CONTEXT->camearUBO.reset();
+		GLOBAL_SCENE->releaseEntityResource();
+		destoryDescriptorPool(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->descriptorPool);
+		destoryDescriptorSetLayout(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->descriptorSetLayout);
+		destoryBackgroundPipeline();
+		destoryGraphicsPipeline(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->graphicsPipeline);
+		destoryPipelineLayout(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->pipelineLayout);
 	}
 
 	void VulkanRenderer::startNextFrame()

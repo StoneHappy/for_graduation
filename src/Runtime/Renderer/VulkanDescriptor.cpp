@@ -68,6 +68,16 @@ namespace GU
         }
     }
 
+    void destoryDescriptorPool(VulkanContext& vkContext, VkDescriptorPool& descriptorPool)
+    {
+        vkDestroyDescriptorPool(vkContext.logicalDevice, descriptorPool, nullptr);
+    }
+
+    void destoryDescriptorSetLayout(VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout)
+    {
+        vkDestroyDescriptorSetLayout(vulkanContext.logicalDevice, descriptorSetLayout, nullptr);
+    }
+
     void createDescriptorSets(VulkanContext& vkContext, VulkanImage& vulkanImage, std::vector<VkBuffer>& modelUBOs, VkDescriptorSetLayout& descriptorSetLayout, VkDescriptorPool& descriptorPool, std::vector<VkDescriptorSet>& descriptorSets)
     {
         std::vector<VkDescriptorSetLayout> layouts(VulkanContext::MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);

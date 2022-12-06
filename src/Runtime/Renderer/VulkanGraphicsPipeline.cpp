@@ -117,6 +117,10 @@ namespace GU
             throw std::runtime_error("failed to create graphics pipeline!");
         }
     }
+    void destoryBackgroundPipeline()
+    {
+        vkDestroyPipeline(GLOBAL_VULKAN_CONTEXT->logicalDevice, GLOBAL_VULKAN_CONTEXT->backgroudPipeline, nullptr);
+    }
     void createBoundingBoxPipeline(VulkanContext& vulkanContext, VkPipeline& wireframePipeline)
     {
         VkShaderModule vertexShader = createShader(vulkanContext.logicalDevice, shader_boundingbox_vert, sizeof(shader_boundingbox_vert));
@@ -334,6 +338,11 @@ namespace GU
         }
 	}
 
+    void destoryGraphicsPipeline(VulkanContext& vulkanContext, VkPipeline& graphicsPipeline)
+    {
+        vkDestroyPipeline(vulkanContext.logicalDevice, graphicsPipeline, nullptr);
+    }
+
 
     void createPipelineLayout(VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout, VkPipelineLayout& pipelineLayout)
     {
@@ -349,6 +358,8 @@ namespace GU
         }
     }
 
-    
-
+    void destoryPipelineLayout(VulkanContext& vulkanContext, VkPipelineLayout& pipelineLayout)
+    {
+        vkDestroyPipelineLayout(vulkanContext.logicalDevice, pipelineLayout, nullptr);
+    }
 }

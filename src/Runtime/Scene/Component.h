@@ -52,8 +52,13 @@ namespace GU
 
 	struct MaterialComponent
 	{
+		MaterialComponent(uint64_t modelid, uint64_t textureid);
+
 		Material material;
 		MaterialComponent() = default;
 		MaterialComponent(const MaterialComponent&) = default;
+
+		void createDescritorSets();
+		void destoryUBO();
 	};
 }

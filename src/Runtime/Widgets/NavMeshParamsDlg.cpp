@@ -18,8 +18,9 @@ void NavMeshParamsDlg::slot_accept()
 	rc_params.m_agentHeight = ui->p_agentHeight->value();
 	rc_params.m_agentMaxClimb = ui->p_agentMaxClimb->value();
 	rc_params.m_agentRadius = ui->p_agentRadius->value();
-	rc_params.m_edgeMaxError = ui->p_edgeMaxLen->value();
-	rc_params.m_detailSampleMaxError = ui->p_edgeMaxError->value();
+	rc_params.m_edgeMaxLen = ui->p_edgeMaxLen->value();
+	rc_params.m_edgeMaxError = ui->p_edgeMaxError->value();
+	rc_params.m_detailSampleMaxError = ui->p_detailSampleMaxError->value();
 	rc_params.m_regionMinSize = ui->p_regionMinSize->value();		
 	rc_params.m_regionMergeSize = ui->p_regionMergeSize->value();
 	rc_params.m_vertsPerPoly = ui->p_vertsPerPoly->value();

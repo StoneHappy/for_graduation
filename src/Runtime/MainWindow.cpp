@@ -502,17 +502,7 @@ void MainWindow::on_actAddModelToEntity_triggered()
 		auto textureitem = m_textureTableModel->itemFromIndex(m_textureTableSelectModel->currentIndex());
 		uint64_t uuid = entityitem->data().toULongLong();
 		auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
-		auto& materialComponent = entity.addComponent<GU::MaterialComponent>();
-		materialComponent.material.meshUUID = modelitem->data().toULongLong();
-		materialComponent.material.textureUUID = textureitem->data().toULongLong();
-		materialComponent.material.modelUBO = std::make_shared<::GU::VulkanUniformBuffer<::GU::ModelUBO> >();
-		::GU::createDescriptorSets(*GLOBAL_VULKAN_CONTEXT, \
-			*GLOBAL_ASSET->getTextureWithUUID(materialComponent.material.textureUUID)->image,\
-			materialComponent.material.modelUBO->uniformBuffers, \
-			GLOBAL_VULKAN_CONTEXT->descriptorSetLayout, \
-			GLOBAL_VULKAN_CONTEXT->descriptorPool, \
-			materialComponent.material.descriptorSets);
-		;
+		auto& materialComponent = entity.addComponent<GU::MaterialComponent>(modelitem->data().toULongLong(), textureitem->data().toULongLong());
 	}
 	slot_on_entityTreeSelectModel_currentChanged(m_entityTreeSelectModel->currentIndex(), m_entityTreeSelectModel->currentIndex());
 }

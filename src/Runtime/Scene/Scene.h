@@ -24,6 +24,9 @@ namespace GU
 
 		void renderTick(VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime);
 
+		void initEntityResource();
+		void releaseEntityResource();
+
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
 	public:

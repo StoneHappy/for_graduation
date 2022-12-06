@@ -78,6 +78,26 @@ namespace GU
 		}
 	}
 
+	void Scene::initEntityResource()
+	{
+		auto view = m_registry.view<MaterialComponent>();
+		for (auto entity : view)
+		{
+			auto&& materialComponent = view.get<MaterialComponent>(entity);
+			materialComponent.createDescritorSets();
+		}
+	}
+
+	void Scene::releaseEntityResource()
+	{
+		auto view = m_registry.view<MaterialComponent>();
+		for (auto entity : view)
+		{
+			auto&& materialComponent = view.get<MaterialComponent>(entity);
+			materialComponent.material.modelUBO.reset();
+		}
+	}
+
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{

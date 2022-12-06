@@ -65,6 +65,15 @@ namespace GU
 		}
 	}
 
+	void destoryUniformBuffer(VulkanContext& vkContext, std::vector<VkBuffer>& uniformBuffers, std::vector<VkDeviceMemory>& uniformBuffersMemory, std::vector<void*>& uniformBuffersMapped)
+	{
+		for (size_t i = 0; i < VulkanContext::MAX_FRAMES_IN_FLIGHT; i++) {
+			vkDestroyBuffer(vkContext.logicalDevice, uniformBuffers[i], nullptr);
+			vkUnmapMemory(vkContext.logicalDevice, uniformBuffersMemory[i]);
+			vkFreeMemory(vkContext.logicalDevice, uniformBuffersMemory[i], nullptr);
+		}
+	}
+
 	void createBuffer(VulkanContext& vkContext, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
 		VkBufferCreateInfo bufferInfo = {};
