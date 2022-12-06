@@ -10,4 +10,12 @@ namespace GU
 	{
 
 	}
+	NavMeshMaterial::NavMeshMaterial()
+	{
+
+	}
+	NavMeshMaterial::~NavMeshMaterial()
+	{
+
+	}
 }

@@ -9,6 +9,8 @@
 #include <Renderer/Mesh.h>
 #include <memory>
 #include <Renderer/Material.h>
+class rcPolyMesh;
+
 namespace GU
 {
 	struct IDComponent
@@ -60,5 +62,13 @@ namespace GU
 
 		void createDescritorSets();
 		void destoryUBO();
+	};
+
+	struct NavMeshComponent
+	{
+		NavMeshComponent(rcPolyMesh* m_pmesh);
+		~NavMeshComponent() = default;
+
+		uint64_t pmesh_uuid;
 	};
 }

@@ -25,5 +25,9 @@ namespace GU
 	{
 		material.modelUBO.reset();
 	}
+	NavMeshComponent::NavMeshComponent(rcPolyMesh* pmesh)
+	{
+
+	}
 }
 

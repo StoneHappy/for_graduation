@@ -5,6 +5,7 @@
 #include <DetourNavMeshQuery.h>
 #include <DetourCrowd.h>
 #include <Recast.h>
+#include <Function/AgentNav/RCData.h>
 namespace GU
 {
 	RCScheduler::RCScheduler()
@@ -250,7 +251,7 @@ namespace GU
 			m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not triangulate contours.");
 			return false;
 		}
-
+		RCMesh rcmesh(*m_pmesh);
 		//
 		// Step 7. Create detail mesh which allows to access approximate height on each polygon.
 		//

@@ -37,6 +37,12 @@ namespace GU
 		VkDeviceMemory							vertexMemory;
 		VkBuffer								indexBuffer;
 		VkDeviceMemory							indexMemory;
+
+
+		VkDescriptorSetLayout					rcDescriptorSetLayout;
+		std::vector<VkDescriptorSet>			rcDescriptorSets;
+		VkPipelineLayout						rcPipelineLayout;
+		VkPipeline								rcPipeline;
 		
 		std::shared_ptr<VulkanUniformBuffer<CameraUBO> > camearUBO;
 		static int MAX_FRAMES_IN_FLIGHT;

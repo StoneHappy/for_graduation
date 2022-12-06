@@ -13,6 +13,7 @@
 #include <Renderer/VulkanUniformBuffer.hpp>
 #include <Scene/Asset.h>
 #include <MainWindow.h>
+#include <Function/AgentNav/RCVulkanGraphicsPipline.h>
 namespace GU
 {
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)
@@ -51,6 +52,8 @@ namespace GU
 		m_devFuncs->vkDestroyShaderModule(GLOBAL_VULKAN_CONTEXT->logicalDevice, fragShader, nullptr);
 
 		GLOBAL_SCENE->initEntityResource();
+
+		createRCGraphicsPieline();
 	}
 
 	void VulkanRenderer::initSwapChainResources()

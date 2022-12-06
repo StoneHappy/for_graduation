@@ -20,4 +20,14 @@ namespace GU
 		std::vector<VkDescriptorSet> descriptorSets;
 		std::shared_ptr<VulkanUniformBuffer<ModelUBO> > modelUBO;
 	};
+
+	class NavMeshMaterial
+	{
+	public:
+		NavMeshMaterial();
+		~NavMeshMaterial();
+		uint64_t meshUUID;
+		std::vector<VkDescriptorSet> descriptorSets;
+		std::shared_ptr<VulkanUniformBuffer<ModelUBO> > modelUBO;
+	};
 }
