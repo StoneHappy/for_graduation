@@ -199,5 +199,7 @@ namespace GU
         createRCPipelineLayout(GLOBAL_VULKAN_CONTEXT->rcDescriptorSetLayout, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout);
         // create graphicspipeline according to layout
         createRCGraphicsPipeline(shaderStage, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, GLOBAL_VULKAN_CONTEXT->rcPipeline);
+
+        createRCDescriptorSets(GLOBAL_VULKAN_CONTEXT->rcDescriptorSetLayout, GLOBAL_VULKAN_CONTEXT->descriptorPool, GLOBAL_VULKAN_CONTEXT->rcDescriptorSets);
 	}
 }

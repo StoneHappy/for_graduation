@@ -1,5 +1,8 @@
 #include "RCData.h"
 #include <stddef.h>
+#include <Global/CoreContext.h>
+#include <Renderer/VulkanContext.h>
+#include <Renderer/VulkanBuffer.h>
 namespace GU
 {
 	inline int bit(int a, int b)
@@ -30,6 +33,29 @@ namespace GU
 		{
 			return duIntToCol(area, 255);
 		}
+	}
+
+
+	void createVertexBuffer(VulkanContext& vkContext, const std::vector<RCVertex>& vertices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
+	{
+		VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+
+		VkBuffer stagingBuffer;
+		VkDeviceMemory stagingBufferMemory;
+		createBuffer(vkContext, bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+
+		// map memory to cpu host
+		void* data;
+		vkMapMemory(vkContext.logicalDevice, stagingBufferMemory, 0, bufferSize, 0, &data);
+		memcpy(data, vertices.data(), (size_t)bufferSize);
+		vkUnmapMemory(vkContext.logicalDevice, stagingBufferMemory);
+
+		createBuffer(vkContext, bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, buffer, bufferMemory);
+
+		copyBuffer(vkContext, stagingBuffer, buffer, bufferSize);
+
+		vkDestroyBuffer(vkContext.logicalDevice, stagingBuffer, nullptr);
+		vkFreeMemory(vkContext.logicalDevice, stagingBufferMemory, nullptr);
 	}
 
 	RCMesh::RCMesh(const rcPolyMesh& mesh)
@@ -67,11 +93,19 @@ namespace GU
 					const float z = orig[2] + v[2] * cs;
 					RCVertex vertex;
 					vertex.pos = { x, y, z };
-					memcpy(&vertex.color, &color, 4 * sizeof(uint8_t));
+					glm::u8vec4 tmpcolor;
+					memcpy(&tmpcolor, &color, 4 * sizeof(uint8_t));
+					vertex.color.r = (float)tmpcolor.r;
+					vertex.color.g = (float)tmpcolor.g;
+					vertex.color.b = (float)tmpcolor.b;
+					vertex.color.a = (float)tmpcolor.a;
 					m_verts.emplace_back(std::move(vertex));
 				}
 			}
 		}
+
+		// generate render buuffer
+		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, m_verts, vertexBuffer, vertexMemory);
 	}
 	VkVertexInputBindingDescription RCVertex::getBindingDescription()
 	{
@@ -93,7 +127,7 @@ namespace GU
 
 		attributeDescriptions[1].binding = 0;
 		attributeDescriptions[1].location = 1;
-		attributeDescriptions[1].format = VK_FORMAT_R8G8B8A8_UINT;
+		attributeDescriptions[1].format = VK_FORMAT_R32G32B32A32_SFLOAT;
 		attributeDescriptions[1].offset = offsetof(RCVertex, color);
 
 		return attributeDescriptions;

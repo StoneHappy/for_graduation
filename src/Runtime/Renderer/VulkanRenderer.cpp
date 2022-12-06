@@ -14,6 +14,7 @@
 #include <Scene/Asset.h>
 #include <MainWindow.h>
 #include <Function/AgentNav/RCVulkanGraphicsPipline.h>
+#include <Function/AgentNav/RCScheduler.h>
 namespace GU
 {
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)
@@ -139,6 +140,9 @@ namespace GU
 
 		// 3D model
 		GLOBAL_SCENE->renderTick(*GLOBAL_VULKAN_CONTEXT, cmdBuf, m_window->currentSwapChainImageIndex(), GLOBAL_DELTATIME);
+
+		// RCMesh
+		GLOBAL_RCSCHEDULER->handelRender(cmdBuf, m_window->currentSwapChainImageIndex());
 
 		// submit queue
 		m_devFuncs->vkCmdEndRenderPass(cmdBuf);

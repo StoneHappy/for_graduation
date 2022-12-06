@@ -3,6 +3,7 @@
 #include "rcMeshLoaderObj.h"
 #include <Function/AgentNav/RCParams.h>
 #include <Recast.h>
+#include <vulkan/vulkan.h>
 class dtNavMesh;
 class dtNavMeshQuery;
 class dtCrowd;
@@ -11,7 +12,7 @@ namespace GU
 {
 	class Mesh;
 	class BuildContext;
-
+	class RCMesh;
 	class RCScheduler
 	{
 	public:
@@ -19,10 +20,11 @@ namespace GU
 		~RCScheduler() = default;
 
 		bool handelBuild(const RCParams& rcparams, Mesh* mesh);
+		void handelRender(VkCommandBuffer cmdBuf, int currentImage);
 
+		RCMesh* m_polymesh = nullptr;
 	private:
 		void createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh);
-
 	private:
 		unsigned char* m_triareas;
 		rcHeightfield* m_solid;

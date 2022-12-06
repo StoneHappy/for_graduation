@@ -9,7 +9,7 @@ namespace GU
 	struct RCVertex
 	{
 		glm::vec3 pos;
-		glm::u8vec4 color;
+		glm::vec4 color;
 
 		static VkVertexInputBindingDescription getBindingDescription();
 
@@ -22,6 +22,8 @@ namespace GU
 		~RCMesh() = default;
 
 		std::vector<RCVertex> m_verts;
+		VkBuffer								vertexBuffer;
+		VkDeviceMemory							vertexMemory;
 	};
 
 	struct RCContour

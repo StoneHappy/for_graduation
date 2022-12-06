@@ -251,7 +251,7 @@ namespace GU
 			m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not triangulate contours.");
 			return false;
 		}
-		RCMesh rcmesh(*m_pmesh);
+		m_polymesh = new RCMesh(*m_pmesh);
 		//
 		// Step 7. Create detail mesh which allows to access approximate height on each polygon.
 		//
@@ -382,6 +382,19 @@ namespace GU
 
 		return true;
 	}
+
+	void RCScheduler::handelRender(VkCommandBuffer cmdBuf, int currentImage)
+	{
+		if (m_polymesh == nullptr) return;
+
+		vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->rcDescriptorSets[currentImage], 0, nullptr);
+		vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipeline);
+		VkBuffer vertexBuffers[] = { m_polymesh->vertexBuffer };
+		VkDeviceSize offsets[] = { 0 };
+		vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
+		vkCmdDraw(cmdBuf,  static_cast<uint32_t>(m_polymesh->m_verts.size()), 1, 0, 0);
+	}
+	
 	void RCScheduler::createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh)
 	{
 		int vcap = 0;
