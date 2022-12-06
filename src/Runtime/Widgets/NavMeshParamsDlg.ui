@@ -292,7 +292,7 @@
       <item row="0" column="0">
        <widget class="QCheckBox" name="p_filterLowHangingObstacles">
         <property name="text">
-         <string>低矮的悬浮障碍物</string>
+         <string>悬浮障碍物</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -302,7 +302,7 @@
       <item row="1" column="0">
        <widget class="QCheckBox" name="p_m_filterWalkableLowHeightSpans">
         <property name="text">
-         <string>低矮的悬浮障碍物</string>
+         <string>间距过大的高度域</string>
         </property>
         <property name="checked">
          <bool>true</bool>
