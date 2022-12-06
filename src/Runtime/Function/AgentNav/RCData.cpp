@@ -107,6 +107,34 @@ namespace GU
 		// generate render buuffer
 		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, m_verts, vertexBuffer, vertexMemory);
 	}
+	RCMesh::RCMesh(const rcPolyMeshDetail& dmesh)
+	{
+		for (int i = 0; i < dmesh.nmeshes; ++i)
+		{
+			const unsigned int* m = &dmesh.meshes[i * 4];
+			const unsigned int bverts = m[0];
+			const unsigned int btris = m[2];
+			const int ntris = (int)m[3];
+			const float* verts = &dmesh.verts[bverts * 3];
+			const unsigned char* tris = &dmesh.tris[btris * 4];
+
+			unsigned int color = duIntToCol(i, 192);
+			glm::u8vec4 tmpcolor;
+			memcpy(&tmpcolor, &color, 4 * sizeof(uint8_t));
+			glm::vec4 glmcolor = tmpcolor;
+			for (int j = 0; j < ntris; ++j)
+			{
+				m_verts.push_back({ {(&verts[tris[j * 4 + 0] * 3])[0], (&verts[tris[j * 4 + 0] * 3])[1], (&verts[tris[j * 4 + 0] * 3])[2]}, glmcolor });
+				m_verts.push_back({ {(&verts[tris[j * 4 + 1] * 3])[0], (&verts[tris[j * 4 + 1] * 3])[1], (&verts[tris[j * 4 + 1] * 3])[2]}, glmcolor });
+				m_verts.push_back({ {(&verts[tris[j * 4 + 2] * 3])[0], (&verts[tris[j * 4 + 2] * 3])[1], (&verts[tris[j * 4 + 2] * 3])[2]}, glmcolor});
+				/*dd->vertex(&verts[tris[j * 4 + 0] * 3], color);
+				dd->vertex(&verts[tris[j * 4 + 1] * 3], color);
+				dd->vertex(&verts[tris[j * 4 + 2] * 3], color);*/
+			}
+		}
+
+		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, m_verts, vertexBuffer, vertexMemory);
+	}
 	VkVertexInputBindingDescription RCVertex::getBindingDescription()
 	{
 		VkVertexInputBindingDescription bindingDescription = {};

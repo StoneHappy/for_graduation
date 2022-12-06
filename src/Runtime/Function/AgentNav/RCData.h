@@ -19,6 +19,7 @@ namespace GU
 	struct RCMesh
 	{
 		RCMesh(const rcPolyMesh& mesh);
+		RCMesh(const rcPolyMeshDetail& mesh);
 		~RCMesh() = default;
 
 		std::vector<RCVertex> m_verts;

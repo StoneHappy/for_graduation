@@ -251,7 +251,6 @@ namespace GU
 			m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not triangulate contours.");
 			return false;
 		}
-		m_polymesh = new RCMesh(*m_pmesh);
 		//
 		// Step 7. Create detail mesh which allows to access approximate height on each polygon.
 		//
@@ -268,7 +267,7 @@ namespace GU
 			m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not build detail mesh.");
 			return false;
 		}
-
+		m_polymesh = new RCMesh(*m_dmesh);
 		if (!rcparams.m_keepInterResults)
 		{
 			rcFreeCompactHeightfield(m_chf);

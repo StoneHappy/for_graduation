@@ -5,5 +5,5 @@ layout(location = 0) in vec4 inColor;
 
 void main()
 {
-	FragColor = inColor;
+	FragColor = inColor/255;
 }
