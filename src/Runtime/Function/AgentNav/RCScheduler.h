@@ -1,8 +1,12 @@
 #pragma once
-#include <Recast.h>
 #include <memory>
 #include "rcMeshLoaderObj.h"
 #include <Function/AgentNav/RCParams.h>
+#include <Recast.h>
+class dtNavMesh;
+class dtNavMeshQuery;
+class dtCrowd;
+
 namespace GU
 {
 	class Mesh;
@@ -20,8 +24,6 @@ namespace GU
 		void createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh);
 
 	private:
-		rcConfig rc_cfg;
-
 		unsigned char* m_triareas;
 		rcHeightfield* m_solid;
 		rcCompactHeightfield* m_chf;
@@ -32,11 +34,40 @@ namespace GU
 		rcMeshLoaderObj rcmesh;
 		BuildContext* m_ctx;
 		float m_meshBMin[3], m_meshBMax[3];
+
+
+		class dtNavMesh* m_navMesh;
+		class dtNavMeshQuery* m_navQuery;
+		class dtCrowd* m_crowd;
+
+
 		enum PartitionType
 		{
 			SAMPLE_PARTITION_WATERSHED,
 			SAMPLE_PARTITION_MONOTONE,
 			SAMPLE_PARTITION_LAYERS
+		};
+
+		enum PolyFlags
+		{
+			SAMPLE_POLYFLAGS_WALK = 0x01,		// Ability to walk (ground, grass, road)
+			SAMPLE_POLYFLAGS_SWIM = 0x02,		// Ability to swim (water).
+			SAMPLE_POLYFLAGS_DOOR = 0x04,		// Ability to move through doors.
+			SAMPLE_POLYFLAGS_JUMP = 0x08,		// Ability to jump.
+			SAMPLE_POLYFLAGS_DISABLED = 0x10,		// Disabled polygon
+			SAMPLE_POLYFLAGS_ALL = 0xffff	// All abilities.
+		};
+
+		/// These are just sample areas to use consistent values across the samples.
+		/// The use should specify these base on his needs.
+		enum PolyAreas
+		{
+			SAMPLE_POLYAREA_GROUND,
+			SAMPLE_POLYAREA_WATER,
+			SAMPLE_POLYAREA_ROAD,
+			SAMPLE_POLYAREA_DOOR,
+			SAMPLE_POLYAREA_GRASS,
+			SAMPLE_POLYAREA_JUMP
 		};
 	};
 

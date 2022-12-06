@@ -29,6 +29,8 @@ assimp::assimp
 EnTT::EnTT
 yaml-cpp
 Recast
+Detour
+DetourCrowd
           )
 
 target_include_directories(
