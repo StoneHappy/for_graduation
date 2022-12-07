@@ -15,6 +15,7 @@
 #include <MainWindow.h>
 #include <Function/AgentNav/RCVulkanGraphicsPipline.h>
 #include <Function/AgentNav/RCScheduler.h>
+#include <Renderer/Texture.h>
 namespace GU
 {
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)
@@ -33,6 +34,7 @@ namespace GU
 		GLOBAL_VULKAN_CONTEXT->graphicsQueue = m_window->graphicsQueue();
 		GLOBAL_VULKAN_CONTEXT->renderPass = m_window->defaultRenderPass();
 		GLOBAL_VULKAN_CONTEXT->camearUBO = std::make_shared<VulkanUniformBuffer<CameraUBO> >();
+		GLOBAL_VULKAN_CONTEXT->skeletalUBO = std::make_shared<VulkanUniformBuffer<SkeletalModelUBO> >();
 
 		VkShaderModule vertexShader = createShader(m_window->device(), shader_texture_vert, sizeof(shader_texture_vert));
 		VkShaderModule fragShader = createShader(m_window->device(), shader_texture_frag, sizeof(shader_texture_frag));
@@ -56,6 +58,10 @@ namespace GU
 
 		createRCGraphicsPieline();
 		createSkeletalPipeline();
+
+		std::shared_ptr<Texture> texture = Texture::read("D:/data/projects/project1/assets/textures/viking_room.png");
+
+		createSkeletalDescriptorSets(*GLOBAL_VULKAN_CONTEXT, *texture->image, GLOBAL_VULKAN_CONTEXT->skeletalUBO->uniformBuffers, GLOBAL_VULKAN_CONTEXT->descriptorSetLayout, GLOBAL_VULKAN_CONTEXT->descriptorPool, GLOBAL_VULKAN_CONTEXT->skeletalDescriptorSets);
 	}
 
 	void VulkanRenderer::initSwapChainResources()
@@ -72,6 +78,7 @@ namespace GU
 	{
 		qDebug("releaseResources");
 		GLOBAL_VULKAN_CONTEXT->camearUBO.reset();
+		GLOBAL_VULKAN_CONTEXT->skeletalUBO.reset();
 		GLOBAL_SCENE->releaseEntityResource();
 		destoryDescriptorPool(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->descriptorPool);
 		destoryDescriptorSetLayout(*GLOBAL_VULKAN_CONTEXT, GLOBAL_VULKAN_CONTEXT->descriptorSetLayout);

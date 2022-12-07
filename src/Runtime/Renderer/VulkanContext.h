@@ -7,6 +7,7 @@ namespace GU
 	template <class T>
 	class VulkanUniformBuffer;
 	struct CameraUBO;
+	struct SkeletalModelUBO;
 	class VulkanContext
 	{
 	public:
@@ -47,10 +48,12 @@ namespace GU
 		
 		VkDescriptorSetLayout					skeletalDescriptorSetLayout;
 		VkPipelineLayout						skeletalPipelineLayout;
+		std::vector<VkDescriptorSet>			skeletalDescriptorSets;
 		VkPipeline								skeletalPipeline;
 		VkPipeline								skeletalContourPipeline;
 
 		std::shared_ptr<VulkanUniformBuffer<CameraUBO> > camearUBO;
+		std::shared_ptr<VulkanUniformBuffer<SkeletalModelUBO> > skeletalUBO;
 		static int MAX_FRAMES_IN_FLIGHT;
 	private:
 
