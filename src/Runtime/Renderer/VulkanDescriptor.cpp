@@ -161,7 +161,7 @@ namespace GU
             VkDescriptorBufferInfo meshbufferInfo{};
             meshbufferInfo.buffer = modelUBOs[i];
             meshbufferInfo.offset = 0;
-            meshbufferInfo.range = sizeof(ModelUBO);
+            meshbufferInfo.range = sizeof(SkeletalModelUBO);
 
             VkDescriptorImageInfo imageInfo{};
             imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;

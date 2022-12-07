@@ -46,8 +46,8 @@ namespace GU
 	// Stores bone information
 	struct BoneInfo
 	{
-		glm::mat4 FinalTransformation; // Final transformation to apply to vertices 
-		glm::mat4 BoneOffset; // Initial offset from local to bone space. 
+		glm::mat4 finalTransformation; // Final transformation to apply to vertices 
+		glm::mat4 boneOffset; // Initial offset from local to bone space. 
 	};
 
 	class SkeletalMesh
