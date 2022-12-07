@@ -30,6 +30,28 @@ namespace GU
 		vkFreeMemory(vkContext.logicalDevice, stagingBufferMemory, nullptr);
 	}
 
+	void createVertexBuffer(VulkanContext& vkContext, const std::vector<SkeletalVertex>& vertices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
+	{
+		VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+
+		VkBuffer stagingBuffer;
+		VkDeviceMemory stagingBufferMemory;
+		createBuffer(vkContext, bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+
+		// map memory to cpu host
+		void* data;
+		vkMapMemory(vkContext.logicalDevice, stagingBufferMemory, 0, bufferSize, 0, &data);
+		memcpy(data, vertices.data(), (size_t)bufferSize);
+		vkUnmapMemory(vkContext.logicalDevice, stagingBufferMemory);
+
+		createBuffer(vkContext, bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, buffer, bufferMemory);
+
+		copyBuffer(vkContext, stagingBuffer, buffer, bufferSize);
+
+		vkDestroyBuffer(vkContext.logicalDevice, stagingBuffer, nullptr);
+		vkFreeMemory(vkContext.logicalDevice, stagingBufferMemory, nullptr);
+	}
+
 	void createIndexBuffer(VulkanContext& vkContext, const std::vector<uint32_t>& indices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
 		VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
