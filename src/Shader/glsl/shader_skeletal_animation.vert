@@ -17,7 +17,6 @@ layout(location = 2) in vec2	inTexCoord;
 layout(location = 3) in ivec4	inBoneIDs; // Stream of vertex bone IDs
 layout(location = 4) in vec4	inWeights; // Stream of vertex weights
 
-
 layout(location = 0) out vec3 outPos; 
 layout(location = 1) out vec3 outNormal;
 layout(location = 2) out vec2 outTexCoord;

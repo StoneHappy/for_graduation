@@ -27,6 +27,24 @@ namespace GU
 			return pos == other.pos && normal == other.normal && texCoord == other.texCoord;
 		}
 	};
+
+	// Vertex
+	struct SkeletalVertex {
+		glm::vec3 pos;
+		glm::vec3 normal;
+		glm::vec2 texCoord;
+
+		glm::ivec4	boneIDs; // Stream of vertex bone IDs
+		glm::vec4	weights; // Stream of vertex weights
+
+		static VkVertexInputBindingDescription getBindingDescription();
+
+		static ::std::array<VkVertexInputAttributeDescription, 5> getAttributeDescriptions();
+
+		bool operator==(const Vertex& other) const {
+			return pos == other.pos && normal == other.normal && texCoord == other.texCoord;
+		}
+	};
 	
 	struct CameraUBO {
 		glm::mat4 view;
