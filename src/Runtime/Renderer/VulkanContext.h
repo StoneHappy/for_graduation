@@ -45,6 +45,11 @@ namespace GU
 		VkPipeline								rcPipeline;
 		VkPipeline								rcContourPipeline;
 		
+		VkDescriptorSetLayout					skeletalDescriptorSetLayout;
+		VkPipelineLayout						skeletalPipelineLayout;
+		VkPipeline								skeletalPipeline;
+		VkPipeline								skeletalContourPipeline;
+
 		std::shared_ptr<VulkanUniformBuffer<CameraUBO> > camearUBO;
 		static int MAX_FRAMES_IN_FLIGHT;
 	private:

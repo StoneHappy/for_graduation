@@ -55,6 +55,7 @@ namespace GU
 		GLOBAL_SCENE->initEntityResource();
 
 		createRCGraphicsPieline();
+		createSkeletalPipeline();
 	}
 
 	void VulkanRenderer::initSwapChainResources()

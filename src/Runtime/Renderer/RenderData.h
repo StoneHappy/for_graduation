@@ -11,6 +11,8 @@
 #include <stb/stb_image.h>
 #include <unordered_map>
 #include <filesystem>
+
+#define MAX_BONES 70
 namespace GU
 {
 	// Vertex
@@ -53,6 +55,11 @@ namespace GU
 
 	struct ModelUBO {
 		glm::mat4 model;
+	};
+
+	struct SkeletalModelUBO {
+		glm::mat4 model;
+		glm::mat4 bones[MAX_BONES]; // Bone transformations 
 	};
 	// Image
 	struct VulkanImage

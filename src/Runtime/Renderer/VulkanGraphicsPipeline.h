@@ -11,5 +11,6 @@ namespace GU
     void destoryGraphicsPipeline(VulkanContext& vulkanContext, VkPipeline& graphicsPipeline);
     void createPipelineLayout(VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout, VkPipelineLayout& pipelineLayout);
     void destoryPipelineLayout(VulkanContext& vulkanContext, VkPipelineLayout& pipelineLayout);
-    
+
+    void createSkeletalPipeline();
 }
