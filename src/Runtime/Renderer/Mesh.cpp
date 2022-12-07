@@ -102,9 +102,11 @@ namespace GU
 			{
 
 				// Push new bone info into bones vector. 
-				aimesh->mBones[i]->mOffsetMatrix;
 				BoneInfo bi;
-				bi.boneOffset = aiMat42glmMat4(aimesh->mBones[i]->mOffsetMatrix);
+				auto roottransform = scene->mRootNode->mTransformation;
+				roottransform.Inverse();
+				auto offset = aimesh->mBones[i]->mOffsetMatrix;
+				bi.boneOffset = aiMat42glmMat4(offset);
 				mesh.boneinfos.push_back(bi);
 				// Iterate over all the affected vertices by this bone i.e weights. 
 				for (unsigned int j = 0; j < aimesh->mBones[i]->mNumWeights; j++) {
@@ -115,10 +117,16 @@ namespace GU
 					float weight = aimesh->mBones[i]->mWeights[j].mWeight;
 
 					// Insert bone data for particular vertex ID. A maximum of 4 bones can influence the same vertex. 
-					auto vertWeight = mesh.m_vertices[vID].weights;
-					auto vertBonids = mesh.m_vertices[vID].boneIDs;
-					mesh.m_vertices[vID].boneIDs = { vertWeight.x == 0 ? i : vertBonids.x, vertWeight.y == 0 ? i : vertBonids.y, vertWeight.z == 0 ? i : vertBonids.z,vertWeight.w == 0 ? i : vertBonids.w };
-					mesh.m_vertices[vID].weights = { vertWeight.x == 0 ? weight : vertWeight.x, vertWeight.y == 0 ? weight : vertWeight.y, vertWeight.z == 0 ? weight : vertWeight.z,vertWeight.w == 0 ? weight : vertWeight.w };
+					for (unsigned int k = 0; k < 4; k++) {
+						// Check to see if there are any empty weight values. 
+						if (mesh.m_vertices[vID].weights[k] == 0.0) {
+							// Add ID of bone. 
+							mesh.m_vertices[vID].weights[k] = weight;
+							mesh.m_vertices[vID].boneIDs[k] = i;
+							break;
+						}
+
+					}
 				}
 			}
 

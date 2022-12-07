@@ -160,7 +160,7 @@ namespace GU
 		{
 			skeletalubo.bones[i] = testmeshnode->meshs[0].boneinfos[i].boneOffset;
 		} 
-
+		//skeletalubo.bones[1] = testmeshnode->meshs[0].boneinfos[1].boneOffset;
 		GLOBAL_VULKAN_CONTEXT->skeletalUBO->update( skeletalubo , m_window->currentSwapChainImageIndex());
 		VkBuffer vertexBuffers[] = { testmeshnode->meshs[0].vertexBuffer};
 		VkDeviceSize offsets[] = { 0 };
