@@ -593,8 +593,8 @@ namespace GU
 
     void createSkeletalPipeline()
     {
-        VkShaderModule vertexShader = createShader(GLOBAL_VULKAN_CONTEXT->logicalDevice, shader_backgroud_vert, sizeof(shader_backgroud_vert));
-        VkShaderModule fragShader = createShader(GLOBAL_VULKAN_CONTEXT->logicalDevice, shader_backgroud_frag, sizeof(shader_backgroud_frag));
+        VkShaderModule vertexShader = createShader(GLOBAL_VULKAN_CONTEXT->logicalDevice, shader_skeletal_animation_vert, sizeof(shader_skeletal_animation_vert));
+        VkShaderModule fragShader = createShader(GLOBAL_VULKAN_CONTEXT->logicalDevice, shader_skeletal_animation_frag, sizeof(shader_skeletal_animation_frag));
         std::vector<VkPipelineShaderStageCreateInfo> shaderStage;
         createShaderStageInfo(vertexShader, fragShader, shaderStage);
         // descript binding point

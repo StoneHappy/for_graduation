@@ -58,6 +58,7 @@ namespace GU
 	};
 
 	struct SkeletalModelUBO {
+		SkeletalModelUBO();
 		glm::mat4 model;
 		glm::mat4 bones[MAX_BONES]; // Bone transformations 
 	};
