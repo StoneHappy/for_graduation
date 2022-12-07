@@ -466,7 +466,7 @@ void MainWindow::on_actNavmeshParam_triggered()
 
 void MainWindow::on_actImportModel_triggered()
 {
-	QString qfilename = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("打开模型"), QDir::currentPath(), QString::fromLocal8Bit("obj模型(*.obj)"));
+	QString qfilename = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("打开模型"), QDir::currentPath(), QString::fromLocal8Bit("obj模型(*.obj);;fbx模型(*.fbx)"));
 
 	if (!qfilename.isEmpty())
 	{
