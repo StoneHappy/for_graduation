@@ -156,6 +156,11 @@ namespace GU
 		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->skeletalPipeline);
 		m_devFuncs->vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->skeletalPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->skeletalDescriptorSets[m_window->currentSwapChainImageIndex()], 0, nullptr);
 		SkeletalModelUBO skeletalubo{};
+		for (size_t i = 0; i < testmeshnode->meshs[0].boneinfos.size(); i++)
+		{
+			skeletalubo.bones[i] = testmeshnode->meshs[0].boneinfos[i].boneOffset;
+		} 
+
 		GLOBAL_VULKAN_CONTEXT->skeletalUBO->update( skeletalubo , m_window->currentSwapChainImageIndex());
 		VkBuffer vertexBuffers[] = { testmeshnode->meshs[0].vertexBuffer};
 		VkDeviceSize offsets[] = { 0 };
