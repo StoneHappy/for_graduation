@@ -15,7 +15,6 @@ namespace GU
 
 		static ::std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions();
 	};
-
 	struct RCMesh
 	{
 		RCMesh(const rcPolyMesh& mesh);
@@ -38,5 +37,17 @@ namespace GU
 		VkBuffer								externalVertexBuffer;
 		VkDeviceMemory							internalVertexMemory;
 		VkDeviceMemory							externalVertexMemory;
+	};
+
+	struct RCHeightfieldSolid
+	{
+		RCHeightfieldSolid(const rcHeightfield& solid);
+
+		void duAppendBox(float minx, float miny, float minz,
+			float maxx, float maxy, float maxz, const unsigned int* fcol);
+
+		std::vector<RCVertex> m_verts;
+		VkBuffer								vertexBuffer;
+		VkDeviceMemory							vertexMemory;
 	};
 }

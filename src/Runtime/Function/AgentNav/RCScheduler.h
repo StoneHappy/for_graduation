@@ -14,6 +14,7 @@ namespace GU
 	class BuildContext;
 	class RCMesh;
 	class RCContour;
+	class RCHeightfieldSolid;
 	class RCScheduler
 	{
 	public:
@@ -25,6 +26,7 @@ namespace GU
 
 		RCMesh* m_polymesh = nullptr;
 		RCContour* m_polyContourMesh = nullptr;
+		RCHeightfieldSolid* m_heightFieldSolid = nullptr;
 	private:
 		void createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh);
 	private:

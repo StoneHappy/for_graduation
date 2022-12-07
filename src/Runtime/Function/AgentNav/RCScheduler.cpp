@@ -141,6 +141,8 @@ namespace GU
 			return false;
 		}
 
+		m_heightFieldSolid = new RCHeightfieldSolid(*m_solid);
+
 		if (!rcparams.m_keepInterResults)
 		{
 			rcFreeHeightField(m_solid);
@@ -388,12 +390,20 @@ namespace GU
 	{
 		if (m_polymesh == nullptr) return;
 
+
+		// draw detailmesh
 		vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->rcDescriptorSets[currentImage], 0, nullptr);
 		vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipeline);
 		VkBuffer vertexBuffers[] = { m_polymesh->vertexBuffer };
 		VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
 		vkCmdDraw(cmdBuf,  static_cast<uint32_t>(m_polymesh->m_verts.size()), 1, 0, 0);
+
+		// heightfield
+		VkBuffer solidVertexBuffers[] = { m_heightFieldSolid->vertexBuffer };
+		VkDeviceSize solidOffsets[] = { 0 };
+		vkCmdBindVertexBuffers(cmdBuf, 0, 1, solidVertexBuffers, solidOffsets);
+		vkCmdDraw(cmdBuf,  static_cast<uint32_t>(m_heightFieldSolid->m_verts.size()), 1, 0, 0);
 
 
 		vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcContourPipeline);

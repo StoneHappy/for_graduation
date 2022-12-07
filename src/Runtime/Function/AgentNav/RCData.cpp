@@ -35,6 +35,26 @@ namespace GU
 		}
 	}
 
+	inline unsigned int duMultCol(const unsigned int col, const unsigned int d)
+	{
+		const unsigned int r = col & 0xff;
+		const unsigned int g = (col >> 8) & 0xff;
+		const unsigned int b = (col >> 16) & 0xff;
+		const unsigned int a = (col >> 24) & 0xff;
+		return duRGBA((r * d) >> 8, (g * d) >> 8, (b * d) >> 8, a);
+	}
+
+	void duCalcBoxColors(unsigned int* colors, unsigned int colTop, unsigned int colSide)
+	{
+		if (!colors) return;
+
+		colors[0] = duMultCol(colTop, 250);
+		colors[1] = duMultCol(colSide, 140);
+		colors[2] = duMultCol(colSide, 165);
+		colors[3] = duMultCol(colSide, 217);
+		colors[4] = duMultCol(colSide, 165);
+		colors[5] = duMultCol(colSide, 217);
+	}
 
 	void createVertexBuffer(VulkanContext& vkContext, const std::vector<RCVertex>& vertices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
@@ -223,5 +243,80 @@ namespace GU
 		}
 
 		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, externalVerts, externalVertexBuffer, externalVertexMemory);
+	}
+
+
+	void RCHeightfieldSolid::duAppendBox(float minx, float miny, float minz,
+		float maxx, float maxy, float maxz, const unsigned int* fcol)
+	{
+		const float verts[8 * 3] =
+		{
+			minx, miny, minz,
+			maxx, miny, minz,
+			maxx, miny, maxz,
+			minx, miny, maxz,
+			minx, maxy, minz,
+			maxx, maxy, minz,
+			maxx, maxy, maxz,
+			minx, maxy, maxz,
+		};
+		static const unsigned char inds[6 * 6] =
+		{
+			7, 6, 5, 4, 7, 5,
+			0, 1, 2, 3, 0, 2,
+			1, 5, 6, 2, 1, 6,
+			3, 7, 4, 0, 3, 4,
+			2, 6, 7, 3, 2, 7,
+			0, 4, 5, 1, 0, 5
+		};
+
+		const unsigned char* in = inds;
+		for (int i = 0; i < 6; ++i)
+		{
+			glm::u8vec4 tmpcolor;
+			memcpy(&tmpcolor, &fcol[i], 4 * sizeof(uint8_t));
+			glm::vec4 icolor = tmpcolor;
+			m_verts.push_back({ {(&verts[*in * 3])[0], (&verts[*in * 3])[1], (&verts[*in * 3])[2]}, icolor }); in++;
+			m_verts.push_back({ {(&verts[*in * 3])[0], (&verts[*in * 3])[1], (&verts[*in * 3])[2]}, icolor }); in++;
+			m_verts.push_back({ {(&verts[*in * 3])[0], (&verts[*in * 3])[1], (&verts[*in * 3])[2]}, icolor }); in++;
+			m_verts.push_back({ {(&verts[*in * 3])[0], (&verts[*in * 3])[1], (&verts[*in * 3])[2]}, icolor }); in++;
+			m_verts.push_back({ {(&verts[*in * 3])[0], (&verts[*in * 3])[1], (&verts[*in * 3])[2]}, icolor }); in++;
+			m_verts.push_back({ {(&verts[*in * 3])[0], (&verts[*in * 3])[1], (&verts[*in * 3])[2]}, icolor }); in++;
+
+			/*dd->vertex(&verts[*in * 3], fcol[i]); in++;
+			dd->vertex(&verts[*in * 3], fcol[i]); in++;
+			dd->vertex(&verts[*in * 3], fcol[i]); in++;
+			dd->vertex(&verts[*in * 3], fcol[i]); in++;*/
+		}
+	}
+
+	RCHeightfieldSolid::RCHeightfieldSolid(const rcHeightfield& hf)
+	{
+		const float* orig = hf.bmin;
+		const float cs = hf.cs;
+		const float ch = hf.ch;
+
+		const int w = hf.width;
+		const int h = hf.height;
+
+		unsigned int fcol[6];
+		duCalcBoxColors(fcol, duRGBA(255, 255, 255, 255), duRGBA(255, 255, 255, 255));
+
+		for (int y = 0; y < h; ++y)
+		{
+			for (int x = 0; x < w; ++x)
+			{
+				float fx = orig[0] + x * cs;
+				float fz = orig[2] + y * cs;
+				const rcSpan* s = hf.spans[x + y * w];
+				while (s)
+				{
+					duAppendBox(fx, orig[1] + s->smin * ch, fz, fx + cs, orig[1] + s->smax * ch, fz + cs, fcol);
+					s = s->next;
+				}
+			}
+		}
+
+		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, m_verts, vertexBuffer, vertexMemory);
 	}
 }
