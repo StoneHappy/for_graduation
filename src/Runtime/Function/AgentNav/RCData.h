@@ -29,6 +29,14 @@ namespace GU
 
 	struct RCContour
 	{
+		RCContour(const rcPolyMeshDetail& mesh);
+		~RCContour() = default;
 
+		std::vector<RCVertex> internalVerts;
+		std::vector<RCVertex> externalVerts;
+		VkBuffer								internalVertexBuffer;
+		VkBuffer								externalVertexBuffer;
+		VkDeviceMemory							internalVertexMemory;
+		VkDeviceMemory							externalVertexMemory;
 	};
 }

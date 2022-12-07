@@ -268,6 +268,8 @@ namespace GU
 			return false;
 		}
 		m_polymesh = new RCMesh(*m_dmesh);
+		m_polyContourMesh = new RCContour(*m_dmesh);
+
 		if (!rcparams.m_keepInterResults)
 		{
 			rcFreeCompactHeightfield(m_chf);
@@ -392,6 +394,18 @@ namespace GU
 		VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
 		vkCmdDraw(cmdBuf,  static_cast<uint32_t>(m_polymesh->m_verts.size()), 1, 0, 0);
+
+
+		vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcContourPipeline);
+		VkBuffer icontourVertexBuffers[] = { m_polyContourMesh->internalVertexBuffer };
+		VkDeviceSize icontourOffsets[] = { 0 };
+		vkCmdBindVertexBuffers(cmdBuf, 0, 1, icontourVertexBuffers, icontourOffsets);
+		vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_polyContourMesh->internalVerts.size()), 1, 0, 0);
+
+		VkBuffer econtourVertexBuffers[] = { m_polyContourMesh->externalVertexBuffer };
+		VkDeviceSize econtourOffsets[] = { 0 };
+		vkCmdBindVertexBuffers(cmdBuf, 0, 1, econtourVertexBuffers, econtourOffsets);
+		vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_polyContourMesh->externalVerts.size()), 1, 0, 0);
 	}
 	
 	void RCScheduler::createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh)

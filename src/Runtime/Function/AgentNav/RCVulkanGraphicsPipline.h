@@ -7,6 +7,7 @@ namespace GU
 	void createRCDescriptorSets(VkDescriptorSetLayout& descriptorSetLayout, VkDescriptorPool& descriptorPool, std::vector<VkDescriptorSet>& descriptorSets);
 	void createRCPipelineLayout(VkDescriptorSetLayout& descriptorSetLayout, VkPipelineLayout& pipelineLayout);
 	void createRCGraphicsPipeline(const std::vector<VkPipelineShaderStageCreateInfo>& shaderStages, const VkPipelineLayout& pipelineLayout, VkPipeline& graphicsPipeline);
+	void createRCContourPipeline(const std::vector<VkPipelineShaderStageCreateInfo>& shaderStages, const VkPipelineLayout& pipelineLayout, VkPipeline& graphicsPipeline);
 
 	void createRCGraphicsPieline();
 }

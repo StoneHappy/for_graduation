@@ -160,4 +160,68 @@ namespace GU
 
 		return attributeDescriptions;
 	}
+	RCContour::RCContour(const rcPolyMeshDetail& dmesh)
+	{
+		const unsigned int coli = duRGBA(0, 0, 0, 64);
+		for (int i = 0; i < dmesh.nmeshes; ++i)
+		{
+			const unsigned int* m = &dmesh.meshes[i * 4];
+			const unsigned int bverts = m[0];
+			const unsigned int btris = m[2];
+			const int ntris = (int)m[3];
+			const float* verts = &dmesh.verts[bverts * 3];
+			const unsigned char* tris = &dmesh.tris[btris * 4];
+
+			for (int j = 0; j < ntris; ++j)
+			{
+				const unsigned char* t = &tris[j * 4];
+				for (int k = 0, kp = 2; k < 3; kp = k++)
+				{
+					unsigned char ef = (t[3] >> (kp * 2)) & 0x3;
+					if (ef == 0)
+					{
+						// Internal edge
+						if (t[kp] < t[k])
+						{
+							internalVerts.push_back({ {(&verts[t[kp] * 3])[0], (&verts[t[kp] * 3])[1], (&verts[t[kp] * 3])[2]}, {0, 0, 0, 64} });
+							internalVerts.push_back({ {(&verts[t[k] * 3])[0], (&verts[t[k] * 3])[1], (&verts[t[k] * 3])[2]}, {0, 0, 0, 64} });
+							/*dd->vertex(&verts[t[kp] * 3], coli);
+							dd->vertex(&verts[t[k] * 3], coli);*/
+						}
+					}
+				}
+			}
+		}
+		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, internalVerts, internalVertexBuffer, internalVertexMemory);
+
+		const unsigned int cole = duRGBA(0, 0, 0, 64);
+		for (int i = 0; i < dmesh.nmeshes; ++i)
+		{
+			const unsigned int* m = &dmesh.meshes[i * 4];
+			const unsigned int bverts = m[0];
+			const unsigned int btris = m[2];
+			const int ntris = (int)m[3];
+			const float* verts = &dmesh.verts[bverts * 3];
+			const unsigned char* tris = &dmesh.tris[btris * 4];
+
+			for (int j = 0; j < ntris; ++j)
+			{
+				const unsigned char* t = &tris[j * 4];
+				for (int k = 0, kp = 2; k < 3; kp = k++)
+				{
+					unsigned char ef = (t[3] >> (kp * 2)) & 0x3;
+					if (ef != 0)
+					{
+						// Ext edge
+						externalVerts.push_back({ {(&verts[t[kp] * 3])[0], (&verts[t[kp] * 3])[1], (&verts[t[kp] * 3])[2]}, {0, 0, 0, 64} });
+						externalVerts.push_back({ {(&verts[t[k] * 3])[0], (&verts[t[k] * 3])[1], (&verts[t[k] * 3])[2]}, {0, 0, 0, 64} });
+						/*dd->vertex(&verts[t[kp] * 3], cole);
+						dd->vertex(&verts[t[k] * 3], cole);*/
+					}
+				}
+			}
+		}
+
+		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, externalVerts, externalVertexBuffer, externalVertexMemory);
+	}
 }

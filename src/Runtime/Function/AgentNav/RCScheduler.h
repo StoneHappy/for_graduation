@@ -13,6 +13,7 @@ namespace GU
 	class Mesh;
 	class BuildContext;
 	class RCMesh;
+	class RCContour;
 	class RCScheduler
 	{
 	public:
@@ -23,6 +24,7 @@ namespace GU
 		void handelRender(VkCommandBuffer cmdBuf, int currentImage);
 
 		RCMesh* m_polymesh = nullptr;
+		RCContour* m_polyContourMesh = nullptr;
 	private:
 		void createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh);
 	private:
