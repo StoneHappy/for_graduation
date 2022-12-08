@@ -57,6 +57,7 @@ namespace GU
 		std::vector<SkeletalVertex> m_vertices;
 		std::vector<uint32_t> m_indices;
 		std::vector<BoneInfo> boneinfos;
+
 		float bmin[3];
 		float bmax[3];
 		VkBuffer								vertexBuffer;

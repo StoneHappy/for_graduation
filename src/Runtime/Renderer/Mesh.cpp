@@ -96,7 +96,7 @@ namespace GU
 				vertex.texCoord = { aimesh->mTextureCoords[0] == nullptr ? 0 : aimesh->mTextureCoords[0][j].x,1 - (aimesh->mTextureCoords[0] == nullptr ? 0 : aimesh->mTextureCoords[0][j].y) };
 				mesh.m_vertices.push_back(vertex);
 			}
-
+			glm::mat4 globaltransfrom;
 			// bone datas
 			for (size_t i = 0; i < aimesh->mNumBones; i++)
 			{
@@ -105,6 +105,7 @@ namespace GU
 				BoneInfo bi;
 				auto roottransform = scene->mRootNode->mTransformation;
 				roottransform.Inverse();
+				globaltransfrom = aiMat42glmMat4(roottransform);
 				auto offset = aimesh->mBones[i]->mOffsetMatrix;
 				bi.boneOffset = aiMat42glmMat4(offset);
 				mesh.boneinfos.push_back(bi);
@@ -144,8 +145,8 @@ namespace GU
 			auto rbon0 = aiMat42glmMat4(aiMatrix4x4(bone0->mRotationKeys[bone0->mNumRotationKeys - 1].mValue.GetMatrix()));
 			auto rbon1 = aiMat42glmMat4(aiMatrix4x4(bone1->mRotationKeys[bone1->mNumRotationKeys - 1].mValue.GetMatrix()));
 
-			mesh.boneinfos[0].boneOffset = pbon0 * rbon0 * mesh.boneinfos[0].boneOffset;
-			mesh.boneinfos[1].boneOffset = pbon0 * rbon0 * pbon1 * rbon1 * mesh.boneinfos[1].boneOffset;
+			mesh.boneinfos[0].boneOffset = globaltransfrom * pbon0 * rbon0 * mesh.boneinfos[0].boneOffset;
+			mesh.boneinfos[1].boneOffset = globaltransfrom * pbon0 * rbon0 * pbon1 * rbon1 * mesh.boneinfos[1].boneOffset;
 
 			for (size_t i = 0; i < aimesh->mNumFaces; i++)
 			{
