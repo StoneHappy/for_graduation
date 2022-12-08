@@ -11,6 +11,8 @@ namespace GU
 	class Project;
 	class Asset;
 	class RCScheduler;
+	class Animation;
+
 	extern CoreContext g_CoreContext;
 
 	class CoreContext
@@ -34,6 +36,7 @@ namespace GU
 		MainWindow* g_p_mainWindow;
 		std::shared_ptr<Project> g_Proejct;
 		std::shared_ptr<RCScheduler> g_rcScheduler;
+		std::shared_ptr<Animation> g_animation;
 	};
 
 }
@@ -59,3 +62,4 @@ namespace GU
 #define GLOBAL_THREAD_POOL ::GU::g_CoreContext.g_threadPool
 #define GLOBAL_TIME_TICK() ::GU::g_CoreContext.timeTick()
 #define GLOBAL_RCSCHEDULER ::GU::g_CoreContext.g_rcScheduler
+#define GLOBAL_ANIMATION   ::GU::g_CoreContext.g_animation

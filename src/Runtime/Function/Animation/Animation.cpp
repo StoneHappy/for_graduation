@@ -2,11 +2,29 @@
 #include <iostream>
 #define GLM_ENABLE_EXPERIMENTAL
 #include<glm/gtx/matrix_interpolation.hpp>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 namespace GU
 {
-	uint64_t Animation::insert(aiScene* scene)
+	uint64_t Animation::addAnimation(const aiScene* scene)
 	{
+		for (size_t i = 0; i < scene->mNumAnimations; i++)
+		{
+			const aiAnimation* pAnimation = scene->mAnimations[i];
+			for (size_t j = 0; j < pAnimation->mNumChannels; j++)
+			{
+				Action action;
+				aiNodeAnim* pNodeAnim = pAnimation->mChannels[j];
+				action.nodeName = std::string(pNodeAnim->mNodeName.data);
+			}
+		}
+		// Use the first animation 
 		return 0;
+	}
+	void Animation::aaa()
+	{
+
 	}
 	void Animation::updateSkeletalModelUBOWithUUID(uint16_t, const std::string& actioNanme, SkeletalModelUBO& skeleltalmodeubo)
 	{
@@ -14,7 +32,7 @@ namespace GU
 	}
 	glm::mat4 Action::interpolation(float timetick)
 	{
-		if (size() < 2)
+		/*if (size() < 2)
 		{
 			std::cout << "animation key size < 2" << std::endl;
 			return glm::mat4(1);
@@ -34,6 +52,8 @@ namespace GU
 		glm::mat4 interpolationPos = glm::interpolate((*this)[nextNo - 1].position, (*this)[nextNo].position, timetick - (*this)[nextNo - 1].time);
 		glm::mat4 interpolationRot = glm::interpolate((*this)[nextNo - 1].rotation, (*this)[nextNo].rotation, timetick - (*this)[nextNo - 1].time);
 
-		return interpolationPos * interpolationRot;
+		return interpolationPos * interpolationRot;*/
+
+		return glm::mat4(1);
 	}
 }

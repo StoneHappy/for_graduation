@@ -4,39 +4,42 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <string>
+#include <Renderer/VulkanUniformBuffer.hpp>
+#include <assimp/scene.h>
 namespace GU
 {
-	class aiScene;
-	struct SkeletalModelUBO;
-
-	struct AnimationKey
+	struct PositionKey
 	{
-		std::string boneName;
 		glm::mat4 position = glm::mat4(1);
-		glm::mat4 rotation = glm::mat4(1);
+		float time;
+	};
+	struct RotationKey
+	{
+		glm::mat4 position = glm::mat4(1);
 		float time;
 	};
 
-	class Action : public std::vector<AnimationKey>
+	class Action
 	{
 	public:
-		std::string name;
+		std::string nodeName; // node name or bone name
 		glm::mat4 interpolation(float timetick);
-	};
 
-	class Actions : public std::vector<Action> {};
+		std::vector<PositionKey> positionKeys;
+		std::vector<RotationKey> rotationKeys;
+	};
 
 	class Animation
 	{
 	public:
-		Animation();
-		~Animation();
+		Animation() = default;
+		~Animation() = default;
 
-		uint64_t insert(aiScene* scene);
-
+		uint64_t addAnimation(const aiScene* scene);
+		void aaa();
 		void updateSkeletalModelUBOWithUUID(uint16_t, const std::string& actioNanme, SkeletalModelUBO& skeleltalmodeubo);
 	private:
-		std::unordered_map<uint64_t, Actions> actionsMap;
+		std::unordered_map<uint64_t, std::vector<Action> > actionsMap;
 	};
 
 	

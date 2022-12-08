@@ -3,6 +3,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <Renderer/VulkanBuffer.h>
+#include <Global/CoreContext.h>
+#include <Function/Animation/Animation.h>
 namespace GU
 {
 	glm::mat4 aiMat42glmMat4(aiMatrix4x4 aimat4)
@@ -130,7 +132,6 @@ namespace GU
 					}
 				}
 			}
-
 			// Use the first animation 
 			const aiAnimation* pAnimation = scene->mAnimations[0];
 
@@ -203,6 +204,7 @@ namespace GU
 		const aiScene* scene = import.ReadFile(filepath.generic_string(), aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
 		aiNode* aimeshnode = scene->mRootNode;
 
+		GLOBAL_ANIMATION->aaa();
 		recursiveBuildMeshTree(aimeshnode, meshnode->root);
 		return buildMeshs(vulkanContext, scene, meshnode->meshs);
 	}

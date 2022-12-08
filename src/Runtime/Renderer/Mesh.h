@@ -79,6 +79,7 @@ namespace GU
 	public:
 		std::vector<SkeletalMesh> meshs;
 		MeshTree root;
+		uint64_t animationID;
 
 		static bool read(VulkanContext& vulkanContext, std::shared_ptr<SkeletalMeshNode> meshnode, const std::filesystem::path& filepath);
 	};
