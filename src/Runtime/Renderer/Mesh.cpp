@@ -130,6 +130,23 @@ namespace GU
 				}
 			}
 
+			// Use the first animation 
+			const aiAnimation* pAnimation = scene->mAnimations[0];
+
+			const aiNodeAnim* pNodeAnim = NULL;
+			std::vector<aiNodeAnim*> aaa;
+			
+			auto bone0 = pAnimation->mChannels[1];
+			auto bone1 = pAnimation->mChannels[2];
+			auto pbon0 = glm::translate(glm::mat4(1), { bone0->mPositionKeys[bone0->mNumPositionKeys - 1].mValue.x, bone0->mPositionKeys[bone0->mNumPositionKeys - 1].mValue.y, bone0->mPositionKeys[bone0->mNumPositionKeys - 1].mValue.z });
+			auto pbon1 = glm::translate(glm::mat4(1), { bone1->mPositionKeys[bone1->mNumPositionKeys - 1].mValue.x, bone1->mPositionKeys[bone1->mNumPositionKeys - 1].mValue.y, bone1->mPositionKeys[bone1->mNumPositionKeys - 1].mValue.z });
+
+			auto rbon0 = aiMat42glmMat4(aiMatrix4x4(bone0->mRotationKeys[bone0->mNumRotationKeys - 1].mValue.GetMatrix()));
+			auto rbon1 = aiMat42glmMat4(aiMatrix4x4(bone1->mRotationKeys[bone1->mNumRotationKeys - 1].mValue.GetMatrix()));
+
+			mesh.boneinfos[0].boneOffset = pbon0 * rbon0 * mesh.boneinfos[0].boneOffset;
+			mesh.boneinfos[1].boneOffset = pbon0 * rbon0 * pbon1 * rbon1 * mesh.boneinfos[1].boneOffset;
+
 			for (size_t i = 0; i < aimesh->mNumFaces; i++)
 			{
 				const aiFace* face = &aimesh->mFaces[i];
