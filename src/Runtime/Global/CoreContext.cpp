@@ -22,7 +22,7 @@ namespace GU
 		g_Proejct = std::make_shared<Project>();
 		g_threadPool = std::make_shared<::ThreadPool>(8);
 		g_rcScheduler = std::make_shared<RCScheduler>();
-		g_animation = std::make_shared<Animation>();
+		g_animation = std::make_shared<AnimationManager>();
 	}
 	CoreContext::~CoreContext()
 	{

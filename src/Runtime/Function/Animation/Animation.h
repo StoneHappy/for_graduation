@@ -27,13 +27,21 @@ namespace GU
 	class Animation
 	{
 	public:
-		Animation() = default;
-		~Animation() = default;
+		std::string animationName;
+
+		std::vector<Action> actions;
+	};
+
+	class AnimationManager
+	{
+	public:
+		AnimationManager() = default;
+		~AnimationManager() = default;
 
 		uint64_t addAnimation(const aiScene* scene);
 		void updateSkeletalModelUBOWithUUID(uint16_t, const std::string& actioNanme, SkeletalModelUBO& skeleltalmodeubo);
 	private:
-		std::unordered_map<uint64_t, std::vector<Action> > actionsMap;
+		std::unordered_map<uint64_t, std::vector<Animation> > animationMap;
 	};
 
 	

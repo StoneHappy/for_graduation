@@ -11,7 +11,7 @@ namespace GU
 	class Project;
 	class Asset;
 	class RCScheduler;
-	class Animation;
+	class AnimationManager;
 
 	extern CoreContext g_CoreContext;
 
@@ -36,7 +36,7 @@ namespace GU
 		MainWindow* g_p_mainWindow;
 		std::shared_ptr<Project> g_Proejct;
 		std::shared_ptr<RCScheduler> g_rcScheduler;
-		std::shared_ptr<Animation> g_animation;
+		std::shared_ptr<AnimationManager> g_animation;
 	};
 
 }

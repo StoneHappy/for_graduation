@@ -10,13 +10,17 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <Utils/AssimpUtils.h>
+#include <Core/UUID.h>
 namespace GU
 {
-	uint64_t Animation::addAnimation(const aiScene* scene)
+	uint64_t AnimationManager::addAnimation(const aiScene* scene)
 	{
+		std::vector<Animation> animations;
 		for (size_t i = 0; i < scene->mNumAnimations; i++)
 		{
 			const aiAnimation* pAnimation = scene->mAnimations[i];
+			Animation animation;
+			animation.animationName = pAnimation->mName.C_Str();
 			for (size_t j = 0; j < pAnimation->mNumChannels; j++)
 			{
 				Action action;
@@ -38,12 +42,15 @@ namespace GU
 					float time = pNodeAnim->mRotationKeys[k].mTime;
 					action.rotationKeys.push_back({ time, glmRotationKeyMat });
 				}
+				animation.actions.push_back(action);
 			}
+			animations.push_back(animation);
 		}
-		// Use the first animation 
-		return 0;
+		UUID uuid;
+		animationMap[uuid] = animations;
+		return uuid;
 	}
-	void Animation::updateSkeletalModelUBOWithUUID(uint16_t, const std::string& actioNanme, SkeletalModelUBO& skeleltalmodeubo)
+	void AnimationManager::updateSkeletalModelUBOWithUUID(uint16_t, const std::string& actioNanme, SkeletalModelUBO& skeleltalmodeubo)
 	{
 
 	}
