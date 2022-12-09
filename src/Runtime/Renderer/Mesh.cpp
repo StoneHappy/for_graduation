@@ -139,9 +139,9 @@ namespace GU
 			auto rbon1 = aiMat42glmMat4(aiMatrix4x4(bone1->mRotationKeys[bone1->mNumRotationKeys - 1].mValue.GetMatrix()));
 
 			auto animations = GLOBAL_ANIMATION->getAnimationWithUUID(mesh.animationID);
-			auto animation = animations[0];
-			mesh.boneinfos[0].boneOffset = globaltransfrom * animation.actions["Bone"].interpolation(5.0) * mesh.boneinfos[0].boneOffset;
-			mesh.boneinfos[1].boneOffset = globaltransfrom * animation.actions["Bone"].interpolation(5.0) * animation.actions["Bone.001"].interpolation(5.0) * mesh.boneinfos[1].boneOffset;
+			auto animation = animations["Armature|Action0"];
+			mesh.boneinfos[0].boneOffset = globaltransfrom * animation->actions["Bone"]->interpolation(5.0) * mesh.boneinfos[0].boneOffset;
+			mesh.boneinfos[1].boneOffset = globaltransfrom * animation->actions["Bone"]->interpolation(5.0) * animation->actions["Bone.001"]->interpolation(5.0) * mesh.boneinfos[1].boneOffset;
 
 			for (size_t i = 0; i < aimesh->mNumFaces; i++)
 			{

@@ -45,13 +45,17 @@ namespace GU
 	public:
 		std::string animationName;
 
-		std::unordered_map<std::string, Action> actions;
+		std::unordered_map<std::string, std::shared_ptr<Action>> actions;
 		
 		std::unordered_map<std::string, uint32_t> boneIndexMap;
 
 		void updateSkeletalModelUBOWithUUID(SkeletalModelUBO& skeleltalmodeubo);
 
 		std::shared_ptr<ActionTree> actiontree;
+
+	private:
+
+		glm::mat4 calculateBoneTranformMat();
 	};
 
 	class AnimationManager
@@ -61,9 +65,9 @@ namespace GU
 		~AnimationManager() = default;
 
 		uint64_t addAnimation(const aiScene* scene, const aiMesh* aimesh);
-		std::unordered_map<std::string, Animation>& getAnimationWithUUID(uint64_t uuid);
+		std::unordered_map<std::string, std::shared_ptr<Animation> >& getAnimationWithUUID(uint64_t uuid);
 	private:
-		std::unordered_map<uint64_t, std::unordered_map<std::string, Animation> > animationMap;
+		std::unordered_map<uint64_t, std::unordered_map<std::string, std::shared_ptr<Animation> > > animationMap;
 	};
 
 	
