@@ -75,9 +75,8 @@ namespace GU
 			SkeletalMesh mesh;
 
 			// import animations
-			mesh.animationID = GLOBAL_ANIMATION->addAnimation(scene);
-
 			aiMesh* aimesh = scene->mMeshes[i];
+			mesh.animationID = GLOBAL_ANIMATION->addAnimation(scene, aimesh);
 			memset(mesh.bmin, 0, sizeof(float) * 3);
 			memset(mesh.bmax, 0, sizeof(float) * 3);
 			memcpy(mesh.bmin, &aimesh->mAABB.mMin, sizeof(float) * 3);
@@ -139,13 +138,10 @@ namespace GU
 			auto rbon0 = aiMat42glmMat4(aiMatrix4x4(bone0->mRotationKeys[bone0->mNumRotationKeys - 1].mValue.GetMatrix()));
 			auto rbon1 = aiMat42glmMat4(aiMatrix4x4(bone1->mRotationKeys[bone1->mNumRotationKeys - 1].mValue.GetMatrix()));
 
-			/*mesh.boneinfos[0].boneOffset = globaltransfrom * pbon0 * rbon0 * mesh.boneinfos[0].boneOffset;
-			mesh.boneinfos[1].boneOffset = globaltransfrom * pbon0 * rbon0 * pbon1 * rbon1 * mesh.boneinfos[1].boneOffset;*/
-
 			auto animations = GLOBAL_ANIMATION->getAnimationWithUUID(mesh.animationID);
 			auto animation = animations[0];
-			mesh.boneinfos[0].boneOffset = globaltransfrom * animation.actions[1].interpolation(5.0) * mesh.boneinfos[0].boneOffset;
-			mesh.boneinfos[1].boneOffset = globaltransfrom * animation.actions[1].interpolation(5.0) * animation.actions[2].interpolation(5.0) * mesh.boneinfos[1].boneOffset;
+			mesh.boneinfos[0].boneOffset = globaltransfrom * animation.actions[0].interpolation(5.0) * mesh.boneinfos[0].boneOffset;
+			mesh.boneinfos[1].boneOffset = globaltransfrom * animation.actions[0].interpolation(5.0) * animation.actions[1].interpolation(5.0) * mesh.boneinfos[1].boneOffset;
 
 			for (size_t i = 0; i < aimesh->mNumFaces; i++)
 			{

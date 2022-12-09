@@ -13,7 +13,7 @@
 #include <Core/UUID.h>
 namespace GU
 {
-	uint64_t AnimationManager::addAnimation(const aiScene* scene)
+	uint64_t AnimationManager::addAnimation(const aiScene* scene, const aiMesh* aimesh)
 	{
 		std::vector<Animation> animations;
 		for (size_t i = 0; i < scene->mNumAnimations; i++)
@@ -25,8 +25,24 @@ namespace GU
 			{
 				Action action;
 				aiNodeAnim* pNodeAnim = pAnimation->mChannels[j];
+				// remove unnessary nodes
+				if (std::string(pNodeAnim->mNodeName.data) == "Armature") continue;
+				
+				// add node name bone name
 				action.nodeName = std::string(pNodeAnim->mNodeName.data);
 
+				// root transform
+				auto roottransform = scene->mRootNode->mTransformation;
+				roottransform.Inverse();
+				action.globalTransfrom = aiMat42glmMat4(roottransform);
+
+				// bone offset
+				for (size_t b = 0; b < aimesh->mNumBones; b++)
+				{
+					if (aimesh->mBones[b]->mName.C_Str() == pNodeAnim->mNodeName.data) action.offset = aiMat42glmMat4(aimesh->mBones[b]->mOffsetMatrix);
+				}
+
+				// animation keys
 				for (size_t k = 0; k < pNodeAnim->mNumPositionKeys; k++)
 				{
 					auto positionkeyValue = pNodeAnim->mPositionKeys[k].mValue;
@@ -62,7 +78,7 @@ namespace GU
 	{
 		glm::mat4 interpolationpos = interpolatePostion(timetick);
 		glm::mat4 interpolationrot = interpolateRotation(timetick);
-		return interpolationpos * interpolationrot;
+		return  interpolationpos * interpolationrot;
 	}
 	glm::mat4 Action::interpolateRotation(float timetick)
 	{
