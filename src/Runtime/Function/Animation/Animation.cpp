@@ -17,14 +17,16 @@ namespace GU
 				Action action;
 				aiNodeAnim* pNodeAnim = pAnimation->mChannels[j];
 				action.nodeName = std::string(pNodeAnim->mNodeName.data);
+
+				for (size_t k = 0; k < pNodeAnim->mNumPositionKeys; k++)
+				{
+					auto positionkey = pNodeAnim->mPositionKeys[k];
+
+				}
 			}
 		}
 		// Use the first animation 
 		return 0;
-	}
-	void Animation::aaa()
-	{
-
 	}
 	void Animation::updateSkeletalModelUBOWithUUID(uint16_t, const std::string& actioNanme, SkeletalModelUBO& skeleltalmodeubo)
 	{

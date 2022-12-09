@@ -15,7 +15,7 @@ namespace GU
 	};
 	struct RotationKey
 	{
-		glm::mat4 position = glm::mat4(1);
+		glm::mat4 rotation = glm::mat4(1);
 		float time;
 	};
 
@@ -36,7 +36,6 @@ namespace GU
 		~Animation() = default;
 
 		uint64_t addAnimation(const aiScene* scene);
-		void aaa();
 		void updateSkeletalModelUBOWithUUID(uint16_t, const std::string& actioNanme, SkeletalModelUBO& skeleltalmodeubo);
 	private:
 		std::unordered_map<uint64_t, std::vector<Action> > actionsMap;
