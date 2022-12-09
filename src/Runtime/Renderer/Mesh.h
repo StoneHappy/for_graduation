@@ -66,6 +66,7 @@ namespace GU
 		VkDeviceMemory							indexMemory;
 		uint32_t id;
 		uint64_t textureID;
+		uint64_t animationID;
 	};
 
 	
@@ -79,7 +80,6 @@ namespace GU
 	public:
 		std::vector<SkeletalMesh> meshs;
 		MeshTree root;
-		uint64_t animationID;
 
 		static bool read(VulkanContext& vulkanContext, std::shared_ptr<SkeletalMeshNode> meshnode, const std::filesystem::path& filepath);
 	};

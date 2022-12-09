@@ -39,6 +39,7 @@ namespace GU
 		~AnimationManager() = default;
 
 		uint64_t addAnimation(const aiScene* scene);
+		std::vector<Animation> getAnimationWithUUID(uint64_t uuid);
 		void updateSkeletalModelUBOWithUUID(uint16_t, const std::string& actioNanme, SkeletalModelUBO& skeleltalmodeubo);
 	private:
 		std::unordered_map<uint64_t, std::vector<Animation> > animationMap;

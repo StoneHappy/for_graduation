@@ -35,7 +35,7 @@ namespace GU
 					action.positionKeys.push_back({ time, glmPositionKeyMat });
 				}
 
-				for (size_t k = 0; k < pNodeAnim->mNumPositionKeys; k++)
+				for (size_t k = 0; k < pNodeAnim->mNumRotationKeys; k++)
 				{
 					auto rotaionkeyValue = aiMatrix4x4(pNodeAnim->mRotationKeys[k].mValue.GetMatrix());
 					glm::mat4 glmRotationKeyMat = aiMat42glmMat4(rotaionkeyValue);
@@ -49,6 +49,10 @@ namespace GU
 		UUID uuid;
 		animationMap[uuid] = animations;
 		return uuid;
+	}
+	std::vector<Animation> AnimationManager::getAnimationWithUUID(uint64_t uuid)
+	{
+		return animationMap[uuid];
 	}
 	void AnimationManager::updateSkeletalModelUBOWithUUID(uint16_t, const std::string& actioNanme, SkeletalModelUBO& skeleltalmodeubo)
 	{
@@ -64,8 +68,7 @@ namespace GU
 	{
 		if (rotationKeys.size() < 2)
 		{
-			std::cout << "rotation key size < 2" << std::endl;
-			return glm::mat4(1);
+			return rotationKeys[0].second;
 		}
 
 		int nextno = -1;
@@ -87,8 +90,7 @@ namespace GU
 	{
 		if (positionKeys.size() < 2)
 		{
-			std::cout << "rotation key size < 2" << std::endl;
-			return glm::mat4(1);
+			return positionKeys[0].second;
 		}
 
 		int nextno = -1;
