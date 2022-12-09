@@ -6,8 +6,20 @@
 #include <string>
 #include <Renderer/VulkanUniformBuffer.hpp>
 #include <assimp/scene.h>
+#include <memory>
 namespace GU
 {
+	struct ActionTree
+	{
+		std::string nodeName;
+
+		std::vector<std::shared_ptr<ActionTree> > children;
+		std::string parent;
+
+		bool isRoot = false;
+		bool isLeft = false;
+	};
+
 	class Action
 	{
 	public:
@@ -17,7 +29,8 @@ namespace GU
 		std::vector<std::pair<float, glm::mat4> > positionKeys;
 		std::vector<std::pair<float, glm::mat4> > rotationKeys;
 
-		glm::mat4 globalTransfrom; // Final transformation to apply to vertices 
+		glm::mat4 finalTransfrom; // Final transformation to apply to vertices 
+		glm::mat4 globalTransfrom;
 		glm::mat4 offset; // Initial offset from local to bone space. 
 	private:
 		glm::mat4 interpolateRotation(float timetick);
@@ -32,9 +45,13 @@ namespace GU
 	public:
 		std::string animationName;
 
-		std::vector<Action> actions;
-
+		std::unordered_map<std::string, Action> actions;
 		
+		std::unordered_map<std::string, uint32_t> boneIndexMap;
+
+		void updateSkeletalModelUBOWithUUID(SkeletalModelUBO& skeleltalmodeubo);
+
+		std::shared_ptr<ActionTree> actiontree;
 	};
 
 	class AnimationManager
@@ -44,10 +61,9 @@ namespace GU
 		~AnimationManager() = default;
 
 		uint64_t addAnimation(const aiScene* scene, const aiMesh* aimesh);
-		std::vector<Animation> getAnimationWithUUID(uint64_t uuid);
-		void updateSkeletalModelUBOWithUUID(uint16_t, const std::string& actioNanme, SkeletalModelUBO& skeleltalmodeubo);
+		std::unordered_map<std::string, Animation>& getAnimationWithUUID(uint64_t uuid);
 	private:
-		std::unordered_map<uint64_t, std::vector<Animation> > animationMap;
+		std::unordered_map<uint64_t, std::unordered_map<std::string, Animation> > animationMap;
 	};
 
 	

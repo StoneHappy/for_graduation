@@ -13,14 +13,53 @@
 #include <Core/UUID.h>
 namespace GU
 {
+	void buildActiontree(const aiScene* scene,const aiNode* node, std::shared_ptr<ActionTree> actionTree)
+	{
+		for (size_t i = 0; i < node->mNumChildren; i++)
+		{
+			std::shared_ptr<ActionTree> actree = std::make_shared<ActionTree>();
+			actree->nodeName = std::string(node->mChildren[i]->mName.data);
+			actree->parent = actionTree->nodeName;
+			actionTree->children.push_back(actree);
+			buildActiontree(scene, node->mChildren[i], actree);
+		};
+		return;
+	}
+
+	const aiNode* findArmaturNode(const aiNode* node)
+	{
+		const aiNode* rnt = nullptr;
+		for (size_t i = 0; i < node->mNumChildren; i++)
+		{
+			const aiNode* childnode = node->mChildren[i];
+			if (std::string(childnode->mName.data) == "Armature")
+			{
+				return childnode;
+			}
+			rnt = findArmaturNode(childnode);
+		}
+
+		return rnt;
+	}
+
 	uint64_t AnimationManager::addAnimation(const aiScene* scene, const aiMesh* aimesh)
 	{
-		std::vector<Animation> animations;
+		std::unordered_map<std::string, Animation> animations;
 		for (size_t i = 0; i < scene->mNumAnimations; i++)
 		{
 			const aiAnimation* pAnimation = scene->mAnimations[i];
 			Animation animation;
 			animation.animationName = pAnimation->mName.C_Str();
+
+			// build action tree
+			animation.actiontree = std::make_shared<ActionTree>();
+			animation.actiontree->isLeft = false;
+			animation.actiontree->isRoot = true;
+			animation.actiontree->nodeName = "Armature";
+			auto armaturNode = findArmaturNode(scene->mRootNode);
+			buildActiontree(scene, armaturNode, animation.actiontree);
+
+			// get bone keys
 			for (size_t j = 0; j < pAnimation->mNumChannels; j++)
 			{
 				Action action;
@@ -36,9 +75,10 @@ namespace GU
 				roottransform.Inverse();
 				action.globalTransfrom = aiMat42glmMat4(roottransform);
 
-				// bone offset
+				// bone offset and index
 				for (size_t b = 0; b < aimesh->mNumBones; b++)
 				{
+					animation.boneIndexMap[aimesh->mBones[b]->mName.C_Str()] = b;
 					if (aimesh->mBones[b]->mName.C_Str() == pNodeAnim->mNodeName.data) action.offset = aiMat42glmMat4(aimesh->mBones[b]->mOffsetMatrix);
 				}
 
@@ -58,19 +98,19 @@ namespace GU
 					float time = pNodeAnim->mRotationKeys[k].mTime;
 					action.rotationKeys.push_back({ time, glmRotationKeyMat });
 				}
-				animation.actions.push_back(action);
+				animation.actions[action.nodeName] = action;
 			}
-			animations.push_back(animation);
+			animations[animation.animationName] = animation;
 		}
 		UUID uuid;
 		animationMap[uuid] = animations;
 		return uuid;
 	}
-	std::vector<Animation> AnimationManager::getAnimationWithUUID(uint64_t uuid)
+	std::unordered_map<std::string, Animation>& AnimationManager::getAnimationWithUUID(uint64_t uuid)
 	{
 		return animationMap[uuid];
 	}
-	void AnimationManager::updateSkeletalModelUBOWithUUID(uint16_t, const std::string& actioNanme, SkeletalModelUBO& skeleltalmodeubo)
+	void Animation::updateSkeletalModelUBOWithUUID(SkeletalModelUBO& skeleltalmodeubo)
 	{
 
 	}
