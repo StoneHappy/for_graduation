@@ -16,6 +16,7 @@
 #include <Function/AgentNav/RCVulkanGraphicsPipline.h>
 #include <Function/AgentNav/RCScheduler.h>
 #include <Renderer/Texture.h>
+#include <Function/Animation/Animation.h>
 namespace GU
 {
 	std::shared_ptr<SkeletalMeshNode> testmeshnode;
@@ -156,10 +157,14 @@ namespace GU
 		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->skeletalPipeline);
 		m_devFuncs->vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->skeletalPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->skeletalDescriptorSets[m_window->currentSwapChainImageIndex()], 0, nullptr);
 		SkeletalModelUBO skeletalubo{};
-		for (size_t i = 0; i < testmeshnode->meshs[0].boneinfos.size(); i++)
+		/*for (size_t i = 0; i < testmeshnode->meshs[0].boneinfos.size(); i++)
 		{
 			skeletalubo.bones[i] = testmeshnode->meshs[0].boneinfos[i].boneOffset;
-		} 
+		} */
+		auto&& animations = GLOBAL_ANIMATION->getAnimationsWithUUID(testmeshnode->meshs[0].animationID);
+		auto&& animation = animations["Armature|Action0"];
+		
+		animation->updateSkeletalModelUBOWithUUID(skeletalubo, fmod(GLOBAL_TIMEINTEGRAL, 5.0));
 		//skeletalubo.bones[1] = testmeshnode->meshs[0].boneinfos[1].boneOffset;
 		GLOBAL_VULKAN_CONTEXT->skeletalUBO->update( skeletalubo , m_window->currentSwapChainImageIndex());
 		VkBuffer vertexBuffers[] = { testmeshnode->meshs[0].vertexBuffer};

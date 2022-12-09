@@ -380,6 +380,7 @@ void MainWindow::on_actPlay_triggered()
 	if (!ui->actPause->isVisible()) ui->actPause->setVisible(true);
 	ui->dockEntity->hide();
 	ui->dockInfo->hide();
+	ui->dockComponent->hide();
 	ui->actShowInfoDock->setChecked(false);
 	ui->actShowViewDock->setChecked(false);
 	GU::g_CoreContext.g_isStop = false;

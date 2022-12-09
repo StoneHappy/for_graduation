@@ -97,7 +97,10 @@ namespace GU
 				for (size_t b = 0; b < aimesh->mNumBones; b++)
 				{
 					animation->boneIndexMap[aimesh->mBones[b]->mName.C_Str()] = b;
-					if (aimesh->mBones[b]->mName.C_Str() == pNodeAnim->mNodeName.data) action->offset = aiMat42glmMat4(aimesh->mBones[b]->mOffsetMatrix);
+					if (action->nodeName == aimesh->mBones[b]->mName.C_Str())
+					{
+						action->offset = aiMat42glmMat4(aimesh->mBones[b]->mOffsetMatrix);
+					}
 				}
 
 				// animation keys
@@ -124,16 +127,17 @@ namespace GU
 		animationMap[uuid] = animations;
 		return uuid;
 	}
-	std::unordered_map<std::string, std::shared_ptr<Animation> >& AnimationManager::getAnimationWithUUID(uint64_t uuid)
+	std::unordered_map<std::string, std::shared_ptr<Animation> >& AnimationManager::getAnimationsWithUUID(uint64_t uuid)
 	{
 		return animationMap[uuid];
 	}
-	void Animation::updateSkeletalModelUBOWithUUID(SkeletalModelUBO& skeleltalmodeubo)
+	void Animation::updateSkeletalModelUBOWithUUID(SkeletalModelUBO& skeleltalmodeubo, float timetick)
 	{
-		for (auto&& action : actions)
+		for (auto&& actionit : actions)
 		{
-			uint32_t boneIndex = boneIndexMap[action.first];
-			skeleltalmodeubo.bones[boneIndex];
+			auto action = actionit.second;
+			uint32_t boneIndex = boneIndexMap[action->nodeName];
+			skeleltalmodeubo.bones[boneIndex] = action->globalTransfrom * calculateBoneTransformMat(action->nodeName, timetick) * action->offset;
 		}
 	}
 	glm::mat4 Animation::calculateBoneTransformMat(const std::string& actionname, float timetick)

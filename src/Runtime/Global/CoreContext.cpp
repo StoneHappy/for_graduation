@@ -41,7 +41,7 @@ namespace GU
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			g_deltaTime = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - g_lastTimePoint).count();
 			g_timeIntegral += g_deltaTime;
-			g_editDeltaTime = 0;
+			//g_editDeltaTime = 0;
 		}
 		else
 		{

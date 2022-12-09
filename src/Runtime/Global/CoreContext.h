@@ -49,6 +49,7 @@ namespace GU
 #define GLOBAL_MAINWINDOW ::GU::g_CoreContext.g_p_mainWindow
 #define GLOBAL_VULKAN_CONTEXT ::GU::g_CoreContext.g_vulkanContext
 #define GLOBAL_DELTATIME ::GU::g_CoreContext.g_deltaTime
+#define GLOBAL_TIMEINTEGRAL   ::GU::g_CoreContext.g_timeIntegral
 #define GLOBAL_PLAY ::GU::g_CoreContext.g_isPlay
 #define GLOBAL_STOP ::GU::g_CoreContext.g_isStop
 #define GLOBAL_SCENE ::GU::g_CoreContext.g_scene
