@@ -14,7 +14,7 @@ namespace GU
 		std::string nodeName;
 
 		std::vector<std::shared_ptr<ActionTree> > children;
-		std::string parent;
+		std::shared_ptr<ActionTree> parent;
 
 		bool isRoot = false;
 		bool isLeft = false;
@@ -50,12 +50,9 @@ namespace GU
 		std::unordered_map<std::string, uint32_t> boneIndexMap;
 
 		void updateSkeletalModelUBOWithUUID(SkeletalModelUBO& skeleltalmodeubo);
+		glm::mat4 calculateBoneTransformMat(const std::string& actionname, float timetick);
 
 		std::shared_ptr<ActionTree> actiontree;
-
-	private:
-
-		glm::mat4 calculateBoneTranformMat();
 	};
 
 	class AnimationManager

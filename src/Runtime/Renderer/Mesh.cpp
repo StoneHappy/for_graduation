@@ -140,8 +140,9 @@ namespace GU
 
 			auto animations = GLOBAL_ANIMATION->getAnimationWithUUID(mesh.animationID);
 			auto animation = animations["Armature|Action0"];
-			mesh.boneinfos[0].boneOffset = globaltransfrom * animation->actions["Bone"]->interpolation(5.0) * mesh.boneinfos[0].boneOffset;
-			mesh.boneinfos[1].boneOffset = globaltransfrom * animation->actions["Bone"]->interpolation(5.0) * animation->actions["Bone.001"]->interpolation(5.0) * mesh.boneinfos[1].boneOffset;
+			//mesh.boneinfos[0].boneOffset = globaltransfrom * animation->actions["Bone"]->interpolation(5.0) * mesh.boneinfos[0].boneOffset;
+			mesh.boneinfos[0].boneOffset = globaltransfrom * animation->calculateBoneTransformMat("Bone", 5.0) * mesh.boneinfos[0].boneOffset;
+			mesh.boneinfos[1].boneOffset = globaltransfrom * animation->calculateBoneTransformMat("Bone.001", 5.0) * mesh.boneinfos[1].boneOffset;
 
 			for (size_t i = 0; i < aimesh->mNumFaces; i++)
 			{

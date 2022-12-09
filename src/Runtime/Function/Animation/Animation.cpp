@@ -24,7 +24,7 @@ namespace GU
 		{
 			std::shared_ptr<ActionTree> actree = std::make_shared<ActionTree>();
 			actree->nodeName = std::string(node->mChildren[i]->mName.data);
-			actree->parent = actionTree->nodeName;
+			actree->parent = actionTree;
 			actionTree->children.push_back(actree);
 			buildActiontree(scene, node->mChildren[i], actree);
 		};
@@ -44,6 +44,20 @@ namespace GU
 		}
 
 		return rnt;
+	}
+
+	std::shared_ptr<ActionTree> findActionTreeNodeWithName(std::shared_ptr<ActionTree> parent ,const std::string& name)
+	{
+		for (auto&& child : parent->children)
+		{
+			if (child->nodeName == name) return child;
+
+			auto rnt = findActionTreeNodeWithName(child, name);
+
+			if (rnt !=nullptr && rnt->nodeName == name) return rnt;
+		}
+
+		return nullptr;
 	}
 
 	uint64_t AnimationManager::addAnimation(const aiScene* scene, const aiMesh* aimesh)
@@ -121,6 +135,21 @@ namespace GU
 			uint32_t boneIndex = boneIndexMap[action.first];
 			skeleltalmodeubo.bones[boneIndex];
 		}
+	}
+	glm::mat4 Animation::calculateBoneTransformMat(const std::string& actionname, float timetick)
+	{
+		std::shared_ptr<ActionTree> findingActionTree = findActionTreeNodeWithName(actiontree, actionname);
+
+		if (findingActionTree == nullptr) return glm::mat4(1);
+
+		glm::mat4 transform = glm::mat4(1);
+		while (!findingActionTree->isRoot)
+		{
+			transform = actions[findingActionTree->nodeName]->interpolation(timetick) * transform;
+			findingActionTree = findingActionTree->parent;
+		}
+
+		return transform;
 	}
 	glm::mat4 Action::interpolation(float timetick)
 	{
