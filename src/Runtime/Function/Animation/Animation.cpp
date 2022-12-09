@@ -1,10 +1,15 @@
 #include "Animation.h"
 #include <iostream>
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #define GLM_ENABLE_EXPERIMENTAL
-#include<glm/gtx/matrix_interpolation.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/matrix_interpolation.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <Utils/AssimpUtils.h>
 namespace GU
 {
 	uint64_t Animation::addAnimation(const aiScene* scene)
@@ -20,8 +25,18 @@ namespace GU
 
 				for (size_t k = 0; k < pNodeAnim->mNumPositionKeys; k++)
 				{
-					auto positionkey = pNodeAnim->mPositionKeys[k];
+					auto positionkeyValue = pNodeAnim->mPositionKeys[k].mValue;
+					glm::mat4 glmPositionKeyMat = glm::translate(glm::mat4(1), { positionkeyValue.x, positionkeyValue.y ,positionkeyValue.z });
+					float time = pNodeAnim->mPositionKeys[k].mTime;
+					action.positionKeys.push_back({ time, glmPositionKeyMat });
+				}
 
+				for (size_t k = 0; k < pNodeAnim->mNumPositionKeys; k++)
+				{
+					auto rotaionkeyValue = aiMatrix4x4(pNodeAnim->mRotationKeys[k].mValue.GetMatrix());
+					glm::mat4 glmRotationKeyMat = aiMat42glmMat4(rotaionkeyValue);
+					float time = pNodeAnim->mRotationKeys[k].mTime;
+					action.rotationKeys.push_back({ time, glmRotationKeyMat });
 				}
 			}
 		}
@@ -34,28 +49,54 @@ namespace GU
 	}
 	glm::mat4 Action::interpolation(float timetick)
 	{
-		/*if (size() < 2)
+		glm::mat4 interpolationpos = interpolatePostion(timetick);
+		glm::mat4 interpolationrot = interpolateRotation(timetick);
+		return interpolationpos * interpolationrot;
+	}
+	glm::mat4 Action::interpolateRotation(float timetick)
+	{
+		if (rotationKeys.size() < 2)
 		{
-			std::cout << "animation key size < 2" << std::endl;
+			std::cout << "rotation key size < 2" << std::endl;
 			return glm::mat4(1);
 		}
 
-		int nextNo = -1;
-		for (size_t i = 0; i < size(); i++)
+		int nextno = -1;
+		for (size_t i = 0; i < rotationKeys.size(); i++)
 		{
-			if ((*this)[i].time > timetick) nextNo = i;
+			if (rotationKeys[i].first > timetick) nextno = i;
 		}
 
-		if (nextNo == -1)
+		if (nextno == -1)
 		{
 			return glm::mat4(1);
 		}
 
-		glm::mat4 interpolationPos = glm::interpolate((*this)[nextNo - 1].position, (*this)[nextNo].position, timetick - (*this)[nextNo - 1].time);
-		glm::mat4 interpolationRot = glm::interpolate((*this)[nextNo - 1].rotation, (*this)[nextNo].rotation, timetick - (*this)[nextNo - 1].time);
+		glm::mat4 interpolationrot = glm::interpolate(rotationKeys[nextno - 1].second, rotationKeys[nextno].second, timetick - rotationKeys[nextno - 1].first);
 
-		return interpolationPos * interpolationRot;*/
+		return interpolationrot;
+	}
+	glm::mat4 Action::interpolatePostion(float timetick)
+	{
+		if (positionKeys.size() < 2)
+		{
+			std::cout << "rotation key size < 2" << std::endl;
+			return glm::mat4(1);
+		}
 
-		return glm::mat4(1);
+		int nextno = -1;
+		for (size_t i = 0; i < positionKeys.size(); i++)
+		{
+			if (positionKeys[i].first > timetick) nextno = i;
+		}
+
+		if (nextno == -1)
+		{
+			return glm::mat4(1);
+		}
+
+		glm::mat4 interpolationpos = glm::interpolate(positionKeys[nextno - 1].second, positionKeys[nextno].second, timetick - positionKeys[nextno - 1].first);
+
+		return interpolationpos;
 	}
 }

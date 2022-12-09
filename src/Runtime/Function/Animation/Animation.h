@@ -8,25 +8,20 @@
 #include <assimp/scene.h>
 namespace GU
 {
-	struct PositionKey
-	{
-		glm::mat4 position = glm::mat4(1);
-		float time;
-	};
-	struct RotationKey
-	{
-		glm::mat4 rotation = glm::mat4(1);
-		float time;
-	};
-
 	class Action
 	{
 	public:
 		std::string nodeName; // node name or bone name
 		glm::mat4 interpolation(float timetick);
 
-		std::vector<PositionKey> positionKeys;
-		std::vector<RotationKey> rotationKeys;
+		std::vector<std::pair<float, glm::mat4> > positionKeys;
+		std::vector<std::pair<float, glm::mat4> > rotationKeys;
+	private:
+		glm::mat4 interpolateRotation(float timetick);
+		glm::mat4 interpolatePostion(float timetick);
+
+	private:
+
 	};
 
 	class Animation
