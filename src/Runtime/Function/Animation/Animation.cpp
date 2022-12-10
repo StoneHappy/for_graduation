@@ -171,12 +171,21 @@ namespace GU
 		int nextno = -1;
 		for (size_t i = 0; i < rotationKeys.size(); i++)
 		{
-			if (rotationKeys[i].first > timetick) nextno = i;
+			if (rotationKeys[i].first == timetick)
+			{
+				return rotationKeys[i].second;
+			}
+
+			if (rotationKeys[i].first > timetick)
+			{
+				nextno = i;
+				break;
+			}
 		}
 
 		if (nextno == -1)
 		{
-			return glm::mat4(1);
+			return rotationKeys[rotationKeys.size()-1].second;;
 		}
 
 		glm::mat4 interpolationrot = glm::interpolate(rotationKeys[nextno - 1].second, rotationKeys[nextno].second, timetick - rotationKeys[nextno - 1].first);

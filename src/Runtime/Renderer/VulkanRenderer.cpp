@@ -20,6 +20,8 @@
 namespace GU
 {
 	std::shared_ptr<SkeletalMeshNode> testmeshnode;
+	float timeintgal = 0.0f;
+	float flag = 20;
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)
 		:m_window(w)
 	{
@@ -162,9 +164,21 @@ namespace GU
 			skeletalubo.bones[i] = testmeshnode->meshs[0].boneinfos[i].boneOffset;
 		} */
 		auto&& animations = GLOBAL_ANIMATION->getAnimationsWithUUID(testmeshnode->meshs[0].animationID);
-		auto&& animation = animations["Armature|Action0"];
-		
-		animation->updateSkeletalModelUBOWithUUID(skeletalubo, fmod(GLOBAL_TIMEINTEGRAL, 5.0));
+		auto&& animation = animations["Armature|ArmatureAction"];
+		timeintgal += flag * GLOBAL_DELTATIME;
+		if (timeintgal >= 10.0f || timeintgal <= 0)
+		{
+			flag = -flag;
+		}
+		if (timeintgal >= 10.0)
+		{
+			timeintgal = 10.0;
+		}
+		if (timeintgal <= 0)
+		{
+			timeintgal = 0.0;
+		}
+		animation->updateSkeletalModelUBOWithUUID(skeletalubo, timeintgal);
 		//skeletalubo.bones[1] = testmeshnode->meshs[0].boneinfos[1].boneOffset;
 		GLOBAL_VULKAN_CONTEXT->skeletalUBO->update( skeletalubo , m_window->currentSwapChainImageIndex());
 		VkBuffer vertexBuffers[] = { testmeshnode->meshs[0].vertexBuffer};
