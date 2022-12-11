@@ -389,11 +389,11 @@ void MainWindow::on_actPlay_triggered()
 {
 	if (ui->actPlay->isVisible()) ui->actPlay->setVisible(false);
 	if (!ui->actPause->isVisible()) ui->actPause->setVisible(true);
-	ui->dockEntity->hide();
+	/*ui->dockEntity->hide();
 	ui->dockInfo->hide();
 	ui->dockComponent->hide();
 	ui->actShowInfoDock->setChecked(false);
-	ui->actShowViewDock->setChecked(false);
+	ui->actShowViewDock->setChecked(false);*/
 	GU::g_CoreContext.g_isStop = false;
 	GU::g_CoreContext.g_isPlay = true;
 }
@@ -617,9 +617,9 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 		pyProperty->setValue(translation.y);
 		pzProperty->setValue(translation.z);
 
-		rxProperty->setValue(rotation.x);
-		ryProperty->setValue(rotation.y);
-		rzProperty->setValue(rotation.z);
+		rxProperty->setValue(rotation.x * 180.0/3.14);
+		ryProperty->setValue(rotation.y * 180.0/3.14);
+		rzProperty->setValue(rotation.z * 180.0/3.14);
 
 		sxProperty->setValue(scale.x);
 		syProperty->setValue(scale.y);

@@ -38,7 +38,7 @@ namespace GU
 	void SkeletalMeshComponent::createDescritorSets()
 	{
 		material.modelUBO = std::make_shared<::GU::VulkanUniformBuffer<::GU::SkeletalModelUBO> >();
-		::GU::createDescriptorSets(*GLOBAL_VULKAN_CONTEXT, \
+		::GU::createSkeletalDescriptorSets(*GLOBAL_VULKAN_CONTEXT, \
 			* GLOBAL_ASSET->getTextureWithUUID(material.textureUUID)->image, \
 			material.modelUBO->uniformBuffers, \
 			GLOBAL_VULKAN_CONTEXT->descriptorSetLayout, \

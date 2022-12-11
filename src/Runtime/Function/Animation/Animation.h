@@ -53,6 +53,8 @@ namespace GU
 		glm::mat4 calculateBoneTransformMat(const std::string& actionname, float timetick);
 
 		std::shared_ptr<ActionTree> actiontree;
+
+		float duration;
 	};
 
 	class AnimationManager

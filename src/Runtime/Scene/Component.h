@@ -77,8 +77,10 @@ namespace GU
 
 		SkeletalMaterial material;
 		SkeletalMeshComponent() = default;
-
 		void createDescritorSets();
 		void destoryUBO();
+		std::string currentAnimation;
+		float timeintgal = 1.0;
+		float speed = 24.0;
 	};
 }

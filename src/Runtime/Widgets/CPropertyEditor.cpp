@@ -173,7 +173,7 @@ void CPropertyEditor::onItemClicked(QTreeWidgetItem *item, int column)
 
 #define PROP_ROTATION(prop, axis) if (prop->getId() == TO_STRING(r##axis##Property)) \
 {\
-    double qdRot##axis## = prop->getVariantValue().toDouble();\
+    double qdRot##axis## = prop->getVariantValue().toDouble() * (3.14 / 180.0);\
     entity.getComponent<GU::TransformComponent>().Rotation.##axis## = qdRot##axis##;\
     emit tagChanged();\
 }

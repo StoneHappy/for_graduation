@@ -69,6 +69,9 @@ namespace GU
 			std::shared_ptr<Animation> animation = std::make_shared<Animation>();
 			animation->animationName = pAnimation->mName.C_Str();
 
+			// duration
+			animation->duration = pAnimation->mDuration;
+
 			// build action tree
 			animation->actiontree = std::make_shared<ActionTree>();
 			animation->actiontree->isLeft = false;

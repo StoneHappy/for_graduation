@@ -3,6 +3,7 @@
 #include <Scene/Component.h>
 #include <Renderer/VulkanBuffer.h>
 #include <Scene/Asset.h>
+#include <Function/Animation/Animation.h>
 namespace GU
 {
 
@@ -59,22 +60,59 @@ namespace GU
 
 	void Scene::renderTick(VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime)
 	{
-		auto view = m_registry.view<MaterialComponent, TransformComponent>();
-		for (auto entity : view)
+		// mesh
 		{
-			auto&& [materialComponent, transformComponent] = view.get<MaterialComponent, TransformComponent>(entity);
-			vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.pipelineLayout, 0, 1, &materialComponent.material.descriptorSets[currImageIndex], 0, nullptr);
-			materialComponent.material.modelUBO->update({ transformComponent.getTransform() }, currImageIndex);
-			for (auto& mesh : GLOBAL_ASSET->getMeshWithUUID(materialComponent.material.meshUUID)->meshs)
+			auto view = m_registry.view<MaterialComponent, TransformComponent>();
+			for (auto entity : view)
 			{
-				vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.graphicsPipeline);
-				VkBuffer vertexBuffers[] = { mesh.vertexBuffer };
-				VkDeviceSize offsets[] = { 0 };
-				vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
-				vkCmdBindIndexBuffer(cmdBuf, mesh.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
-				vkCmdDrawIndexed(cmdBuf, mesh.m_indices.size(), 1, 0, 0, 0);
+				auto&& [materialComponent, transformComponent] = view.get<MaterialComponent, TransformComponent>(entity);
+				vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.pipelineLayout, 0, 1, &materialComponent.material.descriptorSets[currImageIndex], 0, nullptr);
+				materialComponent.material.modelUBO->update({ transformComponent.getTransform() }, currImageIndex);
+				for (auto& mesh : GLOBAL_ASSET->getMeshWithUUID(materialComponent.material.meshUUID)->meshs)
+				{
+					vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.graphicsPipeline);
+					VkBuffer vertexBuffers[] = { mesh.vertexBuffer };
+					VkDeviceSize offsets[] = { 0 };
+					vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
+					vkCmdBindIndexBuffer(cmdBuf, mesh.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+					vkCmdDrawIndexed(cmdBuf, mesh.m_indices.size(), 1, 0, 0, 0);
+				}
 			}
-			
+		}
+		
+		// skeletal mesh
+		{
+			auto view = m_registry.view<SkeletalMeshComponent, TransformComponent>();
+			for (auto entity : view)
+			{
+				auto&& [skeletalComponent, transformComponent] = view.get<SkeletalMeshComponent, TransformComponent>(entity);
+				// skeletal animation
+				vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->skeletalPipeline);
+				vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->skeletalPipelineLayout, 0, 1, &skeletalComponent.material.descriptorSets[currImageIndex], 0, nullptr);
+				SkeletalModelUBO skeletalubo{};
+				
+				std::shared_ptr<SkeletalMeshNode> testmeshnode = GLOBAL_ASSET->getSkeletalMeshWithUUID(skeletalComponent.material.skeletalMeshUUID);
+				skeletalubo.model = transformComponent.getTransform();
+				auto&& animations = GLOBAL_ANIMATION->getAnimationsWithUUID(testmeshnode->meshs[0].animationID);
+				auto&& animation = animations["Armature|Idle"];
+				skeletalComponent.timeintgal += skeletalComponent.speed * GLOBAL_DELTATIME;
+				
+				if (skeletalComponent.timeintgal > animation->duration)
+				{
+					skeletalComponent.timeintgal = 1.0;
+				}
+
+				animation->updateSkeletalModelUBOWithUUID(skeletalubo, skeletalComponent.timeintgal);
+				skeletalComponent.material.modelUBO->update(skeletalubo, currImageIndex);
+				for (auto mesh : testmeshnode->meshs)
+				{
+					VkBuffer vertexBuffers[] = { mesh.vertexBuffer };
+					VkDeviceSize offsets[] = { 0 };
+					vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
+					vkCmdBindIndexBuffer(cmdBuf, mesh.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+					vkCmdDrawIndexed(cmdBuf, mesh.m_indices.size(), 1, 0, 0, 0);
+				}
+			}
 		}
 	}
 
