@@ -202,16 +202,25 @@ namespace GU
 		int nextno = -1;
 		for (size_t i = 0; i < positionKeys.size(); i++)
 		{
-			if (positionKeys[i].first > timetick) nextno = i;
+			if (positionKeys[i].first == timetick)
+			{
+				return positionKeys[i].second;
+			}
+
+			if (positionKeys[i].first > timetick)
+			{
+				nextno = i;
+				break;
+			}
 		}
 
 		if (nextno == -1)
 		{
-			return glm::mat4(1);
+			return positionKeys[positionKeys.size() - 1].second;;
 		}
 
-		glm::mat4 interpolationpos = glm::interpolate(positionKeys[nextno - 1].second, positionKeys[nextno].second, timetick - positionKeys[nextno - 1].first);
+		glm::mat4 interpolationrot = glm::interpolate(positionKeys[nextno - 1].second, positionKeys[nextno].second, timetick - positionKeys[nextno - 1].first);
 
-		return interpolationpos;
+		return interpolationrot;
 	}
 }
