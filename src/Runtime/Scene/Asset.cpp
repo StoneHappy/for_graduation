@@ -40,8 +40,8 @@ namespace GU
     }
     UUID Asset::insertSkeletalMesh(const std::filesystem::path& filepath)
     {
-        auto found = m_loadedModelMap.find(filepath);
-        if (found != m_loadedModelMap.end())
+        auto found = m_loadedSkeletalModelMap.find(filepath);
+        if (found != m_loadedSkeletalModelMap.end())
         {
             return found->second;
         }
@@ -56,7 +56,19 @@ namespace GU
     }
     UUID Asset::insertSkeletalMeshWithUUID(const std::filesystem::path& filepath, UUID uuid)
     {
-        return UUID();
+        auto found = m_loadedSkeletalModelMap.find(filepath);
+        if (found != m_loadedSkeletalModelMap.end())
+        {
+            return found->second;
+        }
+
+        std::shared_ptr<SkeletalMeshNode> meshnode = std::make_shared<SkeletalMeshNode>();
+        SkeletalMeshNode::read(*GLOBAL_VULKAN_CONTEXT, meshnode, (GLOBAL_MODEL_PATH / filepath).generic_string());
+        UUID id = uuid;
+        GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::SkeletalMesh);
+        m_skeletalMeshMap[id] = meshnode;
+        m_loadedSkeletalModelMap[filepath] = id;
+        return id;
     }
     UUID Asset::insertTexture(const std::filesystem::path& filepath)
     {

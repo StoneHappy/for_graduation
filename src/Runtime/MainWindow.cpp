@@ -126,6 +126,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	craeteResourceView();
 
 	ui->actImportModel->setEnabled(false);
+	ui->actImportSkeletalMesh->setEnabled(false);
 	ui->actSaveProject->setEnabled(false);
 	ui->actNavmeshParam->setEnabled(false);
 	ui->actImportTexture->setEnabled(false);
@@ -351,6 +352,7 @@ void MainWindow::on_actNewProject_triggered()
 		std::string projectfile = newProjectDlg->m_projectPath.toStdString();
 		GLOBAL_SAVE_PROJECT(projectfile);
 		ui->actImportModel->setEnabled(true);
+		ui->actImportSkeletalMesh->setEnabled(true);
 		ui->actSaveProject->setEnabled(true);
 		ui->actNavmeshParam->setEnabled(true);
 		ui->actImportTexture->setEnabled(true);
@@ -364,6 +366,7 @@ void MainWindow::on_actOpenProject_triggered()
 	std::string filename = qfilename.toStdString();
 	GLOBAL_OPEN_PROJECT(filename);
 	ui->actImportModel->setEnabled(true);
+	ui->actImportSkeletalMesh->setEnabled(true);
 	ui->actSaveProject->setEnabled(true);
 	ui->actNavmeshParam->setEnabled(true);
 	ui->actImportTexture->setEnabled(true);

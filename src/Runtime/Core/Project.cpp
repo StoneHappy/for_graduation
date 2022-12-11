@@ -32,6 +32,8 @@ namespace GU
         out << YAML::BeginMap;
         out << YAML::Key << "Models" << YAML::Value;
         out << GLOBAL_ASSET->m_loadedModelMap;
+        out << YAML::Key << "SkeletalModels" << YAML::Value;
+        out << GLOBAL_ASSET->m_loadedSkeletalModelMap;
         out << YAML::Key << "Textures" << YAML::Value;
         out << GLOBAL_ASSET->m_loadedTextureMap;
         out << YAML::EndMap;
@@ -65,6 +67,7 @@ namespace GU
         YAML::Node config = YAML::LoadFile(projectPath.string());
         auto assets = config["Assets"];
         auto models = assets["Models"];
+        auto sekeltalmodels = assets["SkeletalModels"];
         auto textures = assets["Textures"];
         GLOBAL_MAINWINDOW->progressBegin(models.size());
         for (auto mesh : models)
@@ -73,6 +76,14 @@ namespace GU
                 GLOBAL_MAINWINDOW->progressTick();
                 GLOBAL_ASSET->insertMeshWithUUID(mesh.first.as<std::string>(), mesh.second.as<uint64_t>());
             });
+        }
+
+        for (auto mesh : sekeltalmodels)
+        {
+            GLOBAL_THREAD_POOL->enqueue([=]() {
+                GLOBAL_MAINWINDOW->progressTick();
+            GLOBAL_ASSET->insertSkeletalMeshWithUUID(mesh.first.as<std::string>(), mesh.second.as<uint64_t>());
+                });
         }
 
         for (auto texture : textures)
