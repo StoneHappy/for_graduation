@@ -243,7 +243,15 @@ void MainWindow::craeteResourceView()
 	ui->modelTableView->setSelectionModel(m_meshTableSelectModel);
 	ui->modelTableView->horizontalHeader()->hide();
 	ui->modelTableView->verticalHeader()->hide();
-	
+
+	// skeletal mesh table init
+	m_skeletalmeshTableModel = new QStandardItemModel(50, 15, this);
+	m_skeletalmeshTableSelectModel = new QItemSelectionModel(m_skeletalmeshTableModel, this);
+	ui->skeletalMeshTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	ui->skeletalMeshTableView->setModel(m_skeletalmeshTableModel);
+	ui->skeletalMeshTableView->setSelectionModel(m_skeletalmeshTableSelectModel);
+	ui->skeletalMeshTableView->horizontalHeader()->hide();
+	ui->skeletalMeshTableView->verticalHeader()->hide();
 
 	// texture table init
 	m_textureTableModel = new QStandardItemModel(50, 15, this);
@@ -538,16 +546,7 @@ void MainWindow::on_actImportSkeletalMesh_triggered()
 
 		}
 		GLOBAL_THREAD_POOL->enqueue([=]() {
-			GLOBAL_ASSET->insertMesh(filename.filename());
-#if 0 // test progress bar
-		GLOBAL_MAINWINDOW->progressBegin(5);
-		for (size_t i = 0; i < 5; i++)
-		{
-			std::this_thread::sleep_for(std::chrono::seconds(3));
-			GLOBAL_MAINWINDOW->progressTick();
-		}
-		GLOBAL_MAINWINDOW->progressEnd();
-#endif
+			GLOBAL_ASSET->insertSkeletalMesh(filename.filename());
 			});
 	}
 }
@@ -688,6 +687,11 @@ void MainWindow::slot_importResource2Table(QString filename, uint64_t uuid, int 
 		m_meshTableModel->setItem(m_numMeshInTable / 15, m_numMeshInTable % 15, item);
 		ui->modelTableView->update();
 		m_numMeshInTable++;
+		break;
+	case GU::Asset::AssetType::SkeletalMesh:
+		m_skeletalmeshTableModel->setItem(m_numSkeletalMeshInTable / 15, m_numSkeletalMeshInTable % 15, item);
+		ui->skeletalMeshTableView->update();
+		m_numSkeletalMeshInTable++;
 		break;
 	case GU::Asset::AssetType::Texture:
 		m_textureTableModel->setItem(m_numTextureInTable / 15, m_numTextureInTable % 15, item);

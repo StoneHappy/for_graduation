@@ -9,6 +9,7 @@ namespace GU
 	template <class T>
 	class VulkanUniformBuffer;
 	class ModelUBO;
+	class SkeletalModelUBO;
 
 	class Material
 	{
@@ -19,6 +20,17 @@ namespace GU
 		uint64_t meshUUID;
 		std::vector<VkDescriptorSet> descriptorSets;
 		std::shared_ptr<VulkanUniformBuffer<ModelUBO> > modelUBO;
+	};
+
+	class SkeletalMaterial
+	{
+	public:
+		SkeletalMaterial();
+		~SkeletalMaterial();
+		uint64_t textureUUID;
+		uint64_t skeletalMeshUUID;
+		std::vector<VkDescriptorSet> descriptorSets;
+		std::shared_ptr<VulkanUniformBuffer<SkeletalModelUBO> > modelUBO;
 	};
 
 	class NavMeshMaterial

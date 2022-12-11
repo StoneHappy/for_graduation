@@ -68,7 +68,7 @@ namespace GU
 		createSkeletalDescriptorSets(*GLOBAL_VULKAN_CONTEXT, *texture->image, GLOBAL_VULKAN_CONTEXT->skeletalUBO->uniformBuffers, GLOBAL_VULKAN_CONTEXT->descriptorSetLayout, GLOBAL_VULKAN_CONTEXT->descriptorPool, GLOBAL_VULKAN_CONTEXT->skeletalDescriptorSets);
 		/*testmeshnode = std::make_shared<SkeletalMeshNode>();
 		SkeletalMeshNode::read(*GLOBAL_VULKAN_CONTEXT, testmeshnode, "D:/data/fbx/human.fbx");*/
-		meshuuid =  GLOBAL_ASSET->insertSkeletalMesh("D:/data/fbx/human.fbx");
+		//meshuuid =  GLOBAL_ASSET->insertSkeletalMesh("D:/data/fbx/human.fbx");
 	}
 
 	void VulkanRenderer::initSwapChainResources()
@@ -156,6 +156,7 @@ namespace GU
 		// 3D model
 		GLOBAL_SCENE->renderTick(*GLOBAL_VULKAN_CONTEXT, cmdBuf, m_window->currentSwapChainImageIndex(), GLOBAL_DELTATIME);
 
+#if 0
 		// skeletal animation
 		m_devFuncs->vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->skeletalPipeline);
 		m_devFuncs->vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->skeletalPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->skeletalDescriptorSets[m_window->currentSwapChainImageIndex()], 0, nullptr);
@@ -186,7 +187,7 @@ namespace GU
 		m_devFuncs->vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
 		m_devFuncs->vkCmdBindIndexBuffer(cmdBuf, testmeshnode->meshs[0].indexBuffer, 0, VK_INDEX_TYPE_UINT32);
 		m_devFuncs->vkCmdDrawIndexed(cmdBuf, testmeshnode->meshs[0].m_indices.size(), 1, 0, 0, 0);
-
+#endif
 		// RCMesh
 		GLOBAL_RCSCHEDULER->handelRender(cmdBuf, m_window->currentSwapChainImageIndex());
 

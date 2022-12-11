@@ -16,6 +16,7 @@ namespace GU
 		enum class AssetType
 		{
 			Mesh = 0,
+			SkeletalMesh,
 			Texture
 		};
 

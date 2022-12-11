@@ -51,6 +51,10 @@ private:
     QItemSelectionModel*    m_meshTableSelectModel;
     uint32_t m_numMeshInTable = 0;
 
+    QStandardItemModel* m_skeletalmeshTableModel;
+    QItemSelectionModel* m_skeletalmeshTableSelectModel;
+    uint32_t m_numSkeletalMeshInTable = 0;
+
     QStandardItemModel* m_textureTableModel;
     QItemSelectionModel* m_textureTableSelectModel;
     uint32_t m_numTextureInTable = 0;

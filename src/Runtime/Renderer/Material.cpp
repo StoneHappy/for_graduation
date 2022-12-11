@@ -18,4 +18,10 @@ namespace GU
 	{
 
 	}
+	SkeletalMaterial::SkeletalMaterial()
+	{
+	}
+	SkeletalMaterial::~SkeletalMaterial()
+	{
+	}
 }

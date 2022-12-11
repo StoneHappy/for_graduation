@@ -49,7 +49,7 @@ namespace GU
         std::shared_ptr<SkeletalMeshNode> meshnode = std::make_shared<SkeletalMeshNode>();
         SkeletalMeshNode::read(*GLOBAL_VULKAN_CONTEXT, meshnode, (GLOBAL_MODEL_PATH / filepath).generic_string());
         UUID id;
-        GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::Mesh);
+        GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::SkeletalMesh);
         m_skeletalMeshMap[id] = meshnode;
         m_loadedSkeletalModelMap[filepath] = id;
         return id;

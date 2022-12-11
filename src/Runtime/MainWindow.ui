@@ -115,6 +115,16 @@
              </item>
             </layout>
            </widget>
+           <widget class="QWidget" name="tab">
+            <attribute name="title">
+             <string>骨骼模型</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QTableView" name="skeletalMeshTableView"/>
+             </item>
+            </layout>
+           </widget>
            <widget class="QWidget" name="tabtexture">
             <attribute name="title">
              <string>贴图</string>
