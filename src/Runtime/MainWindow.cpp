@@ -133,6 +133,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	createEntityView();
 	craeteComponentView();
 	craeteResourceView();
+	navmeshdlg = new NavMeshParamsDlg(this);
 
 	ui->actImportModel->setEnabled(false);
 	ui->actImportSkeletalMesh->setEnabled(false);
@@ -349,6 +350,7 @@ void MainWindow::progressTick()
 
 void MainWindow::progressEnd()
 {
+	setStatus("");
 	emit signal_progressTick(-1);
 }
 
@@ -498,10 +500,8 @@ void MainWindow::on_actDeleteEntity_triggered()
 
 void MainWindow::on_actNavmeshParam_triggered()
 {
-	NavMeshParamsDlg* navmeshdlg = new NavMeshParamsDlg(this);
-	auto rnt = navmeshdlg->exec();
-
-	if (rnt == QDialog::Accepted)
+	navmeshdlg->show();
+	/*if (rnt == QDialog::Accepted)
 	{
 		auto item = m_meshTableModel->itemFromIndex(m_meshTableSelectModel->currentIndex());
 		auto uuid = item->data().toULongLong();
@@ -513,7 +513,7 @@ void MainWindow::on_actNavmeshParam_triggered()
 		{
 			DEBUG_LOG("%s", "navmesh build failed!");
 		}
-	}
+	}*/
 }
 
 void MainWindow::on_actImportModel_triggered()

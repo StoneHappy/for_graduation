@@ -69,30 +69,30 @@ namespace GU
         auto models = assets["Models"];
         auto sekeltalmodels = assets["SkeletalModels"];
         auto textures = assets["Textures"];
-        GLOBAL_MAINWINDOW->progressBegin(models.size());
-        for (auto mesh : models)
-        {
-            GLOBAL_THREAD_POOL->enqueue([=]() {
-                GLOBAL_MAINWINDOW->progressTick();
-                GLOBAL_ASSET->insertMeshWithUUID(mesh.first.as<std::string>(), mesh.second.as<uint64_t>());
-            });
-        }
+        GLOBAL_MAINWINDOW->progressBegin(models.size() + sekeltalmodels.size() + textures.size());
+        GLOBAL_THREAD_POOL->enqueue([=]() {
+            for (auto mesh : models)
+            {
+            
+                    GLOBAL_MAINWINDOW->setStatus(QString::fromLocal8Bit("正在加载模型文件:%1").arg(mesh.first.as<std::string>().c_str()));
+                    GLOBAL_ASSET->insertMeshWithUUID(mesh.first.as<std::string>(), mesh.second.as<uint64_t>());
+                    GLOBAL_MAINWINDOW->progressTick();
+            }
 
-        for (auto mesh : sekeltalmodels)
-        {
-            GLOBAL_THREAD_POOL->enqueue([=]() {
-                GLOBAL_MAINWINDOW->progressTick();
-            GLOBAL_ASSET->insertSkeletalMeshWithUUID(mesh.first.as<std::string>(), mesh.second.as<uint64_t>());
-                });
-        }
-
-        for (auto texture : textures)
-        {
-            GLOBAL_THREAD_POOL->enqueue([=]() {
-                GLOBAL_MAINWINDOW->progressTick();
-                GLOBAL_ASSET->insertTextureWithUUID(texture.first.as<std::string>(), texture.second.as<uint64_t>());
-            });
-        }
+            for (auto mesh : sekeltalmodels)
+            {
+                    GLOBAL_MAINWINDOW->setStatus(QString::fromLocal8Bit("正在加载骨骼模型文件:%1").arg(mesh.first.as<std::string>().c_str()));
+                    GLOBAL_ASSET->insertSkeletalMeshWithUUID(mesh.first.as<std::string>(), mesh.second.as<uint64_t>());
+                    GLOBAL_MAINWINDOW->progressTick();
+            }
+            for (auto texture : textures)
+            {
+                    GLOBAL_MAINWINDOW->setStatus(QString::fromLocal8Bit("正在加载纹理贴图文件:%1").arg(texture.first.as<std::string>().c_str()));
+                    GLOBAL_ASSET->insertTextureWithUUID(texture.first.as<std::string>(), texture.second.as<uint64_t>());
+                    GLOBAL_MAINWINDOW->progressTick();
+            }
+            GLOBAL_MAINWINDOW->progressEnd();
+        });
     }
 }
 

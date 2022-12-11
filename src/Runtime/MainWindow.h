@@ -15,6 +15,7 @@ class QStandardItem;
 class QStandardItemModel;
 class QItemSelectionModel;
 class QProgressBar;
+class NavMeshParamsDlg;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -62,6 +63,7 @@ private:
     int m_progressTaskNum = 0;
     int m_currentTaskNo = 0;
 
+    NavMeshParamsDlg* navmeshdlg;
 Q_SIGNALS:
     void signal_importResource2Table(QString, uint64_t, int type);
     void signal_progressTick(int max);
