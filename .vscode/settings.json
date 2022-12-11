@@ -8,5 +8,7 @@
     // "cmake.generator": "Ninja",
     "cmake.debugConfig": {
         "args": ["--gtest_filter="]
-    }
+    },
+    "git.ignoreSubmodules": true,
+    "git.detectSubmodules": false
 }
