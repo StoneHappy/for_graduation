@@ -58,7 +58,6 @@ namespace GU
 
 		Material material;
 		MaterialComponent() = default;
-		MaterialComponent(const MaterialComponent&) = default;
 
 		void createDescritorSets();
 		void destoryUBO();
@@ -74,6 +73,12 @@ namespace GU
 
 	struct SkeletalMeshComponent
 	{
+		SkeletalMeshComponent(uint64_t modelid, uint64_t textureid);
 
+		SkeletalMaterial material;
+		SkeletalMeshComponent() = default;
+
+		void createDescritorSets();
+		void destoryUBO();
 	};
 }

@@ -90,11 +90,22 @@ namespace GU
 
 	void Scene::releaseEntityResource()
 	{
-		auto view = m_registry.view<MaterialComponent>();
-		for (auto entity : view)
 		{
-			auto&& materialComponent = view.get<MaterialComponent>(entity);
-			materialComponent.material.modelUBO.reset();
+			auto view = m_registry.view<MaterialComponent>();
+			for (auto entity : view)
+			{
+				auto&& materialComponent = view.get<MaterialComponent>(entity);
+				materialComponent.material.modelUBO.reset();
+			}
+		}
+		
+		{
+			auto view = m_registry.view<SkeletalMeshComponent>();
+			for (auto entity : view)
+			{
+				auto&& materialComponent = view.get<SkeletalMeshComponent>(entity);
+				materialComponent.material.modelUBO.reset();
+			}
 		}
 	}
 
@@ -120,6 +131,10 @@ namespace GU
 	}
 	template<>
 	void Scene::OnComponentAdded<MaterialComponent>(Entity entity, MaterialComponent& component)
+	{
+	}
+	template<>
+	void Scene::OnComponentAdded<SkeletalMeshComponent>(Entity entity, SkeletalMeshComponent& component)
 	{
 	}
 }

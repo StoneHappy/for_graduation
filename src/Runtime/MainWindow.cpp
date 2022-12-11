@@ -526,11 +526,11 @@ void MainWindow::on_actAddSkeletalModelToEntity_triggered()
 	if (rnt == QDialog::Accepted)
 	{
 		auto entityitem = m_entityTreeModel->itemFromIndex(m_entityTreeSelectModel->currentIndex());
-		auto modelitem = m_meshTableModel->itemFromIndex(m_meshTableSelectModel->currentIndex());
+		auto modelitem = m_skeletalmeshTableModel->itemFromIndex(m_skeletalmeshTableSelectModel->currentIndex());
 		auto textureitem = m_textureTableModel->itemFromIndex(m_textureTableSelectModel->currentIndex());
 		uint64_t uuid = entityitem->data().toULongLong();
 		auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
-		auto& materialComponent = entity.addComponent<GU::MaterialComponent>(modelitem->data().toULongLong(), textureitem->data().toULongLong());
+		auto& materialComponent = entity.addComponent<GU::SkeletalMeshComponent>(modelitem->data().toULongLong(), textureitem->data().toULongLong());
 	}
 	slot_on_entityTreeSelectModel_currentChanged(m_entityTreeSelectModel->currentIndex(), m_entityTreeSelectModel->currentIndex());
 }
