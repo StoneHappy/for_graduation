@@ -36,6 +36,7 @@
    <addaction name="actOpenProject"/>
    <addaction name="actSaveProject"/>
    <addaction name="actImportModel"/>
+   <addaction name="actImportSkeletalMesh"/>
    <addaction name="actImportTexture"/>
    <addaction name="separator"/>
    <addaction name="actNavmeshParam"/>
@@ -350,6 +351,18 @@
    </property>
    <property name="toolTip">
     <string>导入贴图</string>
+   </property>
+  </action>
+  <action name="actImportSkeletalMesh">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/skeletalmesh.png</normaloff>:/images/skeletalmesh.png</iconset>
+   </property>
+   <property name="text">
+    <string>导入骨骼动画模型</string>
+   </property>
+   <property name="toolTip">
+    <string>导入骨骼动画模型</string>
    </property>
   </action>
  </widget>

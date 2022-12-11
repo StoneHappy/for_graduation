@@ -19,9 +19,9 @@
 #include <Function/Animation/Animation.h>
 namespace GU
 {
-	std::shared_ptr<SkeletalMeshNode> testmeshnode;
 	float timeintgal = 1.0f;
 	float flag = 20.0;
+	uint64_t meshuuid;
 	VulkanRenderer::VulkanRenderer(QVulkanWindow* w)
 		:m_window(w)
 	{
@@ -66,8 +66,9 @@ namespace GU
 		std::shared_ptr<Texture> texture = Texture::read("D:/data/projects/project1/assets/textures/viking_room.png");
 
 		createSkeletalDescriptorSets(*GLOBAL_VULKAN_CONTEXT, *texture->image, GLOBAL_VULKAN_CONTEXT->skeletalUBO->uniformBuffers, GLOBAL_VULKAN_CONTEXT->descriptorSetLayout, GLOBAL_VULKAN_CONTEXT->descriptorPool, GLOBAL_VULKAN_CONTEXT->skeletalDescriptorSets);
-		testmeshnode = std::make_shared<SkeletalMeshNode>();
-		SkeletalMeshNode::read(*GLOBAL_VULKAN_CONTEXT, testmeshnode, "D:/data/fbx/human.fbx");
+		/*testmeshnode = std::make_shared<SkeletalMeshNode>();
+		SkeletalMeshNode::read(*GLOBAL_VULKAN_CONTEXT, testmeshnode, "D:/data/fbx/human.fbx");*/
+		meshuuid =  GLOBAL_ASSET->insertSkeletalMesh("D:/data/fbx/human.fbx");
 	}
 
 	void VulkanRenderer::initSwapChainResources()
@@ -163,6 +164,8 @@ namespace GU
 		{
 			skeletalubo.bones[i] = testmeshnode->meshs[0].boneinfos[i].boneOffset;
 		} */
+		std::shared_ptr<SkeletalMeshNode> testmeshnode = GLOBAL_ASSET->getSkeletalMeshWithUUID(meshuuid);
+
 		auto&& animations = GLOBAL_ANIMATION->getAnimationsWithUUID(testmeshnode->meshs[0].animationID);
 		auto&& animation = animations["Armature|Run"];
 		timeintgal += flag * GLOBAL_DELTATIME;

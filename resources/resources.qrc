@@ -20,5 +20,6 @@
         <file>images/save.png</file>
         <file>images/Params.png</file>
         <file>images/texture.png</file>
+        <file>images/skeletalmesh.png</file>
     </qresource>
 </RCC>

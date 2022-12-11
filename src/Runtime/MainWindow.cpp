@@ -525,6 +525,33 @@ void MainWindow::on_actImportTexture_triggered()
 	}
 }
 
+void MainWindow::on_actImportSkeletalMesh_triggered()
+{
+	QString qfilename = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("打开模型"), QDir::currentPath(), QString::fromLocal8Bit("fbx模型(*.fbx)"));
+
+	if (!qfilename.isEmpty())
+	{
+		std::filesystem::path filename = qfilename.toStdString();
+		if (!std::filesystem::exists(GLOBAL_MODEL_PATH / filename.filename()))
+		{
+			std::filesystem::copy(filename, GLOBAL_MODEL_PATH);
+
+		}
+		GLOBAL_THREAD_POOL->enqueue([=]() {
+			GLOBAL_ASSET->insertMesh(filename.filename());
+#if 0 // test progress bar
+		GLOBAL_MAINWINDOW->progressBegin(5);
+		for (size_t i = 0; i < 5; i++)
+		{
+			std::this_thread::sleep_for(std::chrono::seconds(3));
+			GLOBAL_MAINWINDOW->progressTick();
+		}
+		GLOBAL_MAINWINDOW->progressEnd();
+#endif
+			});
+	}
+}
+
 void MainWindow::slot_treeviewEntity_customcontextmenu(const QPoint& point)
 {
 	QMenu* menu = new QMenu(this);

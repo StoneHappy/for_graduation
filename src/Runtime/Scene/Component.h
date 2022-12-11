@@ -71,4 +71,9 @@ namespace GU
 
 		uint64_t pmesh_uuid;
 	};
+
+	struct SkeletalMeshComponent
+	{
+
+	};
 }
