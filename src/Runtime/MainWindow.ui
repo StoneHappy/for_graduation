@@ -375,6 +375,18 @@
     <string>导入骨骼动画模型</string>
    </property>
   </action>
+  <action name="actAddSkeletalModelToEntity">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/skeletalmesh.png</normaloff>:/images/skeletalmesh.png</iconset>
+   </property>
+   <property name="text">
+    <string>添加骨骼动画模型到实体</string>
+   </property>
+   <property name="toolTip">
+    <string>添加骨骼动画模型到实体</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

@@ -519,6 +519,22 @@ void MainWindow::on_actAddModelToEntity_triggered()
 	slot_on_entityTreeSelectModel_currentChanged(m_entityTreeSelectModel->currentIndex(), m_entityTreeSelectModel->currentIndex());
 }
 
+void MainWindow::on_actAddSkeletalModelToEntity_triggered()
+{
+	auto addMeshToEntityDlg = new AddMeshToEntityDlg(m_skeletalmeshTableModel, m_skeletalmeshTableSelectModel, m_textureTableModel, m_textureTableSelectModel, this);
+	auto rnt = addMeshToEntityDlg->exec();
+	if (rnt == QDialog::Accepted)
+	{
+		auto entityitem = m_entityTreeModel->itemFromIndex(m_entityTreeSelectModel->currentIndex());
+		auto modelitem = m_meshTableModel->itemFromIndex(m_meshTableSelectModel->currentIndex());
+		auto textureitem = m_textureTableModel->itemFromIndex(m_textureTableSelectModel->currentIndex());
+		uint64_t uuid = entityitem->data().toULongLong();
+		auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
+		auto& materialComponent = entity.addComponent<GU::MaterialComponent>(modelitem->data().toULongLong(), textureitem->data().toULongLong());
+	}
+	slot_on_entityTreeSelectModel_currentChanged(m_entityTreeSelectModel->currentIndex(), m_entityTreeSelectModel->currentIndex());
+}
+
 void MainWindow::on_actImportTexture_triggered()
 {
 	QString qfilename = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("打开模型"), QDir::currentPath(), QString::fromLocal8Bit("图片(*.png *.jpg);;"));
@@ -561,6 +577,7 @@ void MainWindow::slot_treeviewEntity_customcontextmenu(const QPoint& point)
 	menu->addAction(ui->actCopyEntity);
 	menu->addAction(ui->actDeleteEntity);
 	menu->addAction(ui->actAddModelToEntity);
+	menu->addAction(ui->actAddSkeletalModelToEntity);
 	menu->exec(QCursor::pos());
 }
 

@@ -82,6 +82,7 @@ private slots:
     void on_actNavmeshParam_triggered();
     void on_actImportModel_triggered();
     void on_actAddModelToEntity_triggered();
+    void on_actAddSkeletalModelToEntity_triggered();
     void on_actImportTexture_triggered();
     void on_actImportSkeletalMesh_triggered();
 
