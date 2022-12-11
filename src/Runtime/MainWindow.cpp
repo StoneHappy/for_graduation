@@ -32,6 +32,7 @@
 #include <Renderer/Texture.h>
 #include <Function/AgentNav/RCScheduler.h>
 #include <Function/Animation/Animation.h>
+#include <QMessageBox>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 
@@ -552,8 +553,18 @@ void MainWindow::on_actAddModelToEntity_triggered()
 		auto entityitem = m_entityTreeModel->itemFromIndex(m_entityTreeSelectModel->currentIndex());
 		auto modelitem = m_meshTableModel->itemFromIndex(m_meshTableSelectModel->currentIndex());
 		auto textureitem = m_textureTableModel->itemFromIndex(m_textureTableSelectModel->currentIndex());
+		if (modelitem == nullptr || textureitem == nullptr || modelitem->data().isNull() || textureitem->data().isNull())
+		{
+			QMessageBox msgBox;
+			msgBox.setIcon(QMessageBox::Icon::Critical);
+			msgBox.setText(QString::fromLocal8Bit("未选择模型或者贴图"));
+			msgBox.exec();
+			return;
+		}
+
 		uint64_t uuid = entityitem->data().toULongLong();
 		auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
+		
 		auto& materialComponent = entity.addComponent<GU::MaterialComponent>(modelitem->data().toULongLong(), textureitem->data().toULongLong());
 	}
 	slot_on_entityTreeSelectModel_currentChanged(m_entityTreeSelectModel->currentIndex(), m_entityTreeSelectModel->currentIndex());
@@ -568,6 +579,14 @@ void MainWindow::on_actAddSkeletalModelToEntity_triggered()
 		auto entityitem = m_entityTreeModel->itemFromIndex(m_entityTreeSelectModel->currentIndex());
 		auto modelitem = m_skeletalmeshTableModel->itemFromIndex(m_skeletalmeshTableSelectModel->currentIndex());
 		auto textureitem = m_textureTableModel->itemFromIndex(m_textureTableSelectModel->currentIndex());
+		if (modelitem == nullptr || textureitem == nullptr || modelitem->data().isNull() || textureitem->data().isNull())
+		{
+			QMessageBox msgBox;
+			msgBox.setIcon(QMessageBox::Icon::Critical);
+			msgBox.setText(QString::fromLocal8Bit("未选择模型或者贴图"));
+			msgBox.exec();
+			return;
+		}
 		uint64_t uuid = entityitem->data().toULongLong();
 		auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
 		auto& materialComponent = entity.addComponent<GU::SkeletalMeshComponent>(modelitem->data().toULongLong(), textureitem->data().toULongLong());
