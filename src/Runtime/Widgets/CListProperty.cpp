@@ -26,7 +26,6 @@ CListProperty::CListProperty(CBaseProperty *top, const QByteArray &id, const QSt
 void CListProperty::setIndex(int index)
 {
     m_index = index;
-
     CBaseProperty::setValue();
 }
 
@@ -36,11 +35,15 @@ int CListProperty::getIndex() const
     return m_index;
 }
 
+CListDataItem CListProperty::getCurrentItem()
+{
+    return m_listData[m_index];
+}
+
 
 void CListProperty::setList(const CListData &list)
 {
     // handle editor...
-
     m_listData = list;
 
     CBaseProperty::setValue();
@@ -119,7 +122,7 @@ void CListProperty::valueToEditor()
     QComboBox* comboEditor = dynamic_cast<QComboBox*>(getActiveEditor());
     if (comboEditor != NULL)
     {
-        //qDebug() << "CListProperty::valueToEditor()" << m_index << m_listData.size();
+        qDebug() << "CListProperty::valueToEditor()" << m_index << m_listData.size();
 
         comboEditor->setCurrentIndex(m_index);
     }

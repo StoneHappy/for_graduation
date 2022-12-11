@@ -94,7 +94,12 @@ namespace GU
 				std::shared_ptr<SkeletalMeshNode> testmeshnode = GLOBAL_ASSET->getSkeletalMeshWithUUID(skeletalComponent.material.skeletalMeshUUID);
 				skeletalubo.model = transformComponent.getTransform();
 				auto&& animations = GLOBAL_ANIMATION->getAnimationsWithUUID(testmeshnode->meshs[0].animationID);
-				auto&& animation = animations["Armature|Idle"];
+				//auto&& animation = animations["Armature|Idle"];
+				auto&& animation = animations[skeletalComponent.currentAnimation];
+				if (animation == nullptr)
+				{
+					break;
+				}
 				skeletalComponent.timeintgal += skeletalComponent.speed * GLOBAL_DELTATIME;
 				
 				if (skeletalComponent.timeintgal > animation->duration)

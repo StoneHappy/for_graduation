@@ -34,6 +34,8 @@ public:
     void setIndex(int index);
     int getIndex() const;
 
+    CListDataItem getCurrentItem();
+
     void setList(const CListData& list);
 
     // event handlers

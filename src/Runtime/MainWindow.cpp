@@ -19,6 +19,7 @@
 #include <Widgets/CPropertyHeader.h>
 #include <Widgets/CDoubleProperty.h>
 #include <Widgets/CStringProperty.h>
+#include <Widgets/CListProperty.h>
 #include <Widgets/NewProjectDialog.h>
 #include <QFileDialog>
 #include <Core/Project.h>
@@ -30,6 +31,7 @@
 #include <Renderer/VulkanDescriptor.h>
 #include <Renderer/Texture.h>
 #include <Function/AgentNav/RCScheduler.h>
+#include <Function/Animation/Animation.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 
@@ -57,6 +59,13 @@ CStringProperty* meshProperty;
 CStringProperty* meshuuidProperty;
 CStringProperty* textureProperty;
 CStringProperty* textureuuidProperty;
+
+CPropertyHeader* skeletalMaterialheader;
+CStringProperty* skeletalMeshProperty;
+CStringProperty* skeletalMeshuuidProperty;
+CStringProperty* skeletalMeshtextureProperty;
+CStringProperty* skeletalMeshtextureuuidProperty;
+CListProperty* skeletalCurrentAnimationProperty;
 /*******************************Property***********************************************/
 
 static void messageHandler(QtMsgType msgType, const QMessageLogContext& logContext, const QString& msg)
@@ -221,17 +230,28 @@ void MainWindow::craeteComponentView()
 	syProperty = new CDoubleProperty(sclheader, "syProperty", "y:", 0, 0, -1000.0, 1000.0);
 	szProperty = new CDoubleProperty(sclheader, "szProperty", "z:", 0, 0, -1000.0, 1000.0);
 
-	materialheader = new CPropertyHeader("材质", QString::fromLocal8Bit("材质组件"));
+	materialheader = new CPropertyHeader("material", QString::fromLocal8Bit("材质组件"));
 	meshProperty = new CStringProperty(materialheader, "meshProperty", QString::fromLocal8Bit("网格名称"), QString::fromLocal8Bit(""));
 	meshuuidProperty = new CStringProperty(materialheader, "meshuuidProperty", QString::fromLocal8Bit("网格id"), QString::fromLocal8Bit(""));
-
 	textureProperty = new CStringProperty(materialheader, "textureProperty", QString::fromLocal8Bit("贴图名称"), QString::fromLocal8Bit(""));
 	textureuuidProperty = new CStringProperty(materialheader, "textureuuidProperty", QString::fromLocal8Bit("贴图id"), QString::fromLocal8Bit(""));
-
 	meshProperty->setDisabled(true);
 	meshuuidProperty->setDisabled(true);
 	textureProperty->setDisabled(true);
 	textureuuidProperty->setDisabled(true);
+
+
+	skeletalMaterialheader = new CPropertyHeader("skeletalMaterial", QString::fromLocal8Bit("骨骼动画"));
+	skeletalMeshProperty = new CStringProperty(skeletalMaterialheader, "skeletalMeshProperty", QString::fromLocal8Bit("骨骼模型名称"), QString::fromLocal8Bit(""));
+	skeletalMeshuuidProperty = new CStringProperty(skeletalMaterialheader, "skeletalMeshuuidProperty", QString::fromLocal8Bit("骨骼模型id"), QString::fromLocal8Bit(""));
+	skeletalMeshtextureProperty = new CStringProperty(skeletalMaterialheader, "skeletalMeshtextureProperty", QString::fromLocal8Bit("贴图名称"), QString::fromLocal8Bit(""));
+	skeletalMeshtextureuuidProperty = new CStringProperty(skeletalMaterialheader, "skeletalMeshtextureuuidProperty", QString::fromLocal8Bit("贴图id"), QString::fromLocal8Bit(""));
+	skeletalCurrentAnimationProperty = new CListProperty(skeletalMaterialheader, "skeletalCurrentAnimationProperty", QString::fromLocal8Bit("当前动画"), { CListDataItem("empty")}, 0);
+	skeletalMeshProperty->setDisabled(true);
+	skeletalMeshuuidProperty->setDisabled(true);
+	skeletalMeshtextureProperty->setDisabled(true);
+	skeletalMeshtextureuuidProperty->setDisabled(true);
+	
 	//ui->componentTreeWidget->adjustToContents();
 }
 void MainWindow::craeteResourceView()
@@ -531,6 +551,7 @@ void MainWindow::on_actAddSkeletalModelToEntity_triggered()
 		uint64_t uuid = entityitem->data().toULongLong();
 		auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
 		auto& materialComponent = entity.addComponent<GU::SkeletalMeshComponent>(modelitem->data().toULongLong(), textureitem->data().toULongLong());
+		materialComponent.currentAnimation = GLOBAL_ANIMATION->getAnimationsWithUUID(GLOBAL_ASSET->getSkeletalMeshWithUUID(modelitem->data().toULongLong())->meshs[0].animationID).begin()->first;
 	}
 	slot_on_entityTreeSelectModel_currentChanged(m_entityTreeSelectModel->currentIndex(), m_entityTreeSelectModel->currentIndex());
 }
@@ -658,6 +679,31 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 		ui->componentTreeWidget->add(meshuuidProperty);
 		ui->componentTreeWidget->add(textureProperty);
 		ui->componentTreeWidget->add(textureuuidProperty);
+	}
+
+	if (entity.hasComponent<GU::SkeletalMeshComponent>())
+	{
+		auto meshuuid = entity.getComponent<GU::SkeletalMeshComponent>().material.skeletalMeshUUID;
+		auto textureuuid = entity.getComponent<GU::SkeletalMeshComponent>().material.textureUUID;
+		skeletalMeshuuidProperty->setValue(QString::number(meshuuid));
+		skeletalMeshProperty->setValue(GLOBAL_ASSET->getSkeletalMeshPathWithUUID(meshuuid).string().c_str());
+		skeletalMeshtextureuuidProperty->setValue(QString::number(textureuuid));
+		skeletalMeshtextureProperty->setValue(GLOBAL_ASSET->getTexturePathWithUUID(textureuuid).string().c_str());
+		auto animations = GLOBAL_ANIMATION->getAnimationsWithUUID(GLOBAL_ASSET->getSkeletalMeshWithUUID(meshuuid)->meshs[0].animationID);
+
+		CListData listdata;
+		for (auto&& animation : animations)
+		{
+			listdata.push_back({ animation.first.c_str() });
+		}
+		
+		skeletalCurrentAnimationProperty->setList(listdata);
+		ui->componentTreeWidget->add(skeletalMaterialheader);
+		ui->componentTreeWidget->add(skeletalMeshProperty);
+		ui->componentTreeWidget->add(skeletalMeshuuidProperty);
+		ui->componentTreeWidget->add(skeletalMeshtextureProperty);
+		ui->componentTreeWidget->add(skeletalMeshtextureuuidProperty);
+		ui->componentTreeWidget->add(skeletalCurrentAnimationProperty);
 	}
 	
 

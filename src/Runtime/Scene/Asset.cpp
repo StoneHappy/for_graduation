@@ -97,6 +97,18 @@ namespace GU
         return "";
     }
 
+    std::filesystem::path Asset::getSkeletalMeshPathWithUUID(UUID uuid)
+    {
+        for (auto&& m : m_loadedSkeletalModelMap)
+        {
+            if (m.second == uuid)
+            {
+                return m.first;
+            }
+        }
+        return "";
+    }
+
     std::filesystem::path Asset::getTexturePathWithUUID(UUID uuid)
     {
         for (auto&& t : m_loadedTextureMap)

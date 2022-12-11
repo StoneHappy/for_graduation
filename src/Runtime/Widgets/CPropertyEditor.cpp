@@ -1,6 +1,7 @@
 ﻿#include "CPropertyEditor.h"
 #include "CBoolProperty.h"
 #include "CIntegerProperty.h"
+#include "CListProperty.h"
 
 #include <QKeyEvent>
 #include <QHeaderView>
@@ -219,6 +220,14 @@ void CPropertyEditor::onItemChanged(QTreeWidgetItem *item, int column)
             PROP_SCALE(prop, x);
             PROP_SCALE(prop, y);
             PROP_SCALE(prop, z);
+
+            if (prop->getId() == "skeletalCurrentAnimationProperty")
+            {
+                CListProperty* listprop = dynamic_cast<CListProperty*>(item);
+                entity.getComponent<GU::SkeletalMeshComponent>().currentAnimation = listprop->getCurrentItem().m_text.toStdString();
+                emit tagChanged();
+            }
+
         }
         else
         {

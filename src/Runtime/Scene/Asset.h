@@ -30,6 +30,7 @@ namespace GU
 		UUID insertSkeletalMeshWithUUID(const std::filesystem::path& filepath, UUID uuid);
 
 		std::filesystem::path getMeshPathWithUUID(UUID uuid);
+		std::filesystem::path getSkeletalMeshPathWithUUID(UUID uuid);
 		std::filesystem::path getTexturePathWithUUID(UUID uuid);
 
 		UUID insertTexture(const std::filesystem::path& filepath);
