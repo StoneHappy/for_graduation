@@ -6,6 +6,22 @@
 #include <Function/Animation/Animation.h>
 namespace GU
 {
+	template<typename... Component>
+	static void copyComponentIfExists(Entity dst, Entity src)
+	{
+		([&]()
+			{
+				if (src.hasComponent<Component>())
+				dst.addOrReplaceComponent<Component>(src.getComponent<Component>());
+			}(), ...);
+	}
+
+	template<typename... Component>
+	static void copyComponentIfExists(ComponentGroup<Component...>, Entity dst, Entity src)
+	{
+		copyComponentIfExists<Component...>(dst, src);
+	}
+
 
 	Scene::Scene()
 	{
@@ -29,6 +45,13 @@ namespace GU
 
 		m_entityMap[uuid] = entity;
 		return entity;
+	}
+
+	Entity Scene::duplicateEntity(Entity entity)
+	{
+		Entity newEntity = createEntity(entity.getName());
+		copyComponentIfExists(AllComponents{}, newEntity, entity);
+		return newEntity;
 	}
 
 	Entity Scene::findEntityByName(std::string_view name)

@@ -20,6 +20,8 @@ namespace GU
 
 		Entity findEntityByName(std::string_view name);
 		Entity getEntityByUUID(UUID uuid);
+		Entity duplicateEntity(Entity entity);
+
 		void destroyEntity(Entity entity);
 
 		void renderTick(VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime);

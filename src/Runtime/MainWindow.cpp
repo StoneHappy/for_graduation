@@ -314,6 +314,13 @@ void MainWindow::clearAllComponentProperty()
 	ui->componentTreeWidget->remove(meshuuidProperty);
 	ui->componentTreeWidget->remove(textureProperty);
 	ui->componentTreeWidget->remove(textureuuidProperty);
+
+	ui->componentTreeWidget->remove(skeletalMaterialheader);
+	ui->componentTreeWidget->remove(skeletalMeshProperty);
+	ui->componentTreeWidget->remove(skeletalMeshuuidProperty);
+	ui->componentTreeWidget->remove(skeletalMeshtextureProperty);
+	ui->componentTreeWidget->remove(skeletalMeshtextureuuidProperty);
+	ui->componentTreeWidget->remove(skeletalCurrentAnimationProperty);
 }
 
 void MainWindow::importResource2Table(QString filename, uint64_t uuid, int type)
@@ -455,7 +462,20 @@ void MainWindow::on_actCreateEntity_triggered()
 
 void MainWindow::on_actCopyEntity_triggered()
 {
+	auto sitem = m_entityTreeModel->itemFromIndex(m_entityTreeSelectModel->currentIndex());
+	uint64_t slduuid = sitem->data().toULongLong();
 
+	auto entity = GLOBAL_SCENE->duplicateEntity(GLOBAL_SCENE->getEntityByUUID(slduuid));
+	auto uuid = entity.getComponent<GU::IDComponent>().ID;
+	auto name = entity.getComponent<GU::TagComponent>().Tag;
+	QStandardItem* item = new QStandardItem(name.c_str());
+	item->setData((UINT64)uuid);
+	m_entityMap[uuid] = item;
+	QIcon icon;
+	icon.addFile(":/images/entity.png");
+	item->setIcon(icon);
+	item->setEditable(false);
+	m_treeviewEntityRoot->appendRow(item);
 }
 
 void MainWindow::on_actDeleteEntity_triggered()
@@ -685,6 +705,7 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 	{
 		auto meshuuid = entity.getComponent<GU::SkeletalMeshComponent>().material.skeletalMeshUUID;
 		auto textureuuid = entity.getComponent<GU::SkeletalMeshComponent>().material.textureUUID;
+		auto currentanimation = entity.getComponent<GU::SkeletalMeshComponent>().currentAnimation;
 		skeletalMeshuuidProperty->setValue(QString::number(meshuuid));
 		skeletalMeshProperty->setValue(GLOBAL_ASSET->getSkeletalMeshPathWithUUID(meshuuid).string().c_str());
 		skeletalMeshtextureuuidProperty->setValue(QString::number(textureuuid));
@@ -692,12 +713,20 @@ void MainWindow::slot_on_entityTreeSelectModel_currentChanged(const QModelIndex&
 		auto animations = GLOBAL_ANIMATION->getAnimationsWithUUID(GLOBAL_ASSET->getSkeletalMeshWithUUID(meshuuid)->meshs[0].animationID);
 
 		CListData listdata;
+		int currentindex = 0;
+		int i = 0;
 		for (auto&& animation : animations)
 		{
 			listdata.push_back({ animation.first.c_str() });
+			if (currentanimation == animation.first.c_str())
+			{
+				currentindex = i;
+			}
+			i++;
 		}
 		
 		skeletalCurrentAnimationProperty->setList(listdata);
+		skeletalCurrentAnimationProperty->setIndex(currentindex);
 		ui->componentTreeWidget->add(skeletalMaterialheader);
 		ui->componentTreeWidget->add(skeletalMeshProperty);
 		ui->componentTreeWidget->add(skeletalMeshuuidProperty);

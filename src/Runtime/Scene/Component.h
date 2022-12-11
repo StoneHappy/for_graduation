@@ -77,10 +77,20 @@ namespace GU
 
 		SkeletalMaterial material;
 		SkeletalMeshComponent() = default;
+		SkeletalMeshComponent(const SkeletalMeshComponent&);
 		void createDescritorSets();
 		void destoryUBO();
 		std::string currentAnimation;
 		float timeintgal = 1.0;
 		float speed = 24.0;
 	};
+
+	template<typename... Component>
+	struct ComponentGroup
+	{
+	};
+
+	using AllComponents =
+		ComponentGroup<TransformComponent, MaterialComponent,
+		SkeletalMeshComponent>;
 }

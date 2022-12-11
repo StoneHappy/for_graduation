@@ -35,6 +35,13 @@ namespace GU
 		material.textureUUID = textureid;
 		createDescritorSets();
 	}
+	SkeletalMeshComponent::SkeletalMeshComponent(const SkeletalMeshComponent& other)
+	{
+		material.skeletalMeshUUID = other.material.skeletalMeshUUID;
+		material.textureUUID = other.material.textureUUID;
+		currentAnimation = other.currentAnimation;
+		createDescritorSets();
+	}
 	void SkeletalMeshComponent::createDescritorSets()
 	{
 		material.modelUBO = std::make_shared<::GU::VulkanUniformBuffer<::GU::SkeletalModelUBO> >();
