@@ -7,7 +7,7 @@
 class dtNavMesh;
 class dtNavMeshQuery;
 class dtCrowd;
-
+struct rcChunkyTriMesh;
 namespace GU
 {
 	class Mesh;
@@ -23,6 +23,8 @@ namespace GU
 
 		bool handelBuild(const RCParams& rcparams, Mesh* mesh);
 		void handelRender(VkCommandBuffer cmdBuf, int currentImage);
+		bool raycastMesh(float* src, float* dst, float& tmin);
+
 		bool isRenderHeightField = true;
 		bool isRenderContour = true;
 		bool isRenderDetailMesh = true;
@@ -40,7 +42,8 @@ namespace GU
 		rcPolyMesh* m_pmesh;
 		rcConfig m_cfg;
 		rcPolyMeshDetail* m_dmesh;
-		rcMeshLoaderObj rcmesh;
+		rcMeshLoaderObj m_mesh;
+		rcChunkyTriMesh* m_chunkyMesh;
 		BuildContext* m_ctx;
 		float m_meshBMin[3], m_meshBMax[3];
 
