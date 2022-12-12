@@ -1,15 +1,25 @@
 #include "NavMeshParamsDlg.h"
 #include "ui_NavMeshParamsDlg.h"
 #include <Function/AgentNav/RCScheduler.h>
-NavMeshParamsDlg::NavMeshParamsDlg(QWidget *parent) :
-    QDialog(parent), 
-    ui(new Ui::NavMeshParamsDlg)
+#include <QStandardItemModel>
+#include <QItemSelectionModel>
+#include <Global/CoreContext.h>
+#include <Scene/Asset.h>
+#include <Renderer/Mesh.h>
+#include <Function/AgentNav/RCScheduler.h>
+#include <QTableView>
+#include <QHeaderView>
+#include <Widgets/MeshSelectDialog.h>
+NavMeshParamsDlg::NavMeshParamsDlg(QWidget *parent, QStandardItemModel* p_meshTableModel,QItemSelectionModel* p_meshTableSelectModel) 
+	:QDialog(parent), ui(new Ui::NavMeshParamsDlg), m_meshTableModel(p_meshTableModel), m_meshTableSelectModel(p_meshTableSelectModel)
 {
     ui->setupUi(this);
-    connect(ui->pushButtonOK, SIGNAL(clicked()), this, SLOT(slot_accept()));
+	connect(ui->isRenderHF, SIGNAL(stateChanged(int)), this, SLOT(on_IsRenderHFStateChanged(int)));
+	connect(ui->isRenderCC, SIGNAL(stateChanged(int)), this, SLOT(on_IsRenderCTStateChanged(int)));
+	connect(ui->isRenderDM, SIGNAL(stateChanged(int)), this, SLOT(on_IsRenderDMStateChanged(int)));
 }
 
-void NavMeshParamsDlg::slot_accept()
+void NavMeshParamsDlg::on_pushButtonOK_clicked()
 {
 	// Init build configuration from GUI
 	rc_params.m_cellSize = ui->p_cs->value();
@@ -31,9 +41,67 @@ void NavMeshParamsDlg::slot_accept()
 	rc_params.m_filterLowHangingObstacles = ui->p_filterLowHangingObstacles->isChecked();
 	rc_params.m_filterWalkableLowHeightSpans = ui->p_m_filterWalkableLowHeightSpans->isChecked();
 	rc_params.m_keepInterResults = ui->p_keepInterResults->isChecked();
+
+	auto item = m_meshTableModel->itemFromIndex(m_meshTableSelectModel->currentIndex());
+	auto uuid = item->data().toULongLong();
+	auto meshnode = GLOBAL_ASSET->getMeshWithUUID(uuid);
+	auto& mesh = meshnode->meshs[0];
+	auto rcparams = rc_params;
+
+	if (!GLOBAL_RCSCHEDULER->handelBuild(rcparams, &mesh))
+	{
+		DEBUG_LOG("%s", "navmesh build failed!");
+	}
 }
 
 NavMeshParamsDlg::~NavMeshParamsDlg()
 {
     delete ui;
+}
+
+void NavMeshParamsDlg::on_toolButton_clicked()
+{
+	MeshSelectDialog* meshselect = new MeshSelectDialog(this, m_meshTableModel, m_meshTableSelectModel);
+	auto rnt = meshselect->exec();
+
+	if (rnt == QDialog::Accepted)
+	{
+		ui->lineEdit->setText(m_meshTableModel->itemFromIndex(m_meshTableSelectModel->currentIndex())->text());
+	}
+}
+
+void NavMeshParamsDlg::on_IsRenderHFStateChanged(int state)
+{
+	if (state == Qt::Checked)
+	{
+		GLOBAL_RCSCHEDULER->isRenderHeightField = true;
+	}
+	else
+	{
+		GLOBAL_RCSCHEDULER->isRenderHeightField = false;
+	}
+}
+
+void NavMeshParamsDlg::on_IsRenderCTStateChanged(int state)
+{
+	if (state == Qt::Checked)
+	{
+		GLOBAL_RCSCHEDULER->isRenderContour = true;
+	}
+	else
+	{
+		GLOBAL_RCSCHEDULER->isRenderContour = false;
+	}
+}
+
+void NavMeshParamsDlg::on_IsRenderDMStateChanged(int state)
+{
+	if (state == Qt::Checked)
+	{
+		GLOBAL_RCSCHEDULER->isRenderDetailMesh = true;
+	}
+	else
+	{
+		GLOBAL_RCSCHEDULER->isRenderDetailMesh = false;
+	}
 }

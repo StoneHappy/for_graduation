@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>698</width>
-    <height>829</height>
+    <height>995</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -432,54 +432,53 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="groupBox_9">
+     <property name="title">
+      <string>渲染中间结果</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="isRenderHF">
+        <property name="text">
+         <string>渲染高度域</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="isRenderCC">
+        <property name="text">
+         <string>渲染外轮廓</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="isRenderDM">
+        <property name="text">
+         <string>渲染细节网格</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="pushButtonOK">
      <property name="text">
       <string>构建</string>
      </property>
     </widget>
    </item>
-   <item>
-    <widget class="QPushButton" name="pushButtonCancel">
-     <property name="text">
-      <string>取消</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>pushButtonOK</sender>
-   <signal>clicked()</signal>
-   <receiver>NavMeshParamsDlg</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>380</x>
-     <y>176</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>380</x>
-     <y>118</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButtonCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>NavMeshParamsDlg</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>380</x>
-     <y>211</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>380</x>
-     <y>118</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

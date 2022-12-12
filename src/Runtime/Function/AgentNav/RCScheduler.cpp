@@ -390,32 +390,46 @@ namespace GU
 	{
 		if (m_polymesh == nullptr) return;
 
+		
 
-		// draw detailmesh
-		vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->rcDescriptorSets[currentImage], 0, nullptr);
-		vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipeline);
-		VkBuffer vertexBuffers[] = { m_polymesh->vertexBuffer };
-		VkDeviceSize offsets[] = { 0 };
-		vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
-		vkCmdDraw(cmdBuf,  static_cast<uint32_t>(m_polymesh->m_verts.size()), 1, 0, 0);
+		if (isRenderDetailMesh)
+		{
+			// draw detailmesh
+			vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->rcDescriptorSets[currentImage], 0, nullptr);
+			vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipeline);
+			VkBuffer vertexBuffers[] = { m_polymesh->vertexBuffer };
+			VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
+			vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_polymesh->m_verts.size()), 1, 0, 0);
+		}
+		
+		if (isRenderHeightField)
+		{
+			vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->rcDescriptorSets[currentImage], 0, nullptr);
+			vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipeline);
+			// heightfield
+			VkBuffer solidVertexBuffers[] = { m_heightFieldSolid->vertexBuffer };
+			VkDeviceSize solidOffsets[] = { 0 };
+			vkCmdBindVertexBuffers(cmdBuf, 0, 1, solidVertexBuffers, solidOffsets);
+			vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_heightFieldSolid->m_verts.size()), 1, 0, 0);
+		}
 
-		// heightfield
-		VkBuffer solidVertexBuffers[] = { m_heightFieldSolid->vertexBuffer };
-		VkDeviceSize solidOffsets[] = { 0 };
-		vkCmdBindVertexBuffers(cmdBuf, 0, 1, solidVertexBuffers, solidOffsets);
-		vkCmdDraw(cmdBuf,  static_cast<uint32_t>(m_heightFieldSolid->m_verts.size()), 1, 0, 0);
+		if (isRenderContour)
+		{
+			// draw contour
+			vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcContourPipeline);
+			VkBuffer icontourVertexBuffers[] = { m_polyContourMesh->internalVertexBuffer };
+			VkDeviceSize icontourOffsets[] = { 0 };
+			vkCmdBindVertexBuffers(cmdBuf, 0, 1, icontourVertexBuffers, icontourOffsets);
+			vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_polyContourMesh->internalVerts.size()), 1, 0, 0);
 
-
-		vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcContourPipeline);
-		VkBuffer icontourVertexBuffers[] = { m_polyContourMesh->internalVertexBuffer };
-		VkDeviceSize icontourOffsets[] = { 0 };
-		vkCmdBindVertexBuffers(cmdBuf, 0, 1, icontourVertexBuffers, icontourOffsets);
-		vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_polyContourMesh->internalVerts.size()), 1, 0, 0);
-
-		VkBuffer econtourVertexBuffers[] = { m_polyContourMesh->externalVertexBuffer };
-		VkDeviceSize econtourOffsets[] = { 0 };
-		vkCmdBindVertexBuffers(cmdBuf, 0, 1, econtourVertexBuffers, econtourOffsets);
-		vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_polyContourMesh->externalVerts.size()), 1, 0, 0);
+			VkBuffer econtourVertexBuffers[] = { m_polyContourMesh->externalVertexBuffer };
+			VkDeviceSize econtourOffsets[] = { 0 };
+			vkCmdBindVertexBuffers(cmdBuf, 0, 1, econtourVertexBuffers, econtourOffsets);
+			vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_polyContourMesh->externalVerts.size()), 1, 0, 0);
+		}
+		
+		
 	}
 	
 	void RCScheduler::createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh)
