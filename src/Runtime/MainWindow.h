@@ -37,20 +37,13 @@ private:
     void craeteComponentView();
     void craeteResourceView();
     void clearAllComponentProperty();
-private:
-    Ui::MainWindow *ui;
-    GU::VulkanWindow* m_vulkanWindow;
-    QVulkanInstance* inst;
-    QLabel* m_statusInfo;
-    QProgressBar* m_progressBar;
-    std::unordered_map<GU::UUID, QStandardItem*> m_entityMap;
-
+public:
     QStandardItemModel* m_entityTreeModel;
     QItemSelectionModel* m_entityTreeSelectModel;
     QStandardItem* m_treeviewEntityRoot;
 
-    QStandardItemModel*     m_meshTableModel;
-    QItemSelectionModel*    m_meshTableSelectModel;
+    QStandardItemModel* m_meshTableModel;
+    QItemSelectionModel* m_meshTableSelectModel;
     uint32_t m_numMeshInTable = 0;
 
     QStandardItemModel* m_skeletalmeshTableModel;
@@ -59,6 +52,16 @@ private:
 
     QStandardItemModel* m_textureTableModel;
     QItemSelectionModel* m_textureTableSelectModel;
+
+private:
+    Ui::MainWindow *ui;
+    GU::VulkanWindow* m_vulkanWindow;
+    QVulkanInstance* inst;
+    QLabel* m_statusInfo;
+    QProgressBar* m_progressBar;
+    std::unordered_map<GU::UUID, QStandardItem*> m_entityMap;
+
+   
     uint32_t m_numTextureInTable = 0;
 
     int m_progressTaskNum = 0;

@@ -15,6 +15,8 @@ public:
     explicit AddAgentDlg(QWidget *parent = nullptr);
     ~AddAgentDlg();
 
+private slots:
+    void on_pushButtonOK_clicked();
 private:
     Ui::AddAgentDlg *ui;
 };

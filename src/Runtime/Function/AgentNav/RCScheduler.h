@@ -4,6 +4,7 @@
 #include <Function/AgentNav/RCParams.h>
 #include <Recast.h>
 #include <vulkan/vulkan.h>
+#include <glm/glm.hpp>
 class dtNavMesh;
 class dtNavMeshQuery;
 class dtCrowd;
@@ -32,6 +33,7 @@ namespace GU
 		RCMesh* m_polymesh = nullptr;
 		RCContour* m_polyContourMesh = nullptr;
 		RCHeightfieldSolid* m_heightFieldSolid = nullptr;
+		glm::vec3 hitPos;
 	private:
 		void createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh);
 	private:
