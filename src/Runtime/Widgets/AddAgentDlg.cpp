@@ -34,7 +34,6 @@ void AddAgentDlg::on_pushButtonOK_clicked()
 	materialComponent.currentAnimation = GLOBAL_ANIMATION->getAnimationsWithUUID(GLOBAL_ASSET->getSkeletalMeshWithUUID(modelitem->data().toULongLong())->meshs[0].animationID).begin()->first;
 	auto&& transform = entity.getComponent<GU::TransformComponent>();
 	transform.Translation = GLOBAL_RCSCHEDULER->hitPos;
-	transform.Rotation.x = -90.0 * 3.14 /180.0;
 }
 AddAgentDlg::~AddAgentDlg()
 {
