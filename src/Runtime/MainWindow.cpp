@@ -33,6 +33,7 @@
 #include <Function/AgentNav/RCScheduler.h>
 #include <Function/Animation/Animation.h>
 #include <QMessageBox>
+#include <Widgets/AddAgentDlg.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 
@@ -615,6 +616,13 @@ void MainWindow::on_actImportSkeletalMesh_triggered()
 			GLOBAL_ASSET->insertSkeletalMesh(filename.filename());
 			});
 	}
+}
+
+void MainWindow::on_actAddAgent_triggered()
+{
+	addAgentdlg = new AddAgentDlg(this);
+
+	addAgentdlg->show();
 }
 
 void MainWindow::slot_treeviewEntity_customcontextmenu(const QPoint& point)

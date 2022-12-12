@@ -16,6 +16,7 @@ class QStandardItemModel;
 class QItemSelectionModel;
 class QProgressBar;
 class NavMeshParamsDlg;
+class AddAgentDlg;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -64,6 +65,7 @@ private:
     int m_currentTaskNo = 0;
 
     NavMeshParamsDlg* navmeshdlg;
+    AddAgentDlg* addAgentdlg;
 Q_SIGNALS:
     void signal_importResource2Table(QString, uint64_t, int type);
     void signal_progressTick(int max);
@@ -87,6 +89,7 @@ private slots:
     void on_actAddSkeletalModelToEntity_triggered();
     void on_actImportTexture_triggered();
     void on_actImportSkeletalMesh_triggered();
+    void on_actAddAgent_triggered();
 
     void slot_tagPropertyChanged();
     void slot_treeviewEntity_customcontextmenu(const QPoint&);

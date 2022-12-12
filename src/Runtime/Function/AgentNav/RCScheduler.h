@@ -23,7 +23,6 @@ namespace GU
 
 		bool handelBuild(const RCParams& rcparams, Mesh* mesh);
 		void handelRender(VkCommandBuffer cmdBuf, int currentImage);
-
 		bool isRenderHeightField = true;
 		bool isRenderContour = true;
 		bool isRenderDetailMesh = true;

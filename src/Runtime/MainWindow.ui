@@ -40,6 +40,7 @@
    <addaction name="actImportTexture"/>
    <addaction name="separator"/>
    <addaction name="actNavmeshParam"/>
+   <addaction name="actAddAgent"/>
   </widget>
   <widget class="QDockWidget" name="dockEntity">
    <property name="features">
@@ -385,6 +386,15 @@
    </property>
    <property name="toolTip">
     <string>添加骨骼动画模型到实体</string>
+   </property>
+  </action>
+  <action name="actAddAgent">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/addAgent.png</normaloff>:/images/addAgent.png</iconset>
+   </property>
+   <property name="text">
+    <string>添加智能体</string>
    </property>
   </action>
  </widget>
