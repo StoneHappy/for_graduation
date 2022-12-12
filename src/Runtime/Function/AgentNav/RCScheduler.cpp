@@ -6,6 +6,7 @@
 #include <DetourCrowd.h>
 #include <Recast.h>
 #include <Function/AgentNav/RCData.h>
+#include <MainWindow.h>
 namespace GU
 {
 	RCScheduler::RCScheduler()
@@ -16,6 +17,8 @@ namespace GU
 	}
 	bool RCScheduler::handelBuild(const RCParams& rcparams, Mesh* mesh)
 	{
+		GLOBAL_MAINWINDOW->progressBegin(7);
+		GLOBAL_MAINWINDOW->setStatus(QString::fromLocal8Bit("开始处理导航网格"));
 		createRCMesh(mesh, rcmesh);
 		float bmin[3];
 		float bmax[3];
@@ -63,6 +66,7 @@ namespace GU
 		m_ctx->log(RC_LOG_PROGRESS, " - %d x %d cells", m_cfg.width, m_cfg.height);
 		m_ctx->log(RC_LOG_PROGRESS, " - %.1fK verts, %.1fK tris", nverts / 1000.0f, ntris / 1000.0f);
 
+		GLOBAL_MAINWINDOW->progressTick();
 
 		// Step 2. Rasterize input polygon soup.
 		//
@@ -106,7 +110,7 @@ namespace GU
 			delete[] m_triareas;
 			m_triareas = 0;
 		}
-
+		GLOBAL_MAINWINDOW->progressTick();
 		//
 		// Step 3. Filter walkables surfaces.
 		//
@@ -121,7 +125,7 @@ namespace GU
 		if (rcparams.m_filterWalkableLowHeightSpans)
 			rcFilterWalkableLowHeightSpans(m_ctx, m_cfg.walkableHeight, *m_solid);
 
-
+		GLOBAL_MAINWINDOW->progressTick();
 		//
 		// Step 4. Partition walkable surface to simple regions.
 		//
@@ -219,7 +223,7 @@ namespace GU
 			}
 		}
 
-
+		GLOBAL_MAINWINDOW->progressTick();
 		//
 		// Step 5. Trace and simplify region contours.
 		//
@@ -236,7 +240,7 @@ namespace GU
 			m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not create contours.");
 			return false;
 		}
-
+		GLOBAL_MAINWINDOW->progressTick();
 		//
 		// Step 6. Build polygons mesh from contours.
 		//
@@ -253,6 +257,8 @@ namespace GU
 			m_ctx->log(RC_LOG_ERROR, "buildNavigation: Could not triangulate contours.");
 			return false;
 		}
+
+		GLOBAL_MAINWINDOW->progressTick();
 		//
 		// Step 7. Create detail mesh which allows to access approximate height on each polygon.
 		//
@@ -380,7 +386,8 @@ namespace GU
 				return false;
 			}
 		}
-
+		GLOBAL_MAINWINDOW->progressTick();
+		GLOBAL_MAINWINDOW->progressEnd();
 		m_ctx->stopTimer(RC_TIMER_TOTAL);
 
 		return true;

@@ -10,6 +10,7 @@
 #include <QTableView>
 #include <QHeaderView>
 #include <Widgets/MeshSelectDialog.h>
+#include <QMessageBox>
 NavMeshParamsDlg::NavMeshParamsDlg(QWidget *parent, QStandardItemModel* p_meshTableModel,QItemSelectionModel* p_meshTableSelectModel) 
 	:QDialog(parent), ui(new Ui::NavMeshParamsDlg), m_meshTableModel(p_meshTableModel), m_meshTableSelectModel(p_meshTableSelectModel)
 {
@@ -43,6 +44,15 @@ void NavMeshParamsDlg::on_pushButtonOK_clicked()
 	rc_params.m_keepInterResults = ui->p_keepInterResults->isChecked();
 
 	auto item = m_meshTableModel->itemFromIndex(m_meshTableSelectModel->currentIndex());
+
+	if (item == nullptr || item->data().isNull())
+	{
+		QMessageBox msgBox;
+		msgBox.setIcon(QMessageBox::Icon::Critical);
+		msgBox.setText(QString::fromLocal8Bit("Î´Ñ¡ÔñÄ£ÐÍ"));
+		msgBox.exec();
+		return;
+	}
 	auto uuid = item->data().toULongLong();
 	auto meshnode = GLOBAL_ASSET->getMeshWithUUID(uuid);
 	auto& mesh = meshnode->meshs[0];
