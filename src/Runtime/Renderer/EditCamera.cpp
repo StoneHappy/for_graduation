@@ -105,7 +105,7 @@ namespace GU
         float distance = m_distance * 0.2f;
         distance = std::max(distance, 0.0f);
         float speed = distance * distance;
-        speed = std::min(speed, 10.0f); // max speed = 100
+        speed = std::min(speed, 1.0f); // max speed = 100
         return speed;
     }
 }
