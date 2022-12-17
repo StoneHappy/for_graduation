@@ -50,6 +50,7 @@ void AddAgentDlg::on_pushButtonOK_clicked()
 	transform.Rotation.z = euler.z;
 
 	dtCrowdAgentParams ap;
+	memset(&ap, 0, sizeof(ap));
 	ap.height = GLOBAL_RCSCHEDULER->m_rcparams.m_agentHeight;
 	ap.radius = GLOBAL_RCSCHEDULER->m_rcparams.m_agentRadius;
 	ap.maxAcceleration = 8.0f;
@@ -71,6 +72,7 @@ void AddAgentDlg::on_pushButtonOK_clicked()
 	ap.separationWeight = ui->separationWeight->value();
 
 	int idx = GLOBAL_RCSCHEDULER->addAgent(GLOBAL_RCSCHEDULER->hitPos, ap);
+	GLOBAL_RCSCHEDULER->setMoveTarget(idx, { 25.2513, -2.37028, 23.9598 });
 }
 AddAgentDlg::~AddAgentDlg()
 {

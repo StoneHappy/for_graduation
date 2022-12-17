@@ -4,6 +4,7 @@
 #include <DetourNavMeshBuilder.h>
 #include <DetourNavMeshQuery.h>
 #include <DetourCrowd.h>
+#include <DetourCommon.h>
 #include <Recast.h>
 #include <Function/AgentNav/RCData.h>
 #include <MainWindow.h>
@@ -86,13 +87,29 @@ namespace GU
 		return true;
 	}
 
+	static void calcVel(float* vel, const float* pos, const float* tgt, const float speed)
+	{
+		dtVsub(vel, tgt, pos);
+		vel[1] = 0.0;
+		dtVnormalize(vel);
+		dtVscale(vel, vel, speed);
+	}
+
 
 	RCScheduler::RCScheduler()
 	{
 		m_ctx = new BuildContext();
+		// navmesh
 		m_navQuery = dtAllocNavMeshQuery();
+
+		// crowd
 		m_crowd = dtAllocCrowd();
 		m_targetRef = 0;
+		m_vod = dtAllocObstacleAvoidanceDebugData();
+		m_vod->init(2048);
+		memset(&m_agentDebug, 0, sizeof(m_agentDebug));
+		m_agentDebug.idx = -1;
+		m_agentDebug.vod = m_vod;
 	}
 	bool RCScheduler::handelBuild(const RCParams& rcparams, Mesh* mesh)
 	{
@@ -631,12 +648,35 @@ namespace GU
 		const dtQueryFilter* filter = m_crowd->getFilter(0);
 		const float* halfExtents = m_crowd->getQueryExtents();
 		m_navQuery->findNearestPoly(glm::value_ptr(pos), halfExtents, filter, &m_targetRef, m_targetPos);
-
 		if (idx != -1)
 		{
-			const dtCrowdAgent* ag = m_crowd->getAgent(idx);
+			dtCrowdAgent const * ag = m_crowd->getAgent(idx);
 			if (ag && ag->active)
+			{
 				m_crowd->requestMoveTarget(idx, m_targetRef, m_targetPos);
+			}
+		}
+	}
+
+	void RCScheduler::crowUpdatTick(float delatTime)
+	{	
+		if (m_crowd == nullptr) return;
+
+		int numActiveAgents = 0;
+		numActiveAgents = m_crowd->getActiveAgents(agents, MAX_AGENTS);
+		if (numActiveAgents == 0) return;
+
+		m_crowd->update(delatTime, &m_agentDebug);
+		// Update agent trails
+		//for (int i = 0; i < numActiveAgents; ++i)
+		for (int i = 0; i < m_crowd->getAgentCount(); ++i)
+		{
+			//const dtCrowdAgent* ag = agents[i];
+			const dtCrowdAgent* ag = m_crowd->getAgent(i);
+			if (ag->active)
+			{
+				qDebug() << "agent pos: " << ag->npos[0] << ", " << ag->npos[1] << ", " << ag->npos[2] << "\n";
+			}
 		}
 	}
 	

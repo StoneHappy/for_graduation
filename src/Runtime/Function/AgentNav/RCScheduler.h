@@ -10,6 +10,7 @@ class dtNavMesh;
 class dtNavMeshQuery;
 class dtCrowd;
 struct rcChunkyTriMesh;
+static const int MAX_AGENTS = 128;
 namespace GU
 {
 	class Mesh;
@@ -31,8 +32,12 @@ namespace GU
 		// add agent by params
 		int addAgent(const glm::vec3& pos, const dtCrowdAgentParams& ap);
 		void setMoveTarget(int idx, const glm::vec3& pos);
+		void crowUpdatTick(float delatTime);
 		dtPolyRef m_targetRef;
 		float m_targetPos[3];
+		dtCrowdAgent* agents[MAX_AGENTS];
+		dtCrowdAgentDebugInfo m_agentDebug;
+		dtObstacleAvoidanceDebugData* m_vod;
 		/* crowd */
 		bool isRenderHeightField = true;
 		bool isRenderContour = true;
@@ -43,7 +48,6 @@ namespace GU
 		RCHeightfieldSolid* m_heightFieldSolid = nullptr;
 		glm::vec3 hitPos;
 		RCParams m_rcparams;
-		static const int MAX_AGENTS = 128;
 	private:
 		void createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh);
 	private:

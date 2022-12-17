@@ -189,6 +189,7 @@ namespace GU
 		m_devFuncs->vkCmdDrawIndexed(cmdBuf, testmeshnode->meshs[0].m_indices.size(), 1, 0, 0, 0);
 #endif
 		// RCMesh
+		GLOBAL_RCSCHEDULER->crowUpdatTick(GLOBAL_DELTATIME);
 		GLOBAL_RCSCHEDULER->handelRender(cmdBuf, m_window->currentSwapChainImageIndex());
 
 		// submit queue
