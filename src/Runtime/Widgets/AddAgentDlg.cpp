@@ -11,7 +11,7 @@
 #include <Scene/Entity.h>
 #include <Function/Animation/Animation.h>
 #include <Function/AgentNav/RCScheduler.h>
-
+#include <DetourCrowd.h>
 #define GLM_ENABLE_EXPERIMENTAL
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -48,6 +48,29 @@ void AddAgentDlg::on_pushButtonOK_clicked()
 	transform.Rotation.x = euler.x;
 	transform.Rotation.y = euler.y;
 	transform.Rotation.z = euler.z;
+
+	dtCrowdAgentParams ap;
+	ap.height = GLOBAL_RCSCHEDULER->m_rcparams.m_agentHeight;
+	ap.radius = GLOBAL_RCSCHEDULER->m_rcparams.m_agentRadius;
+	ap.maxAcceleration = 8.0f;
+	ap.maxSpeed = 3.5f;
+	ap.collisionQueryRange = ap.radius * 12.0f;
+	ap.pathOptimizationRange = ap.radius * 30.0f;
+	ap.updateFlags = 0;
+	if (ui->anticipateTurn->isChecked())
+		ap.updateFlags |= DT_CROWD_ANTICIPATE_TURNS;
+	if (ui->optimizePathVisibility->isChecked())
+		ap.updateFlags |= DT_CROWD_OPTIMIZE_VIS;
+	if (ui->optimizePathTopology->isChecked())
+		ap.updateFlags |= DT_CROWD_OPTIMIZE_TOPO;
+	if (ui->obstacleAvoidance->isChecked())
+		ap.updateFlags |= DT_CROWD_OBSTACLE_AVOIDANCE;
+	if (ui->separationWeight->value()!=0)
+		ap.updateFlags |= DT_CROWD_SEPARATION;
+	ap.obstacleAvoidanceType = (unsigned char)3.0f;
+	ap.separationWeight = ui->separationWeight->value();
+
+	int idx = GLOBAL_RCSCHEDULER->addAgent(GLOBAL_RCSCHEDULER->hitPos, ap);
 }
 AddAgentDlg::~AddAgentDlg()
 {

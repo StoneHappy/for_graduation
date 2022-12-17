@@ -5,6 +5,7 @@
 #include <Recast.h>
 #include <vulkan/vulkan.h>
 #include <glm/glm.hpp>
+#include <DetourCrowd.h>
 class dtNavMesh;
 class dtNavMeshQuery;
 class dtCrowd;
@@ -26,6 +27,13 @@ namespace GU
 		void handelRender(VkCommandBuffer cmdBuf, int currentImage);
 		bool raycastMesh(float* src, float* dst, float& tmin);
 
+		/* crowd */
+		// add agent by params
+		int addAgent(const glm::vec3& pos, const dtCrowdAgentParams& ap);
+		void setMoveTarget(int idx, const glm::vec3& pos);
+		dtPolyRef m_targetRef;
+		float m_targetPos[3];
+		/* crowd */
 		bool isRenderHeightField = true;
 		bool isRenderContour = true;
 		bool isRenderDetailMesh = true;
@@ -34,7 +42,7 @@ namespace GU
 		RCContour* m_polyContourMesh = nullptr;
 		RCHeightfieldSolid* m_heightFieldSolid = nullptr;
 		glm::vec3 hitPos;
-
+		RCParams m_rcparams;
 		static const int MAX_AGENTS = 128;
 	private:
 		void createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh);

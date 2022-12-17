@@ -8,6 +8,7 @@
 #include <Function/AgentNav/RCData.h>
 #include <MainWindow.h>
 #include <Function/AgentNav/ChunkyTriMesh.h>
+#include <glm/gtc/type_ptr.hpp>
 namespace GU
 {
 	static bool isectSegAABB(const float* sp, const float* sq,
@@ -91,9 +92,11 @@ namespace GU
 		m_ctx = new BuildContext();
 		m_navQuery = dtAllocNavMeshQuery();
 		m_crowd = dtAllocCrowd();
+		m_targetRef = 0;
 	}
 	bool RCScheduler::handelBuild(const RCParams& rcparams, Mesh* mesh)
 	{
+		m_rcparams = rcparams;
 		GLOBAL_MAINWINDOW->progressBegin(7);
 		GLOBAL_MAINWINDOW->setStatus(QString::fromLocal8Bit("开始处理导航网格"));
 		createRCMesh(mesh, m_mesh);
@@ -610,6 +613,31 @@ namespace GU
 		}
 
 		return hit;
+	}
+
+	int RCScheduler::addAgent(const glm::vec3& pos, const dtCrowdAgentParams& ap)
+	{
+		int idx = m_crowd->addAgent(glm::value_ptr(pos), &ap);
+		if (idx != -1)
+		{
+			if (m_targetRef)
+				m_crowd->requestMoveTarget(idx, m_targetRef, m_targetPos);
+		}
+		return idx;
+	}
+
+	void RCScheduler::setMoveTarget(int idx, const glm::vec3& pos)
+	{
+		const dtQueryFilter* filter = m_crowd->getFilter(0);
+		const float* halfExtents = m_crowd->getQueryExtents();
+		m_navQuery->findNearestPoly(glm::value_ptr(pos), halfExtents, filter, &m_targetRef, m_targetPos);
+
+		if (idx != -1)
+		{
+			const dtCrowdAgent* ag = m_crowd->getAgent(idx);
+			if (ag && ag->active)
+				m_crowd->requestMoveTarget(idx, m_targetRef, m_targetPos);
+		}
 	}
 	
 	void RCScheduler::createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh)
