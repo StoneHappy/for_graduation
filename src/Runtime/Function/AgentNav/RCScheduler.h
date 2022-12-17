@@ -34,6 +34,8 @@ namespace GU
 		RCContour* m_polyContourMesh = nullptr;
 		RCHeightfieldSolid* m_heightFieldSolid = nullptr;
 		glm::vec3 hitPos;
+
+		static const int MAX_AGENTS = 128;
 	private:
 		void createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh);
 	private:

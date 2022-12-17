@@ -478,6 +478,46 @@ namespace GU
 		GLOBAL_MAINWINDOW->progressEnd();
 		m_ctx->stopTimer(RC_TIMER_TOTAL);
 
+
+
+		// init crowd
+		m_crowd->init(MAX_AGENTS, rcparams.m_agentRadius, m_navMesh);
+		m_crowd->getEditableFilter(0)->setExcludeFlags(SAMPLE_POLYFLAGS_DISABLED);
+		// Setup local avoidance params to different qualities.
+		dtObstacleAvoidanceParams params;
+		// Use mostly default settings, copy from dtCrowd.
+		memcpy(&params, m_crowd->getObstacleAvoidanceParams(0), sizeof(dtObstacleAvoidanceParams));
+
+		// Low (11)
+		params.velBias = 0.5f;
+		params.adaptiveDivs = 5;
+		params.adaptiveRings = 2;
+		params.adaptiveDepth = 1;
+		m_crowd->setObstacleAvoidanceParams(0, &params);
+
+		// Medium (22)
+		params.velBias = 0.5f;
+		params.adaptiveDivs = 5;
+		params.adaptiveRings = 2;
+		params.adaptiveDepth = 2;
+		m_crowd->setObstacleAvoidanceParams(1, &params);
+
+		// Good (45)
+		params.velBias = 0.5f;
+		params.adaptiveDivs = 7;
+		params.adaptiveRings = 2;
+		params.adaptiveDepth = 3;
+		m_crowd->setObstacleAvoidanceParams(2, &params);
+
+		// High (66)
+		params.velBias = 0.5f;
+		params.adaptiveDivs = 7;
+		params.adaptiveRings = 3;
+		params.adaptiveDepth = 3;
+
+		m_crowd->setObstacleAvoidanceParams(3, &params);
+
+
 		return true;
 	}
 
