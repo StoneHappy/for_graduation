@@ -9,6 +9,12 @@
 #include <Function/AgentNav/RCData.h>
 #include <MainWindow.h>
 #include <Function/AgentNav/ChunkyTriMesh.h>
+#define GLM_ENABLE_EXPERIMENTAL
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#include <glm/gtx/quaternion.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 namespace GU
 {
@@ -639,6 +645,25 @@ namespace GU
 		float y = agent->npos[1];
 		float z = agent->npos[2];
 		return { x, y, z };
+	}
+
+	void RCScheduler::getAgentRotationWithId(int idx, glm::vec3& rotation)
+	{
+		auto agent = m_crowd->getAgent(idx);
+
+		auto vel = agent->vel;
+		auto glmvel = glm::vec3(vel[0], vel[1], vel[2]);
+		
+		if (glm::length(glmvel) == 0)
+		{
+			return;
+		}
+		glm::vec3 org = glm::normalize(glm::vec3(0, 0, 1.0));
+		glm::vec3 dest = glm::normalize(glmvel);
+		auto rot = glm::rotation(org, dest);
+		auto euler = glm::eulerAngles(rot);
+
+		rotation = euler;
 	}
 
 	int RCScheduler::addAgent(const glm::vec3& pos, const dtCrowdAgentParams& ap)

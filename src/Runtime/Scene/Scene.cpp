@@ -87,11 +87,13 @@ namespace GU
 
 		// agent
 		{
-			auto view = m_registry.view<AgentComponent, TransformComponent>();
+			auto view = m_registry.view<AgentComponent, TransformComponent, SkeletalMeshComponent>();
 			for (auto entity : view)
 			{
-				auto&& [agentComponent, transformComponent] = view.get<AgentComponent, TransformComponent>(entity);
+				auto&& [agentComponent, transformComponent, skeletalMeshComponent] = view.get<AgentComponent, TransformComponent, SkeletalMeshComponent>(entity);
 				transformComponent.Translation = GLOBAL_RCSCHEDULER->getAgentPosWithId(agentComponent.idx);
+				GLOBAL_RCSCHEDULER->getAgentRotationWithId(agentComponent.idx, transformComponent.Rotation);
+				skeletalMeshComponent.currentAnimation = "Armature|Run";
 			}
 		}
 
