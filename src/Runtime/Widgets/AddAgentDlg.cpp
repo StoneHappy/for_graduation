@@ -73,6 +73,10 @@ void AddAgentDlg::on_pushButtonOK_clicked()
 
 	int idx = GLOBAL_RCSCHEDULER->addAgent(GLOBAL_RCSCHEDULER->hitPos, ap);
 	GLOBAL_RCSCHEDULER->setMoveTarget(idx, { 25.2513, -2.37028, 23.9598 });
+
+	auto&& agentcomponent = entity.addComponent<::GU::AgentComponent>();
+	agentcomponent.idx = idx;
+	agentcomponent.targetPos = { 25.2513, -2.37028, 23.9598 };
 }
 AddAgentDlg::~AddAgentDlg()
 {

@@ -632,6 +632,15 @@ namespace GU
 		return hit;
 	}
 
+	glm::vec3 RCScheduler::getAgentPosWithId(int idx)
+	{
+		auto agent = m_crowd->getAgent(idx);
+		float x = agent->npos[0];
+		float y = agent->npos[1];
+		float z = agent->npos[2];
+		return { x, y, z };
+	}
+
 	int RCScheduler::addAgent(const glm::vec3& pos, const dtCrowdAgentParams& ap)
 	{
 		int idx = m_crowd->addAgent(glm::value_ptr(pos), &ap);
@@ -667,17 +676,6 @@ namespace GU
 		if (numActiveAgents == 0) return;
 
 		m_crowd->update(delatTime, &m_agentDebug);
-		// Update agent trails
-		//for (int i = 0; i < numActiveAgents; ++i)
-		for (int i = 0; i < m_crowd->getAgentCount(); ++i)
-		{
-			//const dtCrowdAgent* ag = agents[i];
-			const dtCrowdAgent* ag = m_crowd->getAgent(i);
-			if (ag->active)
-			{
-				qDebug() << "agent pos: " << ag->npos[0] << ", " << ag->npos[1] << ", " << ag->npos[2] << "\n";
-			}
-		}
 	}
 	
 	void RCScheduler::createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh)

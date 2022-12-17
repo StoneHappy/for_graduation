@@ -85,6 +85,13 @@ namespace GU
 		float speed = 24.0;
 	};
 
+	struct AgentComponent
+	{
+		AgentComponent() = default;
+		int idx;
+		glm::vec3 targetPos;
+	};
+
 	template<typename... Component>
 	struct ComponentGroup
 	{

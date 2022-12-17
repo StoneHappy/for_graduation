@@ -4,6 +4,7 @@
 #include <Renderer/VulkanBuffer.h>
 #include <Scene/Asset.h>
 #include <Function/Animation/Animation.h>
+#include <Function/AgentNav/RCScheduler.h>
 namespace GU
 {
 	template<typename... Component>
@@ -83,6 +84,17 @@ namespace GU
 
 	void Scene::renderTick(VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime)
 	{
+
+		// agent
+		{
+			auto view = m_registry.view<AgentComponent, TransformComponent>();
+			for (auto entity : view)
+			{
+				auto&& [agentComponent, transformComponent] = view.get<AgentComponent, TransformComponent>(entity);
+				transformComponent.Translation = GLOBAL_RCSCHEDULER->getAgentPosWithId(agentComponent.idx);
+			}
+		}
+
 		// mesh
 		{
 			auto view = m_registry.view<MaterialComponent, TransformComponent>();
@@ -103,6 +115,8 @@ namespace GU
 			}
 		}
 		
+		
+
 		// skeletal mesh
 		{
 			auto view = m_registry.view<SkeletalMeshComponent, TransformComponent>();
@@ -201,6 +215,10 @@ namespace GU
 	}
 	template<>
 	void Scene::OnComponentAdded<SkeletalMeshComponent>(Entity entity, SkeletalMeshComponent& component)
+	{
+	}
+	template<>
+	void Scene::OnComponentAdded<AgentComponent>(Entity entity, AgentComponent& component)
 	{
 	}
 }

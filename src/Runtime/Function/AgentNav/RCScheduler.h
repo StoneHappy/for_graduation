@@ -30,6 +30,7 @@ namespace GU
 
 		/* crowd */
 		// add agent by params
+		glm::vec3 getAgentPosWithId(int idx);
 		int addAgent(const glm::vec3& pos, const dtCrowdAgentParams& ap);
 		void setMoveTarget(int idx, const glm::vec3& pos);
 		void crowUpdatTick(float delatTime);
@@ -38,6 +39,7 @@ namespace GU
 		dtCrowdAgent* agents[MAX_AGENTS];
 		dtCrowdAgentDebugInfo m_agentDebug;
 		dtObstacleAvoidanceDebugData* m_vod;
+		class dtCrowd* m_crowd;
 		/* crowd */
 		bool isRenderHeightField = true;
 		bool isRenderContour = true;
@@ -66,7 +68,6 @@ namespace GU
 
 		class dtNavMesh* m_navMesh;
 		class dtNavMeshQuery* m_navQuery;
-		class dtCrowd* m_crowd;
 
 
 		enum PartitionType
