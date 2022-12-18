@@ -7,6 +7,7 @@ namespace GU
     void createDescriptorPool(VulkanContext& vkContext, VkDescriptorPool& descriptorPool);
     void createDescriptorSets(VulkanContext& vkContext, VulkanImage& vulkanImage, std::vector<VkBuffer>& modelUBOs, VkDescriptorSetLayout& descriptorSetLayout, VkDescriptorPool& descriptorPool, std::vector<VkDescriptorSet>& descriptorSets);
     void createSkeletalDescriptorSets(VulkanContext& vkContext, VulkanImage& vulkanImage, std::vector<VkBuffer>& modelUBOs, VkDescriptorSetLayout& descriptorSetLayout, VkDescriptorPool& descriptorPool, std::vector<VkDescriptorSet>& descriptorSets);
+    void createAgentDescriptorSets(VulkanContext& vkContext, VulkanImage& diffuse, VulkanImage& cloth, std::vector<VkBuffer>& modelUBOs, VkDescriptorSetLayout& descriptorSetLayout, VkDescriptorPool& descriptorPool, std::vector<VkDescriptorSet>& descriptorSets);
     void destoryDescriptorPool(VulkanContext& vkContext, VkDescriptorPool& descriptorPool);
     void destoryDescriptorSetLayout(VulkanContext& vulkanContext, VkDescriptorSetLayout& descriptorSetLayout);
 }

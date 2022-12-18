@@ -88,8 +88,14 @@ namespace GU
 	struct AgentComponent
 	{
 		AgentComponent() = default;
+		AgentComponent(int idx, const glm::vec3& targetpos);
+		void createDescritorSets();
+		void destoryUBO();
+
 		int idx;
 		glm::vec3 targetPos;
+		std::vector<VkDescriptorSet> descriptorSets;
+		std::shared_ptr<VulkanUniformBuffer<SkeletalModelUBO> > modelUBO;
 	};
 
 	template<typename... Component>

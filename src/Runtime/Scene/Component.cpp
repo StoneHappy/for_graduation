@@ -56,5 +56,24 @@ namespace GU
 	{
 		material.modelUBO.reset();
 	}
+	AgentComponent::AgentComponent(int p_idx, const glm::vec3& targetpos)
+		: idx(p_idx), targetPos(targetpos)
+	{
+		createDescritorSets();
+	}
+	void AgentComponent::createDescritorSets()
+	{
+		modelUBO = std::make_shared<::GU::VulkanUniformBuffer<::GU::SkeletalModelUBO> >();
+		::GU::createAgentDescriptorSets(*GLOBAL_VULKAN_CONTEXT, \
+			*GLOBAL_ASSET->getTextureWithUUID(GLOBAL_VULKAN_CONTEXT->agentDiffuseTexture)->image, \
+			*GLOBAL_ASSET->getTextureWithUUID(GLOBAL_VULKAN_CONTEXT->agentDiffuseTexture)->image, \
+			modelUBO->uniformBuffers, \
+			GLOBAL_VULKAN_CONTEXT->agentDescriptorSetLayout, \
+			GLOBAL_VULKAN_CONTEXT->descriptorPool, \
+			descriptorSets);
+	}
+	void AgentComponent::destoryUBO()
+	{
+	}
 }
 
