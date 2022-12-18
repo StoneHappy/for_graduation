@@ -677,6 +677,15 @@ namespace GU
 		return idx;
 	}
 
+	float RCScheduler::getVelLength(int idx)
+	{
+		auto agent = m_crowd->getAgent(idx);
+		auto vel = agent->vel;
+		glm::vec3 glmvel = { vel[0], vel[1] , vel[2] };
+		
+		return glm::length(glmvel);
+	}
+
 	void RCScheduler::setMoveTarget(int idx, const glm::vec3& pos)
 	{
 		const dtQueryFilter* filter = m_crowd->getFilter(0);

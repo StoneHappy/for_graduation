@@ -42,12 +42,16 @@ void main()
 	
 	if (RdotV > 0.0)
 		specular = ks * pow(RdotV, 0.6);
-	if(texture(simple, inTexCoord).r == 1)
+
+	vec4 color;
+	if(texture(clothSimple, inTexCoord).r != 0)
 	{
-		FragColor = (ambient + diffuse + specular) * vec4(1.0, 0.0, 0.0, 1.0);
+		color = texture(simple, inTexCoord) * vec4(0.1, 0.2f, 0.3, 1.0);
 	}
 	else
 	{
-		FragColor = (ambient + diffuse + specular) * texture(simple, inTexCoord);
+		 color = texture(simple, inTexCoord);
 	}
+
+	FragColor = (ambient + diffuse + specular) * color;
 }

@@ -87,13 +87,61 @@ namespace GU
 
 		// agent
 		{
-			auto view = m_registry.view<AgentComponent, TransformComponent, SkeletalMeshComponent>();
+			auto view = m_registry.view<AgentComponent, TransformComponent>();
 			for (auto entity : view)
 			{
-				auto&& [agentComponent, transformComponent, skeletalMeshComponent] = view.get<AgentComponent, TransformComponent, SkeletalMeshComponent>(entity);
+				auto&& [agentComponent, transformComponent] = view.get<AgentComponent, TransformComponent>(entity);
 				transformComponent.Translation = GLOBAL_RCSCHEDULER->getAgentPosWithId(agentComponent.idx);
-				GLOBAL_RCSCHEDULER->getAgentRotationWithId(agentComponent.idx, transformComponent.Rotation);
-				skeletalMeshComponent.currentAnimation = "Armature|Run";
+				//GLOBAL_RCSCHEDULER->getAgentRotationWithId(agentComponent.idx, transformComponent.Rotation);
+
+				float velLength = GLOBAL_RCSCHEDULER->getVelLength(agentComponent.idx);
+
+				std::string animationName = "Armature|Run";
+				if (velLength > 0.3)
+				{
+					GLOBAL_RCSCHEDULER->getAgentRotationWithId(agentComponent.idx, transformComponent.Rotation);
+				}
+
+				if (velLength < 1.5)
+				{
+					animationName = "Armature|Walk";
+				}
+				if (velLength < 0.1)
+				{
+					animationName = "Armature|Idle";
+				}
+
+				// skeletal animation
+				vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->agentPipeline);
+				vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->agentPipelineLayout, 0, 1, &agentComponent.descriptorSets[currImageIndex], 0, nullptr);
+				SkeletalModelUBO skeletalubo{};
+
+				std::shared_ptr<SkeletalMeshNode> testmeshnode = GLOBAL_ASSET->getSkeletalMeshWithUUID(GLOBAL_VULKAN_CONTEXT->agentSkeletalModel);
+				skeletalubo.model = transformComponent.getTransform();
+				auto&& animations = GLOBAL_ANIMATION->getAnimationsWithUUID(testmeshnode->meshs[0].animationID);
+
+				auto&& animation = animations[animationName];
+				if (animation == nullptr)
+				{
+					break;
+				}
+				agentComponent.timeintgal += agentComponent.speed * GLOBAL_DELTATIME;
+
+				if (agentComponent.timeintgal > animation->duration)
+				{
+					agentComponent.timeintgal = 1.0;
+				}
+
+				animation->updateSkeletalModelUBOWithUUID(skeletalubo, agentComponent.timeintgal);
+				agentComponent.modelUBO->update(skeletalubo, currImageIndex);
+				for (auto mesh : testmeshnode->meshs)
+				{
+					VkBuffer vertexBuffers[] = { mesh.vertexBuffer };
+					VkDeviceSize offsets[] = { 0 };
+					vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
+					vkCmdBindIndexBuffer(cmdBuf, mesh.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+					vkCmdDrawIndexed(cmdBuf, mesh.m_indices.size(), 1, 0, 0, 0);
+				}
 			}
 		}
 

@@ -96,6 +96,10 @@ namespace GU
 		glm::vec3 targetPos;
 		std::vector<VkDescriptorSet> descriptorSets;
 		std::shared_ptr<VulkanUniformBuffer<SkeletalModelUBO> > modelUBO;
+
+		std::string currentAnimation;
+		float timeintgal = 1.0;
+		float speed = 24.0;
 	};
 
 	template<typename... Component>

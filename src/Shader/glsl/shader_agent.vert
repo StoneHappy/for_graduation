@@ -21,7 +21,6 @@ layout(location = 0) out vec3 outPos;
 layout(location = 1) out vec3 outNormal;
 layout(location = 2) out vec2 outTexCoord;
 
-
 void main()
 {
 	// Multiply each bone transformation by the particular weight

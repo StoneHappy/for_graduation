@@ -32,6 +32,7 @@ namespace GU
 		// add agent by params
 		glm::vec3 getAgentPosWithId(int idx);
 		void getAgentRotationWithId(int idx, glm::vec3& rotation);
+		float getVelLength(int idx);
 		int addAgent(const glm::vec3& pos, const dtCrowdAgentParams& ap);
 		void setMoveTarget(int idx, const glm::vec3& pos);
 		void crowUpdatTick(float delatTime);
