@@ -136,7 +136,7 @@ namespace GU
 				AgentModelUBO agentubo{};
 				memcpy(agentubo.bones, skeletalubo.bones, sizeof(skeletalubo.bones));
 				memcpy(&agentubo.model, &skeletalubo.model, sizeof(skeletalubo.model));
-				agentubo.idx = agentComponent.idx;
+				agentubo.clothcolor = glm::vec3(0.2, 0.3, 0.5);
 				agentComponent.modelUBO->update(agentubo, currImageIndex);
 				for (auto mesh : testmeshnode->meshs)
 				{

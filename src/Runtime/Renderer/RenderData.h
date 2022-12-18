@@ -67,7 +67,7 @@ namespace GU
 		AgentModelUBO();
 		glm::mat4 model;
 		glm::mat4 bones[MAX_BONES]; // Bone transformations 
-		int idx;
+		glm::vec3 clothcolor;
 	};
 	// Image
 	struct VulkanImage

@@ -4,7 +4,7 @@ layout (location = 0) out vec4 FragColor;
 layout(location = 0) in vec3 inPos; 
 layout(location = 1) in vec3 inNormal;
 layout(location = 2) in vec2 inTexCoord;
-layout(location = 3) in flat float idx;
+layout(location = 3) in flat vec3 inClothColor;
 
 layout (binding = 2) uniform sampler2D simple;
 layout (binding = 3) uniform sampler2D clothSimple;
@@ -47,7 +47,7 @@ void main()
 	vec4 color;
 	if(texture(clothSimple, inTexCoord).r != 0)
 	{
-		color = texture(simple, inTexCoord) * vec4(idx / 128.0f, 0.2f, 0.3, 1.0);
+		color = texture(simple, inTexCoord) * vec4(inClothColor, 1.0);
 	}
 	else
 	{
