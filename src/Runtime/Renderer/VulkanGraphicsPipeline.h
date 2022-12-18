@@ -13,4 +13,5 @@ namespace GU
     void destoryPipelineLayout(VulkanContext& vulkanContext, VkPipelineLayout& pipelineLayout);
 
     void createSkeletalPipeline();
+    void createAgentPipeline();
 }

@@ -10,6 +10,8 @@
 #include "shader_boundingbox_frag.h"
 #include "shader_skeletal_animation_frag.h"
 #include "shader_skeletal_animation_vert.h"
+#include "shader_agent_vert.h"
+#include "shader_agent_frag.h"
 namespace GU
 {
     void createBackgroundPipeline(VulkanContext& vulkanContext, VkPipeline& backgroudPipeline)
@@ -403,6 +405,8 @@ namespace GU
         }
     }
 
+    
+
     void createSkeletalPipelineLayout(VkDescriptorSetLayout& descriptorSetLayout, VkPipelineLayout& pipelineLayout)
     {
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
@@ -604,5 +608,76 @@ namespace GU
         // create graphicspipeline according to layout
         createSkeletalGraphicsPipeline(shaderStage, GLOBAL_VULKAN_CONTEXT->skeletalPipelineLayout, GLOBAL_VULKAN_CONTEXT->skeletalPipeline);
     }
-    /* Skeletal pipelin */
+    /* Skeletal pipeline */
+
+
+    /* agent pipeline */
+    void createAgentDescriptorSetLayout(VkDescriptorSetLayout& descriptorSetLayout)
+    {
+        VkDescriptorSetLayoutBinding uboLayoutBinding{};
+        uboLayoutBinding.binding = 0;
+        uboLayoutBinding.descriptorCount = 1;
+        uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        uboLayoutBinding.pImmutableSamplers = nullptr;
+        uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+        VkDescriptorSetLayoutBinding meshuboLayoutBinding{};
+        meshuboLayoutBinding.binding = 1; /* bingding point must different with each other */
+        meshuboLayoutBinding.descriptorCount = 1;
+        meshuboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        meshuboLayoutBinding.pImmutableSamplers = nullptr;
+        meshuboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+        VkDescriptorSetLayoutBinding samplerLayoutBinding{};
+        samplerLayoutBinding.binding = 2;
+        samplerLayoutBinding.descriptorCount = 1;
+        samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        samplerLayoutBinding.pImmutableSamplers = nullptr;
+        samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+        VkDescriptorSetLayoutBinding clothsamplerLayoutBinding{};
+        clothsamplerLayoutBinding.binding = 3;
+        clothsamplerLayoutBinding.descriptorCount = 1;
+        clothsamplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        clothsamplerLayoutBinding.pImmutableSamplers = nullptr;
+        clothsamplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+
+        std::array<VkDescriptorSetLayoutBinding, 4> bindings = { uboLayoutBinding, meshuboLayoutBinding, samplerLayoutBinding, clothsamplerLayoutBinding };
+        VkDescriptorSetLayoutCreateInfo layoutInfo{};
+        layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
+        layoutInfo.pBindings = bindings.data();
+
+        if (vkCreateDescriptorSetLayout(GLOBAL_VULKAN_CONTEXT->logicalDevice, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
+            FATAL_LOG("failed to create descriptor set layout!");
+            throw std::runtime_error("failed to create descriptor set layout!");
+        }
+    }
+
+    void createAgentPipelineLayout(VkDescriptorSetLayout& descriptorSetLayout, VkPipelineLayout& pipelineLayout)
+    {
+        VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+        pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+        pipelineLayoutInfo.setLayoutCount = 1;
+        pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
+
+        if (vkCreatePipelineLayout(GLOBAL_VULKAN_CONTEXT->logicalDevice, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
+            FATAL_LOG("failed to create pipeline layout!");
+            throw std::runtime_error("failed to create pipeline layout!");
+        }
+    }
+    void createAgentPipeline()
+    {
+        VkShaderModule vertexShader = createShader(GLOBAL_VULKAN_CONTEXT->logicalDevice, shader_agent_vert, sizeof(shader_agent_vert));
+        VkShaderModule fragShader = createShader(GLOBAL_VULKAN_CONTEXT->logicalDevice, shader_agent_frag, sizeof(shader_agent_frag));
+        std::vector<VkPipelineShaderStageCreateInfo> shaderStage;
+        createShaderStageInfo(vertexShader, fragShader, shaderStage);
+        // descript binding point
+        createAgentDescriptorSetLayout(GLOBAL_VULKAN_CONTEXT->agentDescriptorSetLayout);
+        // create graphicspipeline according to descriptor and qt default pipelinelayout
+        createAgentPipelineLayout(GLOBAL_VULKAN_CONTEXT->agentDescriptorSetLayout, GLOBAL_VULKAN_CONTEXT->agentPipelineLayout);
+        // create graphicspipeline according to layout
+        createSkeletalGraphicsPipeline(shaderStage, GLOBAL_VULKAN_CONTEXT->agentPipelineLayout, GLOBAL_VULKAN_CONTEXT->agentPipeline);
+    }
 }
