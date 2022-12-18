@@ -47,7 +47,16 @@ namespace GU
         }
 
         std::shared_ptr<SkeletalMeshNode> meshnode = std::make_shared<SkeletalMeshNode>();
-        SkeletalMeshNode::read(*GLOBAL_VULKAN_CONTEXT, meshnode, (GLOBAL_MODEL_PATH / filepath).generic_string());
+        std::filesystem::path inputpath;
+        if (std::filesystem::exists(filepath))
+        {
+            inputpath = filepath;
+        }
+        else
+        {
+            inputpath = GLOBAL_MODEL_PATH / filepath;
+        }
+        SkeletalMeshNode::read(*GLOBAL_VULKAN_CONTEXT, meshnode, inputpath.generic_string());
         UUID id;
         GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::SkeletalMesh);
         m_skeletalMeshMap[id] = meshnode;
@@ -61,9 +70,17 @@ namespace GU
         {
             return found->second;
         }
-
+        std::filesystem::path inputpath;
+        if (std::filesystem::exists(filepath))
+        {
+            inputpath = filepath;
+        }
+        else
+        {
+            inputpath = GLOBAL_MODEL_PATH / filepath;
+        }
         std::shared_ptr<SkeletalMeshNode> meshnode = std::make_shared<SkeletalMeshNode>();
-        SkeletalMeshNode::read(*GLOBAL_VULKAN_CONTEXT, meshnode, (GLOBAL_MODEL_PATH / filepath).generic_string());
+        SkeletalMeshNode::read(*GLOBAL_VULKAN_CONTEXT, meshnode, inputpath.generic_string());
         UUID id = uuid;
         GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::SkeletalMesh);
         m_skeletalMeshMap[id] = meshnode;
@@ -77,8 +94,16 @@ namespace GU
         {
             return found->second;
         }
-
-        std::shared_ptr<Texture> texture = Texture::read((GLOBAL_TEXTURE_PATH / filepath).generic_string());
+        std::filesystem::path inputpath;
+        if (std::filesystem::exists(filepath))
+        {
+            inputpath = filepath;
+        }
+        else
+        {
+            inputpath = GLOBAL_TEXTURE_PATH / filepath;
+        }
+        std::shared_ptr<Texture> texture = Texture::read(inputpath.generic_string());
         UUID id;
         GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::Texture);
         m_textureMap[id] = texture;
@@ -129,8 +154,16 @@ namespace GU
         {
             return found->second;
         }
-
-        std::shared_ptr<Texture> texture = Texture::read((GLOBAL_TEXTURE_PATH / filepath).generic_string());
+        std::filesystem::path inputpath;
+        if (std::filesystem::exists(filepath))
+        {
+            inputpath = filepath;
+        }
+        else
+        {
+            inputpath = GLOBAL_TEXTURE_PATH / filepath;
+        }
+        std::shared_ptr<Texture> texture = Texture::read(inputpath.generic_string());
         UUID id = uuid;
         GLOBAL_MAINWINDOW->importResource2Table(filepath.filename().string().c_str(), id, (int)AssetType::Texture);
         m_textureMap[id] = texture;
