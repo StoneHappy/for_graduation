@@ -56,7 +56,9 @@ namespace GU
 		VkPipelineLayout						agentPipelineLayout;
 		std::vector<VkDescriptorSet>			agentDescriptorSets;
 		VkPipeline								agentPipeline;
-		VkPipeline								agentContourPipeline;
+		uint64_t								agentDiffuseTexture;
+		uint64_t								agentClothTexture;
+		uint64_t								agentSkeletalModel;
 
 		std::shared_ptr<VulkanUniformBuffer<CameraUBO> > camearUBO;
 		std::shared_ptr<VulkanUniformBuffer<SkeletalModelUBO> > skeletalUBO;
