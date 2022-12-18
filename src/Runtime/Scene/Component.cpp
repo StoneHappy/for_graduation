@@ -63,7 +63,7 @@ namespace GU
 	}
 	void AgentComponent::createDescritorSets()
 	{
-		modelUBO = std::make_shared<::GU::VulkanUniformBuffer<::GU::SkeletalModelUBO> >();
+		modelUBO = std::make_shared<::GU::VulkanUniformBuffer<::GU::AgentModelUBO> >();
 		::GU::createAgentDescriptorSets(*GLOBAL_VULKAN_CONTEXT, \
 			*GLOBAL_ASSET->getTextureWithUUID(GLOBAL_VULKAN_CONTEXT->agentDiffuseTexture)->image, \
 			*GLOBAL_ASSET->getTextureWithUUID(GLOBAL_VULKAN_CONTEXT->agentClothTexture)->image, \

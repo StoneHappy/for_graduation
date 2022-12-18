@@ -62,6 +62,13 @@ namespace GU
 		glm::mat4 model;
 		glm::mat4 bones[MAX_BONES]; // Bone transformations 
 	};
+
+	struct AgentModelUBO {
+		AgentModelUBO();
+		glm::mat4 model;
+		glm::mat4 bones[MAX_BONES]; // Bone transformations 
+		int idx;
+	};
 	// Image
 	struct VulkanImage
 	{

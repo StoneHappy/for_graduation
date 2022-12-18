@@ -79,4 +79,12 @@ namespace GU
             bones[i] = glm::mat4(1);
         }
     }
+    AgentModelUBO::AgentModelUBO()
+    {
+        model = glm::mat4(1);
+        for (size_t i = 0; i < MAX_BONES; i++)
+        {
+            bones[i] = glm::mat4(1);
+        }
+    }
 }

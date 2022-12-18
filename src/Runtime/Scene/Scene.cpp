@@ -133,7 +133,11 @@ namespace GU
 				}
 
 				animation->updateSkeletalModelUBOWithUUID(skeletalubo, agentComponent.timeintgal);
-				agentComponent.modelUBO->update(skeletalubo, currImageIndex);
+				AgentModelUBO agentubo{};
+				memcpy(agentubo.bones, skeletalubo.bones, sizeof(skeletalubo.bones));
+				memcpy(&agentubo.model, &skeletalubo.model, sizeof(skeletalubo.model));
+				agentubo.idx = agentComponent.idx;
+				agentComponent.modelUBO->update(agentubo, currImageIndex);
 				for (auto mesh : testmeshnode->meshs)
 				{
 					VkBuffer vertexBuffers[] = { mesh.vertexBuffer };

@@ -9,6 +9,7 @@ layout(binding = 0) uniform CameraUBO {
 layout(binding = 1) uniform ModelUBO {
     mat4 model;
 	mat4 bones[MAX_BONES]; // Bone transformations 
+	int idx;
 } meshubo;
 
 layout(location = 0) in vec3	inPosition;
@@ -20,6 +21,7 @@ layout(location = 4) in vec4	inWeights; // Stream of vertex weights
 layout(location = 0) out vec3 outPos; 
 layout(location = 1) out vec3 outNormal;
 layout(location = 2) out vec2 outTexCoord;
+layout(location = 3) out flat float idx;
 
 void main()
 {
@@ -39,4 +41,5 @@ void main()
 	vec4 outNormal = BoneTransform * vec4(inNormal, 0.0);
 
 	outTexCoord = inTexCoord;
+	idx = float(meshubo.idx);
 }

@@ -95,7 +95,7 @@ namespace GU
 		int idx;
 		glm::vec3 targetPos;
 		std::vector<VkDescriptorSet> descriptorSets;
-		std::shared_ptr<VulkanUniformBuffer<SkeletalModelUBO> > modelUBO;
+		std::shared_ptr<VulkanUniformBuffer<AgentModelUBO> > modelUBO;
 
 		std::string currentAnimation;
 		float timeintgal = 1.0;
