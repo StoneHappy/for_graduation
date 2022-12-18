@@ -686,6 +686,35 @@ namespace GU
 		return glm::length(glmvel);
 	}
 
+	static inline int bit(int a, int b)
+	{
+		return (a & (1 << b)) >> b;
+	}
+	static inline unsigned int duRGBA(int r, int g, int b, int a)
+	{
+		return ((unsigned int)r) | ((unsigned int)g << 8) | ((unsigned int)b << 16) | ((unsigned int)a << 24);
+	}
+
+	static unsigned int duIntToCol(int i, int a)
+	{
+		int	r = bit(i, 1) + bit(i, 3) * 2 + 1;
+		int	g = bit(i, 2) + bit(i, 4) * 2 + 1;
+		int	b = bit(i, 0) + bit(i, 5) * 2 + 1;
+		return duRGBA(r * 63, g * 63, b * 63, a);
+	}
+	glm::vec3 RCScheduler::getAgentColor(int idx)
+	{
+		auto color = duIntToCol(idx, 1.0);
+		glm::u8vec4 tmpcolor;
+		memcpy(&tmpcolor, &color, 4 * sizeof(uint8_t));
+
+		glm::vec3 rnt;
+		rnt.r = (float)tmpcolor.r / 255.0f;
+		rnt.g = (float)tmpcolor.g / 255.0f;
+		rnt.b = (float)tmpcolor.b / 255.0f;
+
+		return rnt;
+	}
 	void RCScheduler::setMoveTarget(int idx, const glm::vec3& pos)
 	{
 		const dtQueryFilter* filter = m_crowd->getFilter(0);

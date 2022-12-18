@@ -136,7 +136,7 @@ namespace GU
 				AgentModelUBO agentubo{};
 				memcpy(agentubo.bones, skeletalubo.bones, sizeof(skeletalubo.bones));
 				memcpy(&agentubo.model, &skeletalubo.model, sizeof(skeletalubo.model));
-				agentubo.clothcolor = glm::vec3(0.2, 0.3, 0.5);
+				agentubo.clothcolor = GLOBAL_RCSCHEDULER->getAgentColor(agentComponent.idx);
 				agentComponent.modelUBO->update(agentubo, currImageIndex);
 				for (auto mesh : testmeshnode->meshs)
 				{

@@ -5,16 +5,16 @@
 #include <Renderer/VulkanBuffer.h>
 namespace GU
 {
-	inline int bit(int a, int b)
+	static inline int bit(int a, int b)
 	{
 		return (a & (1 << b)) >> b;
 	}
-	inline unsigned int duRGBA(int r, int g, int b, int a)
+	static inline unsigned int duRGBA(int r, int g, int b, int a)
 	{
 		return ((unsigned int)r) | ((unsigned int)g << 8) | ((unsigned int)b << 16) | ((unsigned int)a << 24);
 	}
 
-	unsigned int duIntToCol(int i, int a)
+	static unsigned int duIntToCol(int i, int a)
 	{
 		int	r = bit(i, 1) + bit(i, 3) * 2 + 1;
 		int	g = bit(i, 2) + bit(i, 4) * 2 + 1;
@@ -22,7 +22,7 @@ namespace GU
 		return duRGBA(r * 63, g * 63, b * 63, a);
 	}
 
-	unsigned int areaToCol(unsigned int area)
+	static unsigned int areaToCol(unsigned int area)
 	{
 		if (area == 0)
 		{
@@ -35,7 +35,7 @@ namespace GU
 		}
 	}
 
-	inline unsigned int duMultCol(const unsigned int col, const unsigned int d)
+	static inline unsigned int duMultCol(const unsigned int col, const unsigned int d)
 	{
 		const unsigned int r = col & 0xff;
 		const unsigned int g = (col >> 8) & 0xff;
@@ -44,7 +44,7 @@ namespace GU
 		return duRGBA((r * d) >> 8, (g * d) >> 8, (b * d) >> 8, a);
 	}
 
-	void duCalcBoxColors(unsigned int* colors, unsigned int colTop, unsigned int colSide)
+	static void duCalcBoxColors(unsigned int* colors, unsigned int colTop, unsigned int colSide)
 	{
 		if (!colors) return;
 
@@ -56,7 +56,7 @@ namespace GU
 		colors[5] = duMultCol(colSide, 217);
 	}
 
-	void createVertexBuffer(VulkanContext& vkContext, const std::vector<RCVertex>& vertices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
+	static void createVertexBuffer(VulkanContext& vkContext, const std::vector<RCVertex>& vertices, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 	{
 		VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
