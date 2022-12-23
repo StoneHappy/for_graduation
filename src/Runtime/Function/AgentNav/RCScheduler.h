@@ -6,6 +6,7 @@
 #include <vulkan/vulkan.h>
 #include <glm/glm.hpp>
 #include <DetourCrowd.h>
+#include <Renderer/VulkanUniformBuffer.hpp>
 class dtNavMesh;
 class dtNavMeshQuery;
 class dtCrowd;
@@ -43,6 +44,7 @@ namespace GU
 		dtCrowdAgentDebugInfo m_agentDebug;
 		dtObstacleAvoidanceDebugData* m_vod;
 		class dtCrowd* m_crowd;
+		std::shared_ptr<VulkanUniformBuffer<AgentDensityUBO> > agentUBO;
 		/* crowd */
 		bool isRenderHeightField = true;
 		bool isRenderContour = true;

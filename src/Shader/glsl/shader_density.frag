@@ -50,10 +50,9 @@ void main()
 	vec4 densityColor = vec4(0.0, 0.0, 1.0, 1.0);
 	for( int i = 0; i<agentpos.numAgent; i++ )
 	{
-		vec3 detalPos = agentpos.pos[i] - inPos;
-		if( (detalPos.x * detalPos.x + detalPos.y * detalPos.y + detalPos.z * detalPos.z) < 0.5 )
+		if( length( agentpos.pos[i] - inPos ) < 0.5 )
 		{
-			densityColor.r += 1;
+			densityColor.r += 0.1;
 		}
 	}
 	FragColor = densityColor * (ambient + diffuse + specular) * texture(simple, inTexCoord);

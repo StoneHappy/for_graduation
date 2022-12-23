@@ -157,6 +157,10 @@ namespace GU
 				auto&& [materialComponent, transformComponent] = view.get<MaterialComponent, TransformComponent>(entity);
 				vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.pipelineLayout, 0, 1, &materialComponent.material.descriptorSets[currImageIndex], 0, nullptr);
 				materialComponent.material.modelUBO->update({ transformComponent.getTransform() }, currImageIndex);
+				AgentDensityUBO agentubo;
+				agentubo.numAgnet = 1;
+				agentubo.pos[0] = { 25.2513, -2.37028, 23.9598 };
+				GLOBAL_RCSCHEDULER->agentUBO->update(agentubo, currImageIndex);
 				for (auto& mesh : GLOBAL_ASSET->getMeshWithUUID(materialComponent.material.meshUUID)->meshs)
 				{
 					vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanContext.graphicsPipeline);

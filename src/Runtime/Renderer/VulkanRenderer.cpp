@@ -63,6 +63,7 @@ namespace GU
 		GLOBAL_VULKAN_CONTEXT->agentDiffuseTexture = GLOBAL_ASSET->insertTexture("./assets/models/humantexture.png");
 		GLOBAL_VULKAN_CONTEXT->agentClothTexture = GLOBAL_ASSET->insertTexture("./assets/models/agentcloth.png");
 		GLOBAL_VULKAN_CONTEXT->agentSkeletalModel = GLOBAL_ASSET->insertSkeletalMesh("./assets/models/human.fbx");
+		GLOBAL_RCSCHEDULER->agentUBO = std::make_shared<VulkanUniformBuffer<AgentDensityUBO> >();
 	}
 
 	void VulkanRenderer::initSwapChainResources()

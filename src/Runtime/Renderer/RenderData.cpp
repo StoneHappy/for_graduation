@@ -87,4 +87,11 @@ namespace GU
             bones[i] = glm::mat4(1);
         }
     }
+    AgentDensityUBO::AgentDensityUBO()
+    {
+        for (size_t i = 0; i < 128; i++)
+        {
+            pos[i] = { 25.2513, -2.37028, 23.9598 };
+        }
+    }
 }

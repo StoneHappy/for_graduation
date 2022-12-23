@@ -1,5 +1,6 @@
 #include "VulkanDescriptor.h"
 #include <Global/CoreContext.h>
+#include <Function/AgentNav/RCScheduler.h>
 #include <Renderer/VulkanUniformBuffer.hpp>
 namespace GU
 {
@@ -27,7 +28,14 @@ namespace GU
         samplerLayoutBinding.pImmutableSamplers = nullptr;
         samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-        std::array<VkDescriptorSetLayoutBinding, 3> bindings = { uboLayoutBinding, meshuboLayoutBinding, samplerLayoutBinding };
+        VkDescriptorSetLayoutBinding agentDensityLayoutBinding{};
+        agentDensityLayoutBinding.binding = 3; /* bingding point must different with each other */
+        agentDensityLayoutBinding.descriptorCount = 1;
+        agentDensityLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        agentDensityLayoutBinding.pImmutableSamplers = nullptr;
+        agentDensityLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+        std::array<VkDescriptorSetLayoutBinding, 4> bindings = { uboLayoutBinding, meshuboLayoutBinding, samplerLayoutBinding, agentDensityLayoutBinding };
         VkDescriptorSetLayoutCreateInfo layoutInfo{};
         layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
         layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
@@ -108,7 +116,12 @@ namespace GU
             imageInfo.imageView = vulkanImage.view;
             imageInfo.sampler = vulkanImage.sampler;
 
-            std::array<VkWriteDescriptorSet, 3> descriptorWrites{};
+            VkDescriptorBufferInfo agentbufferInfo{};
+            agentbufferInfo.buffer = GLOBAL_RCSCHEDULER->agentUBO->uniformBuffers[i];
+            agentbufferInfo.offset = 0;
+            agentbufferInfo.range = sizeof(AgentDensityUBO);
+
+            std::array<VkWriteDescriptorSet, 4> descriptorWrites{};
 
             descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
             descriptorWrites[0].dstSet = descriptorSets[i];
@@ -133,6 +146,14 @@ namespace GU
             descriptorWrites[2].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
             descriptorWrites[2].descriptorCount = 1;
             descriptorWrites[2].pImageInfo = &imageInfo;
+
+            descriptorWrites[3].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            descriptorWrites[3].dstSet = descriptorSets[i];
+            descriptorWrites[3].dstBinding = 3;
+            descriptorWrites[3].dstArrayElement = 0;
+            descriptorWrites[3].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            descriptorWrites[3].descriptorCount = 1;
+            descriptorWrites[3].pBufferInfo = &agentbufferInfo;
 
             vkUpdateDescriptorSets(vkContext.logicalDevice, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
         }

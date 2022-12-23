@@ -69,6 +69,12 @@ namespace GU
 		glm::mat4 bones[MAX_BONES]; // Bone transformations 
 		glm::vec3 clothcolor;
 	};
+
+	struct AgentDensityUBO {
+		AgentDensityUBO();
+		int numAgnet = 0;
+		glm::vec3 pos[128]; // Bone transformations 
+	};
 	// Image
 	struct VulkanImage
 	{
