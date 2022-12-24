@@ -56,6 +56,7 @@ void AddAgentDlg::on_pushButtonOK_clicked()
 	GLOBAL_RCSCHEDULER->setMoveTarget(idx, { 25.2513, -2.37028, 23.9598 });
 	glm::vec3 targetpos = { 25.2513, -2.37028, 23.9598 };
 	auto&& agentcomponent = entity.addComponent<::GU::AgentComponent>(idx, targetpos);
+	GLOBAL_RCSCHEDULER->calAgentPath(GLOBAL_RCSCHEDULER->hitPos, targetpos);
 }
 AddAgentDlg::~AddAgentDlg()
 {

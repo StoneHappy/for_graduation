@@ -738,6 +738,7 @@ namespace GU
 		if (isRenderContour)
 		{
 			// draw contour
+			vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->rcDescriptorSets[currentImage], 0, nullptr);
 			vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcContourPipeline);
 			VkBuffer icontourVertexBuffers[] = { m_polyContourMesh->internalVertexBuffer };
 			VkDeviceSize icontourOffsets[] = { 0 };
@@ -750,7 +751,17 @@ namespace GU
 			vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_polyContourMesh->externalVerts.size()), 1, 0, 0);
 		}
 		
-		
+
+		for (size_t i = 0; i < rcAgentPath.size(); i++)
+		{
+			// draw contour
+			vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcContourPipeline);
+			vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->rcDescriptorSets[currentImage], 0, nullptr);
+			VkBuffer vertexBuffers[] = { rcAgentPath[i]->vertexBuffer};
+			VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
+			vkCmdDraw(cmdBuf, static_cast<uint32_t>(rcAgentPath[i]->m_verts.size()), 1, 0, 0);
+		}
 	}
 
 	bool RCScheduler::raycastMesh(float* src, float* dst, float& tmin)
@@ -1078,14 +1089,16 @@ namespace GU
 				m_nsmoothPath = 0;
 			}
 		}
-		numbAgentPaths.push_back(m_nsmoothPath);
+		/*numbAgentPaths.push_back(m_nsmoothPath);
 
 		std::array<float, MAX_SMOOTH * 3> inputpath;
 		for (size_t i = 0; i < m_nsmoothPath * 3; i++)
 		{
 			inputpath[i] = m_smoothPath[i];
 		}
-		agentPaths.push_back(inputpath);
+		agentPaths.push_back(inputpath);*/
+		std::shared_ptr<RCAgentPath> inputPath = std::make_shared<RCAgentPath>(m_smoothPath, m_nsmoothPath);
+		rcAgentPath.push_back(inputPath);
 	}
 
 	void RCScheduler::createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh)

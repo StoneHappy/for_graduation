@@ -319,4 +319,22 @@ namespace GU
 
 		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, m_verts, vertexBuffer, vertexMemory);
 	}
+	RCAgentPath::RCAgentPath(float* path, int nsmmoth)
+	{
+		const unsigned int spathCol = duRGBA(0, 0, 0, 220);
+		for (int i = 0; i < nsmmoth; ++i)
+		{
+			RCVertex vertex;
+			vertex.pos = { path[i * 3], path[i * 3 + 1] + 0.1f, path[i * 3 + 2] };
+			glm::u8vec4 tmpcolor;
+			memcpy(&tmpcolor, &spathCol, 4 * sizeof(uint8_t));
+			vertex.color.r = (float)tmpcolor.r;
+			vertex.color.g = (float)tmpcolor.g;
+			vertex.color.b = (float)tmpcolor.b;
+			vertex.color.a = (float)tmpcolor.a;
+			m_verts.emplace_back(std::move(vertex));
+		}
+
+		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, m_verts, vertexBuffer, vertexMemory);
+	}
 }

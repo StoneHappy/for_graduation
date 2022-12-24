@@ -4,6 +4,7 @@
 #include <Recast.h>
 #include <vulkan/vulkan.h>
 #include <array>
+#include <Function/AgentNav/RCParams.h>
 namespace GU
 {
 	struct RCVertex
@@ -45,6 +46,15 @@ namespace GU
 
 		void duAppendBox(float minx, float miny, float minz,
 			float maxx, float maxy, float maxz, const unsigned int* fcol);
+
+		std::vector<RCVertex> m_verts;
+		VkBuffer								vertexBuffer;
+		VkDeviceMemory							vertexMemory;
+	};
+
+	struct RCAgentPath
+	{
+		RCAgentPath(float* path, int nsmmoth);
 
 		std::vector<RCVertex> m_verts;
 		VkBuffer								vertexBuffer;

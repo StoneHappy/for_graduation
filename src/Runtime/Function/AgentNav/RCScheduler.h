@@ -11,7 +11,7 @@ class dtNavMesh;
 class dtNavMeshQuery;
 class dtCrowd;
 struct rcChunkyTriMesh;
-static const int MAX_AGENTS = 128;
+
 namespace GU
 {
 	class Mesh;
@@ -19,12 +19,11 @@ namespace GU
 	class RCMesh;
 	class RCContour;
 	class RCHeightfieldSolid;
+	class RCAgentPath;
 	class RCScheduler
 	{
 	public:
-		static const int MAX_SMOOTH = 2048;
-		static const int MAX_POLYS = 256;
-
+		
 		RCScheduler();
 		~RCScheduler() = default;
 
@@ -51,6 +50,9 @@ namespace GU
 		// path
 		std::vector<int> numbAgentPaths;
 		std::vector<std::array<float, MAX_SMOOTH*3> > agentPaths;
+
+		std::vector<std::shared_ptr<RCAgentPath>> rcAgentPath;
+
 		void calAgentPath(const glm::vec3& start, const glm::vec3& end);
 		/* crowd */
 		bool isRenderHeightField = true;

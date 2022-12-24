@@ -23,4 +23,7 @@ namespace GU
 		bool	m_filterWalkableLowHeightSpans;
 		bool m_keepInterResults;
 	};
+	const int MAX_AGENTS = 128;
+	const int MAX_SMOOTH = 2048;
+	const int MAX_POLYS = 256;
 }
