@@ -93,6 +93,10 @@ namespace GU
 				auto&& [agentComponent, transformComponent] = view.get<AgentComponent, TransformComponent>(entity);
 				transformComponent.Translation = GLOBAL_RCSCHEDULER->getAgentPosWithId(agentComponent.idx);
 				//GLOBAL_RCSCHEDULER->getAgentRotationWithId(agentComponent.idx, transformComponent.Rotation);
+				
+				auto agent = GLOBAL_RCSCHEDULER->m_crowd->getAgent(agentComponent.idx);
+
+				if (!agent->active) continue;
 
 				float velLength = GLOBAL_RCSCHEDULER->getVelLength(agentComponent.idx);
 
@@ -138,6 +142,11 @@ namespace GU
 				memcpy(&agentubo.model, &skeletalubo.model, sizeof(skeletalubo.model));
 				agentubo.clothcolor = GLOBAL_RCSCHEDULER->getAgentColor(agentComponent.idx);
 				agentComponent.modelUBO->update(agentubo, currImageIndex);
+
+				if (glm::length( agentComponent.targetPos - transformComponent.Translation ) < 1.5)
+				{
+					GLOBAL_RCSCHEDULER->m_crowd->removeAgent(agentComponent.idx);
+				}
 				for (auto mesh : testmeshnode->meshs)
 				{
 					VkBuffer vertexBuffers[] = { mesh.vertexBuffer };
