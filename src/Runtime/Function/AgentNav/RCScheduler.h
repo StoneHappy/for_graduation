@@ -6,6 +6,7 @@
 #include <vulkan/vulkan.h>
 #include <glm/glm.hpp>
 #include <DetourCrowd.h>
+#include <vector>
 class dtNavMesh;
 class dtNavMeshQuery;
 class dtCrowd;
@@ -21,6 +22,9 @@ namespace GU
 	class RCScheduler
 	{
 	public:
+		static const int MAX_SMOOTH = 2048;
+		static const int MAX_POLYS = 256;
+
 		RCScheduler();
 		~RCScheduler() = default;
 
@@ -43,6 +47,11 @@ namespace GU
 		dtCrowdAgentDebugInfo m_agentDebug;
 		dtObstacleAvoidanceDebugData* m_vod;
 		class dtCrowd* m_crowd;
+
+		// path
+		std::vector<int> numbAgentPaths;
+		std::vector<std::array<float, MAX_SMOOTH*3> > agentPaths;
+		void calAgentPath(const glm::vec3& start, const glm::vec3& end);
 		/* crowd */
 		bool isRenderHeightField = true;
 		bool isRenderContour = true;
