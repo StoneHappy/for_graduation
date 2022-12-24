@@ -1017,7 +1017,10 @@ namespace GU
 			m_npolys = 0;
 			m_nstraightPath = 0;
 		}
-
+		if (m_npolys==0 || m_npolys == 1)
+		{
+			return;
+		}
 		std::shared_ptr<RCStraightPath> inputStraightPath = std::make_shared<RCStraightPath>(m_straightPath, m_npolys);
 		rcStraightPath.push_back(inputStraightPath);
 	}
