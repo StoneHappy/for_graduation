@@ -69,4 +69,13 @@ namespace GU
 		VkBuffer								vertexBuffer;
 		VkDeviceMemory							vertexMemory;
 	};
+
+	struct RCAgentSamplePath
+	{
+		RCAgentSamplePath(const std::vector<glm::vec3>& paths);
+
+		std::vector<RCVertex> m_verts;
+		VkBuffer								vertexBuffer;
+		VkDeviceMemory							vertexMemory;
+	};
 }

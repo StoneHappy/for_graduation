@@ -43,12 +43,12 @@ namespace GU
         qDebug() << QString("hitpoint:%1, %2, %3").arg(hitpoint.x).arg(hitpoint.y).arg(hitpoint.z);
 
         GLOBAL_RCSCHEDULER->setCurrentTarget(hitpoint);
-        GLOBAL_RCSCHEDULER->setAgent(hitpoint);
     }
 
     void VulkanWindow::mouseReleaseEvent(QMouseEvent*)
     {
         m_pressed = false;
+        GLOBAL_RCSCHEDULER->setAgent(GLOBAL_RCSCHEDULER->hitPos);
     }
 
     void VulkanWindow::mouseMoveEvent(QMouseEvent* e)

@@ -100,6 +100,8 @@ namespace GU
 		std::string currentAnimation;
 		float timeintgal = 1.0;
 		float speed = 24.0;
+
+		std::vector<glm::vec3> samplePath;
 	};
 
 	template<typename... Component>

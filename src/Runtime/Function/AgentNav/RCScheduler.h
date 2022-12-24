@@ -21,6 +21,7 @@ namespace GU
 	class RCHeightfieldSolid;
 	class RCAgentPath;
 	class RCStraightPath;
+	class RCAgentSamplePath;
 	class RCScheduler
 	{
 	public:
@@ -58,6 +59,7 @@ namespace GU
 
 		std::vector<std::shared_ptr<RCAgentPath>> rcAgentPath;
 		std::vector<std::shared_ptr<RCStraightPath>> rcStraightPath;
+		std::vector<std::shared_ptr<RCAgentSamplePath>> rcAgentSamplePath;
 
 		void calAgentPath(const glm::vec3& start, const glm::vec3& end);
 

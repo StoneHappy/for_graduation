@@ -5,6 +5,7 @@
 #include <Scene/Asset.h>
 #include <Function/Animation/Animation.h>
 #include <Function/AgentNav/RCScheduler.h>
+#include <Function/AgentNav/RCData.h>
 namespace GU
 {
 	template<typename... Component>
@@ -143,9 +144,17 @@ namespace GU
 				agentubo.clothcolor = GLOBAL_RCSCHEDULER->getAgentColor(agentComponent.idx);
 				agentComponent.modelUBO->update(agentubo, currImageIndex);
 
+
+				// sample path
+				if (GLOBAL_PLAY)
+				{
+					agentComponent.samplePath.push_back(transformComponent.Translation);
+				}
 				if (glm::length( agentComponent.targetPos - transformComponent.Translation ) < 1.5)
 				{
 					GLOBAL_RCSCHEDULER->m_crowd->removeAgent(agentComponent.idx);
+					std::shared_ptr<RCAgentSamplePath> path = std::make_shared<RCAgentSamplePath>(agentComponent.samplePath);
+					GLOBAL_RCSCHEDULER->rcAgentSamplePath.push_back(path);
 				}
 				for (auto mesh : testmeshnode->meshs)
 				{

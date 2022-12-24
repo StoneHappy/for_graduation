@@ -761,18 +761,6 @@ namespace GU
 			vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_polyContourMesh->externalVerts.size()), 1, 0, 0);
 		}
 		
-
-		for (size_t i = 0; i < rcAgentPath.size(); i++)
-		{
-			// draw contour
-			vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcContourPipeline);
-			vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->rcDescriptorSets[currentImage], 0, nullptr);
-			VkBuffer vertexBuffers[] = { rcAgentPath[i]->vertexBuffer};
-			VkDeviceSize offsets[] = { 0 };
-			vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
-			vkCmdDraw(cmdBuf, static_cast<uint32_t>(rcAgentPath[i]->m_verts.size()), 1, 0, 0);
-		}
-
 		for (size_t i = 0; i < rcStraightPath.size(); i++)
 		{
 			// draw contour
@@ -782,6 +770,17 @@ namespace GU
 			VkDeviceSize offsets[] = { 0 };
 			vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
 			vkCmdDraw(cmdBuf, static_cast<uint32_t>(rcStraightPath[i]->m_verts.size()), 1, 0, 0);
+		}
+
+		for (size_t i = 0; i < rcAgentSamplePath.size(); i++)
+		{
+			// draw contour
+			vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcContourPipeline);
+			vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->rcDescriptorSets[currentImage], 0, nullptr);
+			VkBuffer vertexBuffers[] = { rcAgentSamplePath[i]->vertexBuffer };
+			VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
+			vkCmdDraw(cmdBuf, static_cast<uint32_t>(rcAgentSamplePath[i]->m_verts.size()), 1, 0, 0);
 		}
 	}
 
@@ -986,155 +985,6 @@ namespace GU
 
 		m_navQuery->findNearestPoly(m_epos, m_polyPickExt, &m_filter, &m_endRef, 0);
 
-
-		//m_pathFindStatus = DT_FAILURE;
-
-		//if (m_toolMode == TOOLMODE_PATHFIND_FOLLOW)
-		{
-			//m_pathIterNum = 0;
-			if (m_startRef && m_endRef)
-			{
-#ifdef DUMP_REQS
-				printf("pi  %f %f %f  %f %f %f  0x%x 0x%x\n",
-					m_spos[0], m_spos[1], m_spos[2], m_epos[0], m_epos[1], m_epos[2],
-					m_filter.getIncludeFlags(), m_filter.getExcludeFlags());
-#endif
-
-				m_navQuery->findPath(m_startRef, m_endRef, m_spos, m_epos, &m_filter, m_polys, &m_npolys, MAX_POLYS);
-
-				m_nsmoothPath = 0;
-
-				if (m_npolys)
-				{
-					// Iterate over the path to find smooth path on the detail mesh surface.
-					dtPolyRef polys[MAX_POLYS];
-					memcpy(polys, m_polys, sizeof(dtPolyRef) * m_npolys);
-					int npolys = m_npolys;
-
-					float iterPos[3], targetPos[3];
-					m_navQuery->closestPointOnPoly(m_startRef, m_spos, iterPos, 0);
-					m_navQuery->closestPointOnPoly(polys[npolys - 1], m_epos, targetPos, 0);
-
-					static const float STEP_SIZE = 0.5f;
-					static const float SLOP = 0.01f;
-
-					m_nsmoothPath = 0;
-
-					dtVcopy(&m_smoothPath[m_nsmoothPath * 3], iterPos);
-					m_nsmoothPath++;
-
-					// Move towards target a small advancement at a time until target reached or
-					// when ran out of memory to store the path.
-					while (npolys && m_nsmoothPath < MAX_SMOOTH)
-					{
-						// Find location to steer towards.
-						float steerPos[3];
-						unsigned char steerPosFlag;
-						dtPolyRef steerPosRef;
-
-						if (!getSteerTarget(m_navQuery, iterPos, targetPos, SLOP,
-							polys, npolys, steerPos, steerPosFlag, steerPosRef))
-							break;
-
-						bool endOfPath = (steerPosFlag & DT_STRAIGHTPATH_END) ? true : false;
-						bool offMeshConnection = (steerPosFlag & DT_STRAIGHTPATH_OFFMESH_CONNECTION) ? true : false;
-
-						// Find movement delta.
-						float delta[3], len;
-						dtVsub(delta, steerPos, iterPos);
-						len = dtMathSqrtf(dtVdot(delta, delta));
-						// If the steer target is end of path or off-mesh link, do not move past the location.
-						if ((endOfPath || offMeshConnection) && len < STEP_SIZE)
-							len = 1;
-						else
-							len = STEP_SIZE / len;
-						float moveTgt[3];
-						dtVmad(moveTgt, iterPos, delta, len);
-
-						// Move
-						float result[3];
-						dtPolyRef visited[16];
-						int nvisited = 0;
-						m_navQuery->moveAlongSurface(polys[0], iterPos, moveTgt, &m_filter,
-							result, visited, &nvisited, 16);
-
-						npolys = fixupCorridor(polys, npolys, MAX_POLYS, visited, nvisited);
-						npolys = fixupShortcuts(polys, npolys, m_navQuery);
-
-						float h = 0;
-						m_navQuery->getPolyHeight(polys[0], result, &h);
-						result[1] = h;
-						dtVcopy(iterPos, result);
-
-						// Handle end of path and off-mesh links when close enough.
-						if (endOfPath && inRange(iterPos, steerPos, SLOP, 1.0f))
-						{
-							// Reached end of path.
-							dtVcopy(iterPos, targetPos);
-							if (m_nsmoothPath < MAX_SMOOTH)
-							{
-								dtVcopy(&m_smoothPath[m_nsmoothPath * 3], iterPos);
-								m_nsmoothPath++;
-							}
-							break;
-						}
-						else if (offMeshConnection && inRange(iterPos, steerPos, SLOP, 1.0f))
-						{
-							// Reached off-mesh connection.
-							float startPos[3], endPos[3];
-
-							// Advance the path up to and over the off-mesh connection.
-							dtPolyRef prevRef = 0, polyRef = polys[0];
-							int npos = 0;
-							while (npos < npolys && polyRef != steerPosRef)
-							{
-								prevRef = polyRef;
-								polyRef = polys[npos];
-								npos++;
-							}
-							for (int i = npos; i < npolys; ++i)
-								polys[i - npos] = polys[i];
-							npolys -= npos;
-
-							// Handle the connection.
-							dtStatus status = m_navMesh->getOffMeshConnectionPolyEndPoints(prevRef, polyRef, startPos, endPos);
-							if (dtStatusSucceed(status))
-							{
-								if (m_nsmoothPath < MAX_SMOOTH)
-								{
-									dtVcopy(&m_smoothPath[m_nsmoothPath * 3], startPos);
-									m_nsmoothPath++;
-									// Hack to make the dotted path not visible during off-mesh connection.
-									if (m_nsmoothPath & 1)
-									{
-										dtVcopy(&m_smoothPath[m_nsmoothPath * 3], startPos);
-										m_nsmoothPath++;
-									}
-								}
-								// Move position at the other side of the off-mesh link.
-								dtVcopy(iterPos, endPos);
-								float eh = 0.0f;
-								m_navQuery->getPolyHeight(polys[0], iterPos, &eh);
-								iterPos[1] = eh;
-							}
-						}
-
-						// Store results.
-						if (m_nsmoothPath < MAX_SMOOTH)
-						{
-							dtVcopy(&m_smoothPath[m_nsmoothPath * 3], iterPos);
-							m_nsmoothPath++;
-						}
-					}
-				}
-
-			}
-			else
-			{
-				m_npolys = 0;
-				m_nsmoothPath = 0;
-			}
-		}
 		int m_straightPathOptions = DT_STRAIGHTPATH_ALL_CROSSINGS;
 		float m_straightPath[MAX_POLYS * 3];
 		unsigned char m_straightPathFlags[MAX_POLYS];
@@ -1167,17 +1017,6 @@ namespace GU
 			m_npolys = 0;
 			m_nstraightPath = 0;
 		}
-
-		/*numbAgentPaths.push_back(m_nsmoothPath);
-
-		std::array<float, MAX_SMOOTH * 3> inputpath;
-		for (size_t i = 0; i < m_nsmoothPath * 3; i++)
-		{
-			inputpath[i] = m_smoothPath[i];
-		}
-		agentPaths.push_back(inputpath);*/
-		std::shared_ptr<RCAgentPath> inputPath = std::make_shared<RCAgentPath>(m_smoothPath, m_nsmoothPath);
-		rcAgentPath.push_back(inputPath);
 
 		std::shared_ptr<RCStraightPath> inputStraightPath = std::make_shared<RCStraightPath>(m_straightPath, m_npolys);
 		rcStraightPath.push_back(inputStraightPath);
