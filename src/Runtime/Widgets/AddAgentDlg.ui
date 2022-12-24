@@ -110,9 +110,22 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="pushButtonOK">
+    <widget class="QPushButton" name="pushButtonSetTarget">
      <property name="text">
-      <string>添加</string>
+      <string>设置终点</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pushButtonAddAgent">
+     <property name="text">
+      <string>添加智能体起点</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

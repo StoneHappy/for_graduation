@@ -39,7 +39,10 @@ namespace GU
 		float getVelLength(int idx);
 		glm::vec3 getAgentColor(int idx);
 		int addAgent(const glm::vec3& pos, const dtCrowdAgentParams& ap);
+		void setAgent(const glm::vec3& pos);
+
 		void setMoveTarget(int idx, const glm::vec3& pos);
+		void setCurrentTarget(const glm::vec3& pos);
 		void crowUpdatTick(float delatTime);
 		dtPolyRef m_targetRef;
 		float m_targetPos[3];
@@ -47,7 +50,8 @@ namespace GU
 		dtCrowdAgentDebugInfo m_agentDebug;
 		dtObstacleAvoidanceDebugData* m_vod;
 		class dtCrowd* m_crowd;
-
+		dtCrowdAgentParams agentParams;
+		glm::vec3 agentTargetPos;
 		// path
 		std::vector<int> numbAgentPaths;
 		std::vector<std::array<float, MAX_SMOOTH*3> > agentPaths;
@@ -56,6 +60,9 @@ namespace GU
 		std::vector<std::shared_ptr<RCStraightPath>> rcStraightPath;
 
 		void calAgentPath(const glm::vec3& start, const glm::vec3& end);
+
+		bool isSetTarget = false;
+		bool isSetAgent = false;
 		/* crowd */
 		bool isRenderHeightField = true;
 		bool isRenderContour = true;

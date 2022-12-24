@@ -152,6 +152,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	//m_progressBar->hide();
 	ui->statusbar->addWidget(m_statusInfo);
 	ui->statusbar->addWidget(m_progressBar);
+	ui->actAddAgent->setCheckable(false);
 	//m_progressBar->setValue(50);
 }
 

@@ -41,6 +41,9 @@ namespace GU
         auto hitpoint = worldPosStart + min * (worldPosEnd - worldPosStart);
         GLOBAL_RCSCHEDULER->hitPos = hitpoint;
         qDebug() << QString("hitpoint:%1, %2, %3").arg(hitpoint.x).arg(hitpoint.y).arg(hitpoint.z);
+
+        GLOBAL_RCSCHEDULER->setCurrentTarget(hitpoint);
+        GLOBAL_RCSCHEDULER->setAgent(hitpoint);
     }
 
     void VulkanWindow::mouseReleaseEvent(QMouseEvent*)

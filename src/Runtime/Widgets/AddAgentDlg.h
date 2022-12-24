@@ -16,7 +16,8 @@ public:
     ~AddAgentDlg();
 
 private slots:
-    void on_pushButtonOK_clicked();
+    void on_pushButtonAddAgent_clicked();
+    void on_pushButtonSetTarget_clicked();
 private:
     Ui::AddAgentDlg *ui;
 };

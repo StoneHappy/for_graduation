@@ -389,9 +389,6 @@
    </property>
   </action>
   <action name="actAddAgent">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
      <normaloff>:/images/addAgent.png</normaloff>:/images/addAgent.png</iconset>

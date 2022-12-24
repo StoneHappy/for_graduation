@@ -24,11 +24,20 @@ AddAgentDlg::AddAgentDlg(QWidget *parent) :
 {
     ui->setupUi(this);
 }
-void AddAgentDlg::on_pushButtonOK_clicked()
+void AddAgentDlg::on_pushButtonAddAgent_clicked()
 {
-	auto entity = GLOBAL_SCENE->createEntity();
-	auto&& transform = entity.getComponent<GU::TransformComponent>();
-	transform.Translation = GLOBAL_RCSCHEDULER->hitPos;
+	if (ui->pushButtonAddAgent->isChecked())
+	{
+		ui->pushButtonSetTarget->setChecked(false);
+		GLOBAL_RCSCHEDULER->isSetAgent = true;
+		GLOBAL_RCSCHEDULER->isSetTarget = false;
+	}
+	if (!ui->pushButtonAddAgent->isChecked())
+	{
+		GLOBAL_RCSCHEDULER->isSetAgent = false;
+		GLOBAL_RCSCHEDULER->isSetTarget = false;
+		return;
+	}
 
 	dtCrowdAgentParams ap;
 	memset(&ap, 0, sizeof(ap));
@@ -52,13 +61,19 @@ void AddAgentDlg::on_pushButtonOK_clicked()
 	ap.obstacleAvoidanceType = (unsigned char)3.0f;
 	ap.separationWeight = ui->separationWeight->value();
 
-	int idx = GLOBAL_RCSCHEDULER->addAgent(GLOBAL_RCSCHEDULER->hitPos, ap);
-	GLOBAL_RCSCHEDULER->setMoveTarget(idx, { 25.2513, -2.37028, 23.9598 });
-	glm::vec3 targetpos = { 25.2513, -2.37028, 23.9598 };
-	auto&& agentcomponent = entity.addComponent<::GU::AgentComponent>(idx, targetpos);
-	GLOBAL_RCSCHEDULER->calAgentPath(GLOBAL_RCSCHEDULER->hitPos, targetpos);
+	GLOBAL_RCSCHEDULER->agentParams = ap;
 }
 AddAgentDlg::~AddAgentDlg()
 {
     delete ui;
+}
+
+void AddAgentDlg::on_pushButtonSetTarget_clicked()
+{
+	if (ui->pushButtonSetTarget->isChecked())
+	{
+		ui->pushButtonAddAgent->setChecked(false);
+		GLOBAL_RCSCHEDULER->isSetAgent = false;
+		GLOBAL_RCSCHEDULER->isSetTarget = true;
+	}
 }

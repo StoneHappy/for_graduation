@@ -907,6 +907,21 @@ namespace GU
 
 		return rnt;
 	}
+	void RCScheduler::setAgent(const glm::vec3& pos)
+	{
+		if (GLOBAL_RCSCHEDULER->isSetTarget || !GLOBAL_RCSCHEDULER->isSetAgent) return;
+
+		auto entity = GLOBAL_SCENE->createEntity();
+		auto&& transform = entity.getComponent<GU::TransformComponent>();
+		transform.Translation = GLOBAL_RCSCHEDULER->hitPos;
+
+		GLOBAL_RCSCHEDULER->agentParams = agentParams;
+
+		int idx = GLOBAL_RCSCHEDULER->addAgent(GLOBAL_RCSCHEDULER->hitPos, agentParams);
+		GLOBAL_RCSCHEDULER->setMoveTarget(idx, agentTargetPos);
+		auto&& agentcomponent = entity.addComponent<::GU::AgentComponent>(idx, agentTargetPos);
+		GLOBAL_RCSCHEDULER->calAgentPath(GLOBAL_RCSCHEDULER->hitPos, agentTargetPos);
+	}
 	void RCScheduler::setMoveTarget(int idx, const glm::vec3& pos)
 	{
 		const dtQueryFilter* filter = m_crowd->getFilter(0);
@@ -920,12 +935,6 @@ namespace GU
 				m_crowd->requestMoveTarget(idx, m_targetRef, m_targetPos);
 			}
 		}
-
-		auto entity = GLOBAL_SCENE->getEntityByUUID(targetModelId);
-
-		targetModelId = entity.getComponent<IDComponent>().ID;
-		auto&& transform = entity.getComponent<TransformComponent>();
-		transform.Translation = { pos };
 	}
 
 	void RCScheduler::crowUpdatTick(float delatTime)
@@ -938,7 +947,17 @@ namespace GU
 
 		m_crowd->update(delatTime, &m_agentDebug);
 	}
-	
+	void RCScheduler::setCurrentTarget(const glm::vec3& pos)
+	{
+		if (!GLOBAL_RCSCHEDULER->isSetTarget || GLOBAL_RCSCHEDULER->isSetAgent) return;
+
+		agentTargetPos = pos;
+		auto entity = GLOBAL_SCENE->getEntityByUUID(targetModelId);
+		targetModelId = entity.getComponent<IDComponent>().ID;
+		auto&& transform = entity.getComponent<TransformComponent>();
+		transform.Translation = { pos };
+	}
+
 	void RCScheduler::calAgentPath(const glm::vec3& p_start, const glm::vec3& p_end)
 	{
 		float m_spos[3] = { p_start.x, p_start.y, p_start.z };
