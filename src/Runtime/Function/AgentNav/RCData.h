@@ -60,4 +60,13 @@ namespace GU
 		VkBuffer								vertexBuffer;
 		VkDeviceMemory							vertexMemory;
 	};
+
+	struct RCStraightPath
+	{
+		RCStraightPath(float* path, int num);
+
+		std::vector<RCVertex> m_verts;
+		VkBuffer								vertexBuffer;
+		VkDeviceMemory							vertexMemory;
+	};
 }

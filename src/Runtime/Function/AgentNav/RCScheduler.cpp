@@ -762,6 +762,17 @@ namespace GU
 			vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
 			vkCmdDraw(cmdBuf, static_cast<uint32_t>(rcAgentPath[i]->m_verts.size()), 1, 0, 0);
 		}
+
+		for (size_t i = 0; i < rcStraightPath.size(); i++)
+		{
+			// draw contour
+			vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcContourPipeline);
+			vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->rcDescriptorSets[currentImage], 0, nullptr);
+			VkBuffer vertexBuffers[] = { rcStraightPath[i]->vertexBuffer };
+			VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
+			vkCmdDraw(cmdBuf, static_cast<uint32_t>(rcStraightPath[i]->m_verts.size()), 1, 0, 0);
+		}
 	}
 
 	bool RCScheduler::raycastMesh(float* src, float* dst, float& tmin)
@@ -1089,6 +1100,39 @@ namespace GU
 				m_nsmoothPath = 0;
 			}
 		}
+		int m_straightPathOptions = DT_STRAIGHTPATH_ALL_CROSSINGS;
+		float m_straightPath[MAX_POLYS * 3];
+		unsigned char m_straightPathFlags[MAX_POLYS];
+		dtPolyRef m_straightPathPolys[MAX_POLYS];
+		int m_nstraightPath;
+		if (m_startRef && m_endRef)
+		{
+#ifdef DUMP_REQS
+			printf("ps  %f %f %f  %f %f %f  0x%x 0x%x\n",
+				m_spos[0], m_spos[1], m_spos[2], m_epos[0], m_epos[1], m_epos[2],
+				m_filter.getIncludeFlags(), m_filter.getExcludeFlags());
+#endif
+			m_navQuery->findPath(m_startRef, m_endRef, m_spos, m_epos, &m_filter, m_polys, &m_npolys, MAX_POLYS);
+			m_nstraightPath = 0;
+			if (m_npolys)
+			{
+				// In case of partial path, make sure the end point is clamped to the last polygon.
+				float epos[3];
+				dtVcopy(epos, m_epos);
+				if (m_polys[m_npolys - 1] != m_endRef)
+					m_navQuery->closestPointOnPoly(m_polys[m_npolys - 1], m_epos, epos, 0);
+
+				m_navQuery->findStraightPath(m_spos, epos, m_polys, m_npolys,
+					m_straightPath, m_straightPathFlags,
+					m_straightPathPolys, &m_nstraightPath, MAX_POLYS, m_straightPathOptions);
+			}
+		}
+		else
+		{
+			m_npolys = 0;
+			m_nstraightPath = 0;
+		}
+
 		/*numbAgentPaths.push_back(m_nsmoothPath);
 
 		std::array<float, MAX_SMOOTH * 3> inputpath;
@@ -1099,6 +1143,9 @@ namespace GU
 		agentPaths.push_back(inputpath);*/
 		std::shared_ptr<RCAgentPath> inputPath = std::make_shared<RCAgentPath>(m_smoothPath, m_nsmoothPath);
 		rcAgentPath.push_back(inputPath);
+
+		std::shared_ptr<RCStraightPath> inputStraightPath = std::make_shared<RCStraightPath>(m_straightPath, m_npolys);
+		rcStraightPath.push_back(inputStraightPath);
 	}
 
 	void RCScheduler::createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh)

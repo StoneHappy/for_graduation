@@ -20,6 +20,7 @@ namespace GU
 	class RCContour;
 	class RCHeightfieldSolid;
 	class RCAgentPath;
+	class RCStraightPath;
 	class RCScheduler
 	{
 	public:
@@ -52,6 +53,7 @@ namespace GU
 		std::vector<std::array<float, MAX_SMOOTH*3> > agentPaths;
 
 		std::vector<std::shared_ptr<RCAgentPath>> rcAgentPath;
+		std::vector<std::shared_ptr<RCStraightPath>> rcStraightPath;
 
 		void calAgentPath(const glm::vec3& start, const glm::vec3& end);
 		/* crowd */
