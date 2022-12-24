@@ -66,6 +66,8 @@ namespace GU
 		RCHeightfieldSolid* m_heightFieldSolid = nullptr;
 		glm::vec3 hitPos;
 		RCParams m_rcparams;
+
+		uint64_t targetModelId;
 	private:
 		void createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh);
 	private:

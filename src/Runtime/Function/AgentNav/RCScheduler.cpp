@@ -16,6 +16,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <Scene/Scene.h>
+#include <Scene/Entity.h>
+#include <Scene/Component.h>
 namespace GU
 {
 	static bool isectSegAABB(const float* sp, const float* sq,
@@ -704,6 +707,13 @@ namespace GU
 		m_crowd->setObstacleAvoidanceParams(3, &params);
 
 
+		auto entity = GLOBAL_SCENE->createEntity();
+
+		targetModelId = entity.getComponent<IDComponent>().ID;
+		auto&& transform = entity.getComponent<TransformComponent>();
+		transform.Translation = {-9999.0, -9999.0, -9999.0 };
+		entity.addComponent<MaterialComponent>(GLOBAL_VULKAN_CONTEXT->targetModel, GLOBAL_VULKAN_CONTEXT->targetModelTexture);
+
 		return true;
 	}
 
@@ -910,6 +920,12 @@ namespace GU
 				m_crowd->requestMoveTarget(idx, m_targetRef, m_targetPos);
 			}
 		}
+
+		auto entity = GLOBAL_SCENE->getEntityByUUID(targetModelId);
+
+		targetModelId = entity.getComponent<IDComponent>().ID;
+		auto&& transform = entity.getComponent<TransformComponent>();
+		transform.Translation = { pos };
 	}
 
 	void RCScheduler::crowUpdatTick(float delatTime)

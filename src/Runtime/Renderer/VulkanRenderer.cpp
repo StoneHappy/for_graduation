@@ -63,6 +63,8 @@ namespace GU
 		GLOBAL_VULKAN_CONTEXT->agentDiffuseTexture = GLOBAL_ASSET->insertTexture("./assets/models/humantexture.png");
 		GLOBAL_VULKAN_CONTEXT->agentClothTexture = GLOBAL_ASSET->insertTexture("./assets/models/agentcloth.png");
 		GLOBAL_VULKAN_CONTEXT->agentSkeletalModel = GLOBAL_ASSET->insertSkeletalMesh("./assets/models/human.fbx");
+		GLOBAL_VULKAN_CONTEXT->targetModel = GLOBAL_ASSET->insertMesh("./assets/models/target.obj");
+		GLOBAL_VULKAN_CONTEXT->targetModelTexture = GLOBAL_ASSET->insertTexture("./assets/models/targetTexture.png");
 	}
 
 	void VulkanRenderer::initSwapChainResources()

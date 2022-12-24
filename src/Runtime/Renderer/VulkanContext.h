@@ -59,6 +59,8 @@ namespace GU
 		uint64_t								agentDiffuseTexture;
 		uint64_t								agentClothTexture;
 		uint64_t								agentSkeletalModel;
+		uint64_t								targetModel;
+		uint64_t								targetModelTexture;
 
 		std::shared_ptr<VulkanUniformBuffer<CameraUBO> > camearUBO;
 		std::shared_ptr<VulkanUniformBuffer<SkeletalModelUBO> > skeletalUBO;
