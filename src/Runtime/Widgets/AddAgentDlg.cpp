@@ -77,3 +77,9 @@ void AddAgentDlg::on_pushButtonSetTarget_clicked()
 		GLOBAL_RCSCHEDULER->isSetTarget = true;
 	}
 }
+
+void AddAgentDlg::closeEvent(QCloseEvent*)
+{
+	GLOBAL_RCSCHEDULER->isSetAgent = false;
+	GLOBAL_RCSCHEDULER->isSetTarget = false;
+}

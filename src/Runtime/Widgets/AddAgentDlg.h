@@ -20,6 +20,9 @@ private slots:
     void on_pushButtonSetTarget_clicked();
 private:
     Ui::AddAgentDlg *ui;
+
+protected:
+    void closeEvent(QCloseEvent*) override;
 };
 
 #endif // ADDAGENTDLG_H
