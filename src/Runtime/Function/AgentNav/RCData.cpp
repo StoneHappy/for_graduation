@@ -340,17 +340,31 @@ namespace GU
 	RCStraightPath::RCStraightPath(float* path, int num)
 	{
 		const unsigned int spathCol = duRGBA(0, 0, 0, 220);
-		for (int i = 0; i < num; ++i)
+
+		glm::u8vec4 tmpcolor;
+		memcpy(&tmpcolor, &spathCol, 4 * sizeof(uint8_t));
+		for (int i = 0; i < num - 1; ++i)
 		{
-			RCVertex vertex;
-			vertex.pos = { path[i * 3], path[i * 3 + 1] + 0.1f, path[i * 3 + 2] };
-			glm::u8vec4 tmpcolor;
-			memcpy(&tmpcolor, &spathCol, 4 * sizeof(uint8_t));
-			vertex.color.r = (float)tmpcolor.r;
-			vertex.color.g = (float)tmpcolor.g;
-			vertex.color.b = (float)tmpcolor.b;
-			vertex.color.a = (float)tmpcolor.a;
-			m_verts.emplace_back(std::move(vertex));
+			unsigned int col;
+			col = spathCol;
+			RCVertex vertex0;
+			vertex0.pos = { path[i * 3], path[i * 3 + 1] + 0.4f, path[i * 3 + 2] };
+			vertex0.color.r = (float)tmpcolor.r;
+			vertex0.color.g = (float)tmpcolor.g;
+			vertex0.color.b = (float)tmpcolor.b;
+			vertex0.color.a = (float)tmpcolor.a;
+
+			RCVertex vertex1;
+			vertex1.pos = { path[(i + 1) * 3], path[(i + 1) * 3 + 1] + 0.4f, path[(i + 1) * 3 + 2] };
+			vertex1.color.r = (float)tmpcolor.r;
+			vertex1.color.g = (float)tmpcolor.g;
+			vertex1.color.b = (float)tmpcolor.b;
+			vertex1.color.a = (float)tmpcolor.a;
+
+			m_verts.push_back(vertex0);
+			m_verts.push_back(vertex1);
+			/*dd.vertex(path[i * 3], path[i * 3 + 1] + 0.4f, path[i * 3 + 2], col);
+			dd.vertex(path[(i + 1) * 3], path[(i + 1) * 3 + 1] + 0.4f, path[(i + 1) * 3 + 2], col);*/
 		}
 
 		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, m_verts, vertexBuffer, vertexMemory);

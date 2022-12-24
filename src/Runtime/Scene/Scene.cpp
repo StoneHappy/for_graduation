@@ -144,7 +144,21 @@ namespace GU
 				agentubo.clothcolor = GLOBAL_RCSCHEDULER->getAgentColor(agentComponent.idx);
 				agentComponent.modelUBO->update(agentubo, currImageIndex);
 
-
+				auto agentaaa = GLOBAL_RCSCHEDULER->m_crowd->getAgent(agentComponent.idx);
+				int nclosenes = 0;
+				for (size_t i = 0; i < agentaaa->nneis; i++)
+				{
+					if (agentaaa->neis[i].dist < 5)
+					{
+						nclosenes++;
+					}
+				}
+				if (nclosenes > 3)
+				{
+					float zerovert[3] = { 0.0f, 0.0f, 0.0f };
+					GLOBAL_RCSCHEDULER->m_crowd->requestMoveVelocity(agentComponent.idx, zerovert);
+					transformComponent.Rotation.x = 90 * 3.14 / 180.0;
+				}
 				// sample path
 				if (GLOBAL_PLAY)
 				{
