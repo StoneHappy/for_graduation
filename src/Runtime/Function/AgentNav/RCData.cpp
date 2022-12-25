@@ -360,6 +360,7 @@ namespace GU
 			vertex1.color.g = (float)tmpcolor.g;
 			vertex1.color.b = (float)tmpcolor.b;
 			vertex1.color.a = (float)tmpcolor.a;
+			if (vertex1.pos.x < -999) continue;
 
 			m_verts.push_back(vertex0);
 			m_verts.push_back(vertex1);

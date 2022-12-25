@@ -6,6 +6,8 @@
 #include <Function/Animation/Animation.h>
 #include <Function/AgentNav/RCScheduler.h>
 #include <Function/AgentNav/RCData.h>
+#include <Global/CoreContext.h>
+#include <MainWindow.h>
 namespace GU
 {
 	template<typename... Component>
@@ -34,7 +36,10 @@ namespace GU
 	}
 	Entity Scene::createEntity(const std::string& name)
 	{
-		return createEntityWithUUID(UUID(), name);
+		UUID uuid;
+		auto rnt = createEntityWithUUID(uuid, name);
+		GLOBAL_MAINWINDOW->addEntity(uuid);
+		return rnt;
 	}
 
 	Entity Scene::createEntityWithUUID(UUID uuid, const std::string& name)

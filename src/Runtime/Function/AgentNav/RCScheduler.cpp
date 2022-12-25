@@ -19,6 +19,7 @@
 #include <Scene/Scene.h>
 #include <Scene/Entity.h>
 #include <Scene/Component.h>
+#include <QString>
 namespace GU
 {
 	static bool isectSegAABB(const float* sp, const float* sq,
@@ -707,7 +708,7 @@ namespace GU
 		m_crowd->setObstacleAvoidanceParams(3, &params);
 
 
-		auto entity = GLOBAL_SCENE->createEntity();
+		auto entity = GLOBAL_SCENE->createEntity("AgentTarget");
 
 		targetModelId = entity.getComponent<IDComponent>().ID;
 		auto&& transform = entity.getComponent<TransformComponent>();
@@ -908,18 +909,20 @@ namespace GU
 	}
 	void RCScheduler::setAgent(const glm::vec3& pos)
 	{
-		if (GLOBAL_RCSCHEDULER->isSetTarget || !GLOBAL_RCSCHEDULER->isSetAgent) return;
-
-		auto entity = GLOBAL_SCENE->createEntity();
-		auto&& transform = entity.getComponent<GU::TransformComponent>();
-		transform.Translation = GLOBAL_RCSCHEDULER->hitPos;
+		if (GLOBAL_RCSCHEDULER->isSetTarget || !GLOBAL_RCSCHEDULER->isSetAgent || agentTargetPos == glm::vec3{ -9999.0, -9999.0, -9999.0 }) return;
 
 		GLOBAL_RCSCHEDULER->agentParams = agentParams;
 
 		int idx = GLOBAL_RCSCHEDULER->addAgent(GLOBAL_RCSCHEDULER->hitPos, agentParams);
 		GLOBAL_RCSCHEDULER->setMoveTarget(idx, agentTargetPos);
-		auto&& agentcomponent = entity.addComponent<::GU::AgentComponent>(idx, agentTargetPos);
 		GLOBAL_RCSCHEDULER->calAgentPath(GLOBAL_RCSCHEDULER->hitPos, agentTargetPos);
+
+		QString name = QString("Agent%1").arg(idx);
+
+		auto entity = GLOBAL_SCENE->createEntity(name.toStdString());
+		auto&& transform = entity.getComponent<GU::TransformComponent>();
+		transform.Translation = GLOBAL_RCSCHEDULER->hitPos;
+		auto&& agentcomponent = entity.addComponent<::GU::AgentComponent>(idx, agentTargetPos);
 	}
 	void RCScheduler::setMoveTarget(int idx, const glm::vec3& pos)
 	{
@@ -959,6 +962,7 @@ namespace GU
 
 	void RCScheduler::calAgentPath(const glm::vec3& p_start, const glm::vec3& p_end)
 	{
+		if (p_end.x < -900) return;
 		float m_spos[3] = { p_start.x, p_start.y, p_start.z };
 		float m_epos[3] = { p_end.x, p_end.y, p_end.z };
 
@@ -1006,7 +1010,7 @@ namespace GU
 				dtVcopy(epos, m_epos);
 				if (m_polys[m_npolys - 1] != m_endRef)
 					m_navQuery->closestPointOnPoly(m_polys[m_npolys - 1], m_epos, epos, 0);
-
+				if (epos[1] < -900) return;
 				m_navQuery->findStraightPath(m_spos, epos, m_polys, m_npolys,
 					m_straightPath, m_straightPathFlags,
 					m_straightPathPolys, &m_nstraightPath, MAX_POLYS, m_straightPathOptions);

@@ -373,6 +373,20 @@ void MainWindow::progressEnd()
 	emit signal_progressTick(-1);
 }
 
+void MainWindow::addEntity(uint64_t uuid)
+{
+	auto entity = GLOBAL_SCENE->getEntityByUUID(uuid);
+	auto name = entity.getComponent<GU::TagComponent>().Tag;
+	QStandardItem* item = new QStandardItem(name.c_str());
+	item->setData(uuid);
+	m_entityMap[uuid] = item;
+	QIcon icon;
+	icon.addFile(":/images/entity.png");
+	item->setIcon(icon);
+	item->setEditable(false);
+	m_treeviewEntityRoot->appendRow(item);
+}
+
 
 void MainWindow::on_actShowViewDock_triggered()
 {
@@ -461,16 +475,6 @@ void MainWindow::on_actStop_triggered()
 void MainWindow::on_actCreateEntity_triggered()
 {
 	auto entity =  GLOBAL_SCENE->createEntity();
-	auto uuid = entity.getComponent<GU::IDComponent>().ID;
-	auto name = entity.getComponent<GU::TagComponent>().Tag;
-	QStandardItem* item = new QStandardItem(name.c_str());
-	item->setData((UINT64)uuid);
-	m_entityMap[uuid] = item;
-	QIcon icon;
-	icon.addFile(":/images/entity.png");
-	item->setIcon(icon);
-	item->setEditable(false);
-	m_treeviewEntityRoot->appendRow(item);
 }
 
 void MainWindow::on_actCopyEntity_triggered()

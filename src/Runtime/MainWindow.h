@@ -30,7 +30,7 @@ public:
     void progressBegin(int tasknum);
     void progressTick();
     void progressEnd();
-
+    void addEntity(uint64_t uuid);
 private:
     void createPopMenu();
     void createEntityView();
