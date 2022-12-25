@@ -86,6 +86,7 @@ namespace GU
 		auto uuid = entity.getUUID();
 		m_registry.destroy(entity);
 		m_entityMap.erase(uuid);
+		GLOBAL_MAINWINDOW->removeEntity(uuid);
 	}
 
 	void Scene::renderTick(VulkanContext& vulkanContext, VkCommandBuffer& cmdBuf, int currImageIndex, float deltaTime)
@@ -165,7 +166,7 @@ namespace GU
 					transformComponent.Rotation.x = 90 * 3.14 / 180.0;
 				}
 				// sample path
-				if (GLOBAL_PLAY)
+				if (GLOBAL_PLAY && velLength>0.1)
 				{
 					agentComponent.samplePath.push_back(transformComponent.Translation);
 				}
@@ -174,6 +175,8 @@ namespace GU
 					GLOBAL_RCSCHEDULER->m_crowd->removeAgent(agentComponent.idx);
 					std::shared_ptr<RCAgentSamplePath> path = std::make_shared<RCAgentSamplePath>(agentComponent.samplePath);
 					GLOBAL_RCSCHEDULER->rcAgentSamplePath.push_back(path);
+					auto uuid = m_registry.get<IDComponent>(entity).ID;
+					destroyEntity(getEntityByUUID(uuid));
 				}
 				for (auto mesh : testmeshnode->meshs)
 				{

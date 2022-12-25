@@ -31,6 +31,7 @@ public:
     void progressTick();
     void progressEnd();
     void addEntity(uint64_t uuid);
+    void removeEntity(uint64_t uuid);
 private:
     void createPopMenu();
     void createEntityView();

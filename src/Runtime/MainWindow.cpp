@@ -387,6 +387,18 @@ void MainWindow::addEntity(uint64_t uuid)
 	m_treeviewEntityRoot->appendRow(item);
 }
 
+void MainWindow::removeEntity(uint64_t uuid)
+{
+	for (size_t i = 0; i < m_treeviewEntityRoot->rowCount(); i++)
+	{
+		auto tvitem = m_treeviewEntityRoot->child(i);
+		if (tvitem->data().toULongLong() == uuid)
+		{
+			m_treeviewEntityRoot->removeRow(i);
+		}
+	}
+}
+
 
 void MainWindow::on_actShowViewDock_triggered()
 {
@@ -500,17 +512,6 @@ void MainWindow::on_actDeleteEntity_triggered()
 	auto item = m_entityTreeModel->itemFromIndex(m_entityTreeSelectModel->currentIndex());
 	uint64_t uuid = item->data().toULongLong();
 	GLOBAL_SCENE->destroyEntity(GLOBAL_SCENE->getEntityByUUID(uuid));
-	//item->index().row();
-	//m_treeviewEntityRoot->removeRow(item->index().row());
-	for (size_t i = 0; i < m_treeviewEntityRoot->rowCount(); i++)
-	{
-		auto tvitem = m_treeviewEntityRoot->child(i);
-		if (tvitem = item)
-		{
-			m_treeviewEntityRoot->removeRow(i);
-		}
-	}
-	
 }
 
 void MainWindow::on_actNavmeshParam_triggered()
