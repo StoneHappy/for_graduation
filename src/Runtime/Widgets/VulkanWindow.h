@@ -15,7 +15,7 @@ namespace GU
         void mouseMoveEvent(QMouseEvent*) override;
         void keyPressEvent(QKeyEvent*) override;
         void wheelEvent(QWheelEvent* event);
-
+        virtual void mouseDoubleClickEvent(QMouseEvent*) override;
         bool m_debug;
         VulkanRenderer* m_renderer;
         bool m_pressed = false;

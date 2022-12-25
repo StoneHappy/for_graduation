@@ -40,6 +40,8 @@
    <addaction name="actImportTexture"/>
    <addaction name="separator"/>
    <addaction name="actNavmeshParam"/>
+   <addaction name="actAgentParam"/>
+   <addaction name="actAgentTarget"/>
    <addaction name="actAddAgent"/>
   </widget>
   <widget class="QDockWidget" name="dockEntity">
@@ -334,10 +336,10 @@
      <normaloff>:/images/Params.png</normaloff>:/images/Params.png</iconset>
    </property>
    <property name="text">
-    <string>导航网格参数</string>
+    <string>生成导航网格</string>
    </property>
    <property name="toolTip">
-    <string>导航网格参数</string>
+    <string>生成导航网格</string>
    </property>
   </action>
   <action name="actAddModelToEntity">
@@ -389,12 +391,42 @@
    </property>
   </action>
   <action name="actAddAgent">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
      <normaloff>:/images/addAgent.png</normaloff>:/images/addAgent.png</iconset>
    </property>
    <property name="text">
     <string>添加智能体</string>
+   </property>
+  </action>
+  <action name="actAgentParam">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/agentParam.png</normaloff>:/images/agentParam.png</iconset>
+   </property>
+   <property name="text">
+    <string>修改智能体参数</string>
+   </property>
+   <property name="toolTip">
+    <string>修改智能体参数</string>
+   </property>
+  </action>
+  <action name="actAgentTarget">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/targetPos.png</normaloff>:/images/targetPos.png</iconset>
+   </property>
+   <property name="text">
+    <string>终点位置</string>
+   </property>
+   <property name="toolTip">
+    <string>终点位置</string>
    </property>
   </action>
  </widget>

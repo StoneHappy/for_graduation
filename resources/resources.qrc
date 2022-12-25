@@ -22,5 +22,7 @@
         <file>images/texture.png</file>
         <file>images/skeletalmesh.png</file>
         <file>images/addAgent.png</file>
+        <file>images/agentParam.png</file>
+        <file>images/targetPos.png</file>
     </qresource>
 </RCC>

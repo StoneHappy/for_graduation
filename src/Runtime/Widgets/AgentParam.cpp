@@ -1,5 +1,5 @@
-#include "AddAgentDlg.h"
-#include "ui_AddAgentDlg.h"
+#include "AgentParam.h"
+#include "ui_AgentParam.h"
 #include <Global/CoreContext.h>
 #include <MainWindow.h>
 #include <QStandardItemModel>
@@ -18,27 +18,14 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-AddAgentDlg::AddAgentDlg(QWidget *parent) :
+AgentParam::AgentParam(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AddAgentDlg)
+    ui(new Ui::AgentParam)
 {
     ui->setupUi(this);
 }
-void AddAgentDlg::on_pushButtonAddAgent_clicked()
+void AgentParam::on_pushButtonSet_clicked()
 {
-	if (ui->pushButtonAddAgent->isChecked())
-	{
-		ui->pushButtonSetTarget->setChecked(false);
-		GLOBAL_RCSCHEDULER->isSetAgent = true;
-		GLOBAL_RCSCHEDULER->isSetTarget = false;
-	}
-	if (!ui->pushButtonAddAgent->isChecked())
-	{
-		GLOBAL_RCSCHEDULER->isSetAgent = false;
-		GLOBAL_RCSCHEDULER->isSetTarget = false;
-		return;
-	}
-
 	dtCrowdAgentParams ap;
 	memset(&ap, 0, sizeof(ap));
 	ap.height = GLOBAL_RCSCHEDULER->m_rcparams.m_agentHeight;
@@ -62,24 +49,10 @@ void AddAgentDlg::on_pushButtonAddAgent_clicked()
 	ap.separationWeight = ui->separationWeight->value();
 
 	GLOBAL_RCSCHEDULER->agentParams = ap;
+	GLOBAL_RCSCHEDULER->isConsiderDie = ui->isConsiderDie->isChecked();
+	accept();
 }
-AddAgentDlg::~AddAgentDlg()
+AgentParam::~AgentParam()
 {
     delete ui;
-}
-
-void AddAgentDlg::on_pushButtonSetTarget_clicked()
-{
-	if (ui->pushButtonSetTarget->isChecked())
-	{
-		ui->pushButtonAddAgent->setChecked(false);
-		GLOBAL_RCSCHEDULER->isSetAgent = false;
-		GLOBAL_RCSCHEDULER->isSetTarget = true;
-	}
-}
-
-void AddAgentDlg::closeEvent(QCloseEvent*)
-{
-	GLOBAL_RCSCHEDULER->isSetAgent = false;
-	GLOBAL_RCSCHEDULER->isSetTarget = false;
 }

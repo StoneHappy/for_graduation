@@ -53,6 +53,7 @@ namespace GU
 		class dtCrowd* m_crowd;
 		dtCrowdAgentParams agentParams;
 		glm::vec3 agentTargetPos;
+		bool isConsiderDie = false;
 		// path
 		std::vector<int> numbAgentPaths;
 		std::vector<std::array<float, MAX_SMOOTH*3> > agentPaths;

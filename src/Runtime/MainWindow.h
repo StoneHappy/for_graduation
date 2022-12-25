@@ -16,7 +16,7 @@ class QStandardItemModel;
 class QItemSelectionModel;
 class QProgressBar;
 class NavMeshParamsDlg;
-class AddAgentDlg;
+class AgentParam;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -37,6 +37,8 @@ private:
     void craeteComponentView();
     void craeteResourceView();
     void clearAllComponentProperty();
+    void setProjectActionEnable();
+    void setProjectActionDisable();
 public:
     QStandardItemModel* m_entityTreeModel;
     QItemSelectionModel* m_entityTreeSelectModel;
@@ -68,7 +70,8 @@ private:
     int m_currentTaskNo = 0;
 
     NavMeshParamsDlg* navmeshdlg;
-    AddAgentDlg* addAgentdlg;
+    AgentParam* agentParam;
+
 Q_SIGNALS:
     void signal_importResource2Table(QString, uint64_t, int type);
     void signal_progressTick(int max);
@@ -92,6 +95,8 @@ private slots:
     void on_actAddSkeletalModelToEntity_triggered();
     void on_actImportTexture_triggered();
     void on_actImportSkeletalMesh_triggered();
+    void on_actAgentParam_triggered();
+    void on_actAgentTarget_triggered();
     void on_actAddAgent_triggered();
 
     void slot_tagPropertyChanged();

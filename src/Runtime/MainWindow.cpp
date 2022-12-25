@@ -33,7 +33,7 @@
 #include <Function/AgentNav/RCScheduler.h>
 #include <Function/Animation/Animation.h>
 #include <QMessageBox>
-#include <Widgets/AddAgentDlg.h>
+#include <Widgets/AgentParam.h>
 static QPointer<QPlainTextEdit> s_messageLogWidget;
 static QPointer<QFile> s_logFile;
 
@@ -137,11 +137,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	craeteResourceView();
 	navmeshdlg = new NavMeshParamsDlg(this, m_meshTableModel, m_meshTableSelectModel);
 
-	ui->actImportModel->setEnabled(false);
-	ui->actImportSkeletalMesh->setEnabled(false);
-	ui->actSaveProject->setEnabled(false);
-	ui->actNavmeshParam->setEnabled(false);
-	ui->actImportTexture->setEnabled(false);
+	setProjectActionDisable();
 
 	// statusbar
 	m_statusInfo = new QLabel(this);
@@ -152,8 +148,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	//m_progressBar->hide();
 	ui->statusbar->addWidget(m_statusInfo);
 	ui->statusbar->addWidget(m_progressBar);
-	ui->actAddAgent->setCheckable(false);
 	//m_progressBar->setValue(50);
+	agentParam = new AgentParam(this);
+	ui->actAddAgent->setEnabled(false);
+	ui->actAgentTarget->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -327,6 +325,24 @@ void MainWindow::clearAllComponentProperty()
 	ui->componentTreeWidget->remove(skeletalCurrentAnimationProperty);
 }
 
+#define AllProjectEnableui(isenable) ui->actImportModel->setEnabled(isenable);\
+ui->actImportSkeletalMesh->setEnabled(isenable);\
+ui->actSaveProject->setEnabled(isenable);\
+ui->actNavmeshParam->setEnabled(isenable);\
+ui->actImportTexture->setEnabled(isenable);\
+ui->actNavmeshParam->setEnabled(isenable);\
+ui->actAgentParam->setEnabled(isenable);\
+
+void MainWindow::setProjectActionEnable()
+{
+	AllProjectEnableui(true)
+}
+
+void MainWindow::setProjectActionDisable()
+{
+	AllProjectEnableui(false)
+}
+
 void MainWindow::importResource2Table(QString filename, uint64_t uuid, int type)
 {
 	emit signal_importResource2Table(filename, uuid, type);
@@ -383,11 +399,7 @@ void MainWindow::on_actNewProject_triggered()
 	{
 		std::string projectfile = newProjectDlg->m_projectPath.toStdString();
 		GLOBAL_SAVE_PROJECT(projectfile);
-		ui->actImportModel->setEnabled(true);
-		ui->actImportSkeletalMesh->setEnabled(true);
-		ui->actSaveProject->setEnabled(true);
-		ui->actNavmeshParam->setEnabled(true);
-		ui->actImportTexture->setEnabled(true);
+		setProjectActionEnable();
 	}
 }
 void MainWindow::on_actOpenProject_triggered()
@@ -397,11 +409,7 @@ void MainWindow::on_actOpenProject_triggered()
 
 	std::string filename = qfilename.toStdString();
 	GLOBAL_OPEN_PROJECT(filename);
-	ui->actImportModel->setEnabled(true);
-	ui->actImportSkeletalMesh->setEnabled(true);
-	ui->actSaveProject->setEnabled(true);
-	ui->actNavmeshParam->setEnabled(true);
-	ui->actImportTexture->setEnabled(true);
+	setProjectActionEnable();
 }
 void MainWindow::on_actSaveProject_triggered()
 {
@@ -619,11 +627,31 @@ void MainWindow::on_actImportSkeletalMesh_triggered()
 	}
 }
 
+void MainWindow::on_actAgentParam_triggered()
+{
+	auto rnt = agentParam->exec();
+
+	if (rnt == QDialog::Accepted)
+	{
+		ui->actAddAgent->setEnabled(true);
+		ui->actAgentTarget->setEnabled(true);
+	}
+}
+
+void MainWindow::on_actAgentTarget_triggered()
+{
+	bool isChecked = ui->actAgentTarget->isChecked();
+	GLOBAL_RCSCHEDULER->isSetTarget = isChecked;
+	GLOBAL_RCSCHEDULER->isSetAgent = false;
+	ui->actAddAgent->setChecked(false);
+}
+
 void MainWindow::on_actAddAgent_triggered()
 {
-	addAgentdlg = new AddAgentDlg(this);
-
-	addAgentdlg->show();
+	bool isChecked = ui->actAddAgent->isChecked();
+	GLOBAL_RCSCHEDULER->isSetAgent = isChecked;
+	GLOBAL_RCSCHEDULER->isSetTarget = false;
+	ui->actAgentTarget->setChecked(false);
 }
 
 void MainWindow::slot_treeviewEntity_customcontextmenu(const QPoint& point)
