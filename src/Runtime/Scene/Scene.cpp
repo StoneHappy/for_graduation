@@ -177,6 +177,7 @@ namespace GU
 					GLOBAL_RCSCHEDULER->rcAgentSamplePath.push_back(path);
 					auto uuid = m_registry.get<IDComponent>(entity).ID;
 					destroyEntity(getEntityByUUID(uuid));
+					continue;
 				}
 				for (auto mesh : testmeshnode->meshs)
 				{
