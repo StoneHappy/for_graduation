@@ -909,13 +909,13 @@ namespace GU
 	}
 	void RCScheduler::setAgent(const glm::vec3& pos)
 	{
-		if (GLOBAL_RCSCHEDULER->isSetTarget || !GLOBAL_RCSCHEDULER->isSetAgent || agentTargetPos == glm::vec3{ -9999.0, -9999.0, -9999.0 }) return;
+		//if (GLOBAL_RCSCHEDULER->isSetTarget || !GLOBAL_RCSCHEDULER->isSetAgent || agentTargetPos == glm::vec3{ -9999.0, -9999.0, -9999.0 }) return;
 
 		GLOBAL_RCSCHEDULER->agentParams = agentParams;
 
-		int idx = GLOBAL_RCSCHEDULER->addAgent(GLOBAL_RCSCHEDULER->hitPos, agentParams);
+		int idx = GLOBAL_RCSCHEDULER->addAgent(pos, agentParams);
 		GLOBAL_RCSCHEDULER->setMoveTarget(idx, agentTargetPos);
-		GLOBAL_RCSCHEDULER->calAgentPath(GLOBAL_RCSCHEDULER->hitPos, agentTargetPos);
+		//GLOBAL_RCSCHEDULER->calAgentPath(pos, agentTargetPos);
 
 		QString name = QString("Agent%1").arg(idx);
 
@@ -951,13 +951,13 @@ namespace GU
 	}
 	void RCScheduler::setCurrentTarget(const glm::vec3& pos)
 	{
-		if (!GLOBAL_RCSCHEDULER->isSetTarget || GLOBAL_RCSCHEDULER->isSetAgent) return;
+		//if (!GLOBAL_RCSCHEDULER->isSetTarget || GLOBAL_RCSCHEDULER->isSetAgent) return;
 
 		agentTargetPos = pos;
-		auto entity = GLOBAL_SCENE->getEntityByUUID(targetModelId);
+		/*auto entity = GLOBAL_SCENE->getEntityByUUID(targetModelId);
 		targetModelId = entity.getComponent<IDComponent>().ID;
 		auto&& transform = entity.getComponent<TransformComponent>();
-		transform.Translation = { pos };
+		transform.Translation = { pos };*/
 	}
 
 	void RCScheduler::calAgentPath(const glm::vec3& p_start, const glm::vec3& p_end)

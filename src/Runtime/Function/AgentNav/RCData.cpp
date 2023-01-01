@@ -372,7 +372,7 @@ namespace GU
 	}
 	RCAgentSamplePath::RCAgentSamplePath(const std::vector<glm::vec3>& paths)
 	{
-		const unsigned int spathCol = duRGBA(220, 0, 0, 220);
+		const unsigned int spathCol = duRGBA(0, 0, 220, 220);
 		for (int i = 0; i < paths.size(); ++i)
 		{
 			RCVertex vertex;

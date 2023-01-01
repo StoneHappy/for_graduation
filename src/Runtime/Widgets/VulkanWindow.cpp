@@ -37,6 +37,7 @@ namespace GU
         qDebug() << QString("worldPosStart:%1, %2, %3").arg(worldPosStart.x).arg(worldPosStart.y).arg(worldPosStart.z);
         qDebug() << QString("worldPosEnd:%1, %2, %3").arg(worldPosEnd.x).arg(worldPosEnd.y).arg(worldPosEnd.z);
         qDebug() << QString("hitpoint:%1, %2, %3").arg(hitpoint.x).arg(hitpoint.y).arg(hitpoint.z);*/
+        qDebug() << QString("hitpoint:%1, %2, %3").arg(hitpoint.x).arg(hitpoint.y).arg(hitpoint.z);
     }
 
     void VulkanWindow::mouseReleaseEvent(QMouseEvent*)
@@ -74,7 +75,16 @@ namespace GU
     }
     void VulkanWindow::mouseDoubleClickEvent(QMouseEvent*)
     {
-        GLOBAL_RCSCHEDULER->setAgent(GLOBAL_RCSCHEDULER->hitPos);
-        GLOBAL_RCSCHEDULER->setCurrentTarget(GLOBAL_RCSCHEDULER->hitPos);
+        float r = 10;
+        for (size_t i = 0; i < 20; i++)
+        {
+            float theta = 3.14 * 2 /20 * i;
+            glm::vec3 startPosition = glm::vec3(r * cos(theta), 0, r * sin(theta));
+            glm::vec3 targetPosition = glm::vec3(r * cos(theta + 3.14), 0, r * sin(theta + 3.14));
+            GLOBAL_RCSCHEDULER->setCurrentTarget(GLOBAL_RCSCHEDULER->hitPos + targetPosition);
+            GLOBAL_RCSCHEDULER->setAgent(GLOBAL_RCSCHEDULER->hitPos + startPosition);
+        }
+        /*GLOBAL_RCSCHEDULER->setAgent(GLOBAL_RCSCHEDULER->hitPos);
+        GLOBAL_RCSCHEDULER->setCurrentTarget(GLOBAL_RCSCHEDULER->hitPos);*/
     }
 }

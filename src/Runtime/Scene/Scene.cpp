@@ -98,6 +98,8 @@ namespace GU
 			for (auto entity : view)
 			{
 				auto&& [agentComponent, transformComponent] = view.get<AgentComponent, TransformComponent>(entity);
+				glm::vec3 randTrans = (int)GLOBAL_TIMEINTEGRAL % (int)(100 * rand() / (RAND_MAX + 1) + 1) ==0 && GLOBAL_TIMEINTEGRAL ? glm::vec3(0.1 * rand() / (RAND_MAX + 1), 0, 0.1 * rand() / (RAND_MAX + 1)) : glm::vec3(0);
+				//transformComponent.Translation = GLOBAL_RCSCHEDULER->getAgentPosWithId(agentComponent.idx) + randTrans;
 				transformComponent.Translation = GLOBAL_RCSCHEDULER->getAgentPosWithId(agentComponent.idx);
 				//GLOBAL_RCSCHEDULER->getAgentRotationWithId(agentComponent.idx, transformComponent.Rotation);
 				
@@ -150,7 +152,7 @@ namespace GU
 				agentubo.clothcolor = GLOBAL_RCSCHEDULER->getAgentColor(agentComponent.idx);
 				agentComponent.modelUBO->update(agentubo, currImageIndex);
 
-				auto agentaaa = GLOBAL_RCSCHEDULER->m_crowd->getAgent(agentComponent.idx);
+				/*auto agentaaa = GLOBAL_RCSCHEDULER->m_crowd->getAgent(agentComponent.idx);
 				int nclosenes = 0;
 				for (size_t i = 0; i < agentaaa->nneis; i++)
 				{
@@ -164,7 +166,7 @@ namespace GU
 					float zerovert[3] = { 0.0f, 0.0f, 0.0f };
 					GLOBAL_RCSCHEDULER->m_crowd->requestMoveVelocity(agentComponent.idx, zerovert);
 					transformComponent.Rotation.x = 90 * 3.14 / 180.0;
-				}
+				}*/
 				// sample path
 				if (GLOBAL_PLAY && velLength>0.1)
 				{
@@ -172,12 +174,12 @@ namespace GU
 				}
 				if (glm::length( agentComponent.targetPos - transformComponent.Translation ) < 1.5)
 				{
-					GLOBAL_RCSCHEDULER->m_crowd->removeAgent(agentComponent.idx);
+					//GLOBAL_RCSCHEDULER->m_crowd->removeAgent(agentComponent.idx);
 					std::shared_ptr<RCAgentSamplePath> path = std::make_shared<RCAgentSamplePath>(agentComponent.samplePath);
 					GLOBAL_RCSCHEDULER->rcAgentSamplePath.push_back(path);
-					auto uuid = m_registry.get<IDComponent>(entity).ID;
-					destroyEntity(getEntityByUUID(uuid));
-					continue;
+					//auto uuid = m_registry.get<IDComponent>(entity).ID;
+					//destroyEntity(getEntityByUUID(uuid));
+					//continue;
 				}
 				for (auto mesh : testmeshnode->meshs)
 				{
