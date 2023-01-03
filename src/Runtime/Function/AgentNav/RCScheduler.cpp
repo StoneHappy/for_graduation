@@ -1010,7 +1010,7 @@ namespace GU
 				dtVcopy(epos, m_epos);
 				if (m_polys[m_npolys - 1] != m_endRef)
 					m_navQuery->closestPointOnPoly(m_polys[m_npolys - 1], m_epos, epos, 0);
-				if (epos[1] < -900) return;
+				if (epos[1] < -900 || epos[1] > 900) return;
 				m_navQuery->findStraightPath(m_spos, epos, m_polys, m_npolys,
 					m_straightPath, m_straightPathFlags,
 					m_straightPathPolys, &m_nstraightPath, MAX_POLYS, m_straightPathOptions);

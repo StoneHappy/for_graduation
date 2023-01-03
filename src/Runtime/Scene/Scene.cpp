@@ -174,7 +174,7 @@ namespace GU
 				{
 					GLOBAL_RCSCHEDULER->m_crowd->removeAgent(agentComponent.idx);
 					std::shared_ptr<RCAgentSamplePath> path = std::make_shared<RCAgentSamplePath>(agentComponent.samplePath);
-					GLOBAL_RCSCHEDULER->rcAgentSamplePath.push_back(path);
+					//GLOBAL_RCSCHEDULER->rcAgentSamplePath.push_back(path);
 					auto uuid = m_registry.get<IDComponent>(entity).ID;
 					destroyEntity(getEntityByUUID(uuid));
 					continue;
