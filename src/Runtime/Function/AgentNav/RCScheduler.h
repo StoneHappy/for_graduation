@@ -22,6 +22,7 @@ namespace GU
 	class RCAgentPath;
 	class RCStraightPath;
 	class RCAgentSamplePath;
+	class RCTContours;
 	class RCScheduler
 	{
 	public:
@@ -70,9 +71,11 @@ namespace GU
 		bool isRenderHeightField = true;
 		bool isRenderContour = true;
 		bool isRenderDetailMesh = true;
+		bool isRenderTContour = true;
 
 		RCMesh* m_polymesh = nullptr;
 		RCContour* m_polyContourMesh = nullptr;
+		RCTContours* m_tContours = nullptr;
 		RCHeightfieldSolid* m_heightFieldSolid = nullptr;
 		glm::vec3 hitPos;
 		RCParams m_rcparams;

@@ -20,6 +20,7 @@
 #include <Scene/Entity.h>
 #include <Scene/Component.h>
 #include <QString>
+#include <ctime>
 namespace GU
 {
 	static bool isectSegAABB(const float* sp, const float* sq,
@@ -312,6 +313,7 @@ namespace GU
 		//
 
 		// Init build configuration from GUI
+		auto timestart = clock();
 		memset(&m_cfg, 0, sizeof(m_cfg));
 		m_cfg.cs = rcparams.m_cellSize;
 		m_cfg.ch = rcparams.m_cellHeight;
@@ -339,7 +341,6 @@ namespace GU
 
 		// Start the build process.	
 		m_ctx->startTimer(RC_TIMER_TOTAL);
-
 		m_ctx->log(RC_LOG_PROGRESS, "Building navigation:");
 		m_ctx->log(RC_LOG_PROGRESS, " - %d x %d cells", m_cfg.width, m_cfg.height);
 		m_ctx->log(RC_LOG_PROGRESS, " - %.1fK verts, %.1fK tris", nverts / 1000.0f, ntris / 1000.0f);
@@ -349,6 +350,7 @@ namespace GU
 		// Step 2. Rasterize input polygon soup.
 		//
 		// Allocate voxel heightfield where we rasterize our input data to.
+		timestart = clock();
 		m_solid = rcAllocHeightfield();
 		if (!m_solid)
 		{
@@ -388,7 +390,12 @@ namespace GU
 			delete[] m_triareas;
 			m_triareas = 0;
 		}
+
+		auto timeend = clock();
 		GLOBAL_MAINWINDOW->progressTick();
+
+		auto timedelta = (timeend - timestart);
+		qDebug() << "Build nav mesh step2: " << timedelta << "ms";
 		//
 		// Step 3. Filter walkables surfaces.
 		//
@@ -396,6 +403,7 @@ namespace GU
 		// Once all geoemtry is rasterized, we do initial pass of filtering to
 		// remove unwanted overhangs caused by the conservative rasterization
 		// as well as filter spans where the character cannot possibly stand.
+		timestart = clock();
 		if (rcparams.m_filterLowHangingObstacles)
 			rcFilterLowHangingWalkableObstacles(m_ctx, m_cfg.walkableClimb, *m_solid);
 		if (rcparams.m_filterLedgeSpans)
@@ -404,6 +412,9 @@ namespace GU
 			rcFilterWalkableLowHeightSpans(m_ctx, m_cfg.walkableHeight, *m_solid);
 
 		GLOBAL_MAINWINDOW->progressTick();
+		timeend = clock();
+		timedelta = (timeend - timestart);
+		qDebug() << "Build nav mesh step3: " << timedelta << "ms";
 		//
 		// Step 4. Partition walkable surface to simple regions.
 		//
@@ -411,6 +422,7 @@ namespace GU
 		// Compact the heightfield so that it is faster to handle from now on.
 		// This will result more cache coherent data as well as the neighbours
 		// between walkable cells will be calculated.
+		timestart = clock();
 		m_chf = rcAllocCompactHeightfield();
 		if (!m_chf)
 		{
@@ -502,11 +514,15 @@ namespace GU
 		}
 
 		GLOBAL_MAINWINDOW->progressTick();
+		timeend = clock();
+		timedelta = (timeend - timestart);
+		qDebug() << "Build nav mesh step4: " << timedelta << "ms";
 		//
 		// Step 5. Trace and simplify region contours.
 		//
 
 		// Create contours.
+		timestart = clock();
 		m_cset = rcAllocContourSet();
 		if (!m_cset)
 		{
@@ -519,6 +535,10 @@ namespace GU
 			return false;
 		}
 		GLOBAL_MAINWINDOW->progressTick();
+		m_tContours = new RCTContours(*m_cset);
+		timeend = clock();
+		timedelta = (timeend - timestart);
+		qDebug() << "Build nav mesh step5: " << timedelta << "ms";
 		//
 		// Step 6. Build polygons mesh from contours.
 		//
@@ -537,10 +557,13 @@ namespace GU
 		}
 
 		GLOBAL_MAINWINDOW->progressTick();
+		timeend = clock();
+		timedelta = (timeend - timestart);
+		qDebug() << "Build nav mesh step6: " << timedelta << "ms";
 		//
 		// Step 7. Create detail mesh which allows to access approximate height on each polygon.
 		//
-
+		timestart = clock();
 		m_dmesh = rcAllocPolyMeshDetail();
 		if (!m_dmesh)
 		{
@@ -563,7 +586,9 @@ namespace GU
 			rcFreeContourSet(m_cset);
 			m_cset = 0;
 		}
-
+		timeend = clock();
+		timedelta = (timeend - timestart);
+		qDebug() << "Build nav mesh step7: " << timedelta << "ms";
 		// At this point the navigation mesh data is ready, you can access it from m_pmesh.
 		// See duDebugDrawPolyMesh or dtCreateNavMeshData as examples how to access the data.
 
@@ -760,6 +785,16 @@ namespace GU
 			VkDeviceSize econtourOffsets[] = { 0 };
 			vkCmdBindVertexBuffers(cmdBuf, 0, 1, econtourVertexBuffers, econtourOffsets);
 			vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_polyContourMesh->externalVerts.size()), 1, 0, 0);
+		}
+		if (isRenderTContour)
+		{
+			// draw contour
+			vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcContourPipeline);
+			vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->rcDescriptorSets[currentImage], 0, nullptr);
+			VkBuffer vertexBuffers[] = { m_tContours->vertexBuffer };
+			VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(cmdBuf, 0, 1, vertexBuffers, offsets);
+			vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_tContours->m_verts.size()), 1, 0, 0);
 		}
 		
 		for (size_t i = 0; i < rcStraightPath.size(); i++)

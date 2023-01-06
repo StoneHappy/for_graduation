@@ -18,6 +18,7 @@ NavMeshParamsDlg::NavMeshParamsDlg(QWidget *parent, QStandardItemModel* p_meshTa
 	connect(ui->isRenderHF, SIGNAL(stateChanged(int)), this, SLOT(on_IsRenderHFStateChanged(int)));
 	connect(ui->isRenderCC, SIGNAL(stateChanged(int)), this, SLOT(on_IsRenderCTStateChanged(int)));
 	connect(ui->isRenderDM, SIGNAL(stateChanged(int)), this, SLOT(on_IsRenderDMStateChanged(int)));
+	connect(ui->isRenderTContour, SIGNAL(stateChanged(int)), this, SLOT(on_IsRenderTContourChanged(int)));
 }
 
 void NavMeshParamsDlg::on_pushButtonOK_clicked()
@@ -113,5 +114,17 @@ void NavMeshParamsDlg::on_IsRenderDMStateChanged(int state)
 	else
 	{
 		GLOBAL_RCSCHEDULER->isRenderDetailMesh = false;
+	}
+}
+
+void NavMeshParamsDlg::on_IsRenderTContourChanged(int state)
+{
+	if (state == Qt::Checked)
+	{
+		GLOBAL_RCSCHEDULER->isRenderTContour = true;
+	}
+	else
+	{
+		GLOBAL_RCSCHEDULER->isRenderTContour = false;
 	}
 }

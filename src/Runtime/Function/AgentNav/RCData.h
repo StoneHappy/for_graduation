@@ -61,6 +61,15 @@ namespace GU
 		VkDeviceMemory							vertexMemory;
 	};
 
+	struct RCTContours
+	{
+		RCTContours(const rcContourSet& cset);
+
+		std::vector<RCVertex> m_verts;
+		VkBuffer								vertexBuffer;
+		VkDeviceMemory							vertexMemory;
+	};
+
 	struct RCStraightPath
 	{
 		RCStraightPath(float* path, int num);

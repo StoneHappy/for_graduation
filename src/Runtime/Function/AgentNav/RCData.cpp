@@ -343,7 +343,7 @@ namespace GU
 
 		glm::u8vec4 tmpcolor;
 		memcpy(&tmpcolor, &spathCol, 4 * sizeof(uint8_t));
-		for (int i = 0; i < num - 1; ++i)
+		for (int i = 0; i < num - 2; ++i)
 		{
 			unsigned int col;
 			col = spathCol;
@@ -384,6 +384,63 @@ namespace GU
 			vertex.color.b = (float)tmpcolor.b;
 			vertex.color.a = (float)tmpcolor.a;
 			m_verts.emplace_back(std::move(vertex));
+		}
+
+		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, m_verts, vertexBuffer, vertexMemory);
+	}
+
+	glm::vec4 Conver2GLMColor(const unsigned int spathCol)
+	{
+		glm::u8vec4 tmpcolor;
+		glm::vec4 color;
+		memcpy(&tmpcolor, &spathCol, 4 * sizeof(uint8_t));
+		color.r = (float)tmpcolor.r;
+		color.g = (float)tmpcolor.g;
+		color.b = (float)tmpcolor.b;
+		color.a = (float)tmpcolor.a;
+		return color;
+	}
+	RCTContours::RCTContours(const rcContourSet& cset)
+	{
+		const float* orig = cset.bmin;
+		const float cs = cset.cs;
+		const float ch = cset.ch;
+
+		const unsigned char a = 255;
+
+		for (int i = 0; i < cset.nconts; ++i)
+		{
+			const rcContour& c = cset.conts[i];
+			unsigned int color = duIntToCol(c.reg, a);
+			for (int j = 0; j < c.nrverts; ++j)
+			{
+				const int* v = &c.rverts[j * 4];
+				float fx = orig[0] + v[0] * cs;
+				float fy = orig[1] + (v[1] + 1 + (i & 1)) * ch;
+				float fz = orig[2] + v[2] * cs;
+				RCVertex vertex; 
+				vertex.pos = { fx, fy, fz };
+				vertex.color = Conver2GLMColor(color);
+				//dd->vertex(fx, fy, fz, color);
+				m_verts.push_back(vertex);
+				if (j > 0)
+				{
+					RCVertex vertex1;
+					vertex1.pos = { fx, fy, fz };
+					vertex1.color = Conver2GLMColor(color);
+					m_verts.push_back(vertex1);
+				}
+			}
+			// Loop last segment.
+			const int* v = &c.rverts[0];
+			float fx = orig[0] + v[0] * cs;
+			float fy = orig[1] + (v[1] + 1 + (i & 1)) * ch;
+			float fz = orig[2] + v[2] * cs;
+			RCVertex vertex;
+			vertex.pos = { fx, fy, fz };
+			vertex.color = Conver2GLMColor(color);
+			//dd->vertex(fx, fy, fz, color);
+			m_verts.push_back(vertex);
 		}
 
 		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, m_verts, vertexBuffer, vertexMemory);
