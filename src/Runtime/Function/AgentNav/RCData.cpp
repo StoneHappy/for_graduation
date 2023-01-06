@@ -445,4 +445,77 @@ namespace GU
 
 		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, m_verts, vertexBuffer, vertexMemory);
 	}
+
+	RCVertex getRCvertexFromData(float fx, float fy, float fz, unsigned intcolor)
+	{
+		RCVertex vertex;
+		vertex.pos = { fx, fy, fz };
+		vertex.color = Conver2GLMColor(intcolor);
+		return vertex;
+	}
+	RCTCompactField::RCTCompactField(const rcCompactHeightfield& chf)
+	{
+		const float cs = chf.cs;
+		const float ch = chf.ch;
+		static const unsigned char inds[2 * 3] =
+		{
+			0, 1, 2, 3, 0, 2,
+		};
+		/*for (int y = 0; y < chf.height; ++y)
+		{
+			for (int x = 0; x < chf.width; ++x)
+			{
+				const float fx = chf.bmin[0] + x * cs;
+				const float fz = chf.bmin[2] + y * cs;
+				const rcCompactCell& c = chf.cells[x + y * chf.width];
+
+				for (unsigned i = c.index, ni = c.index + c.count; i < ni; ++i)
+				{
+					const rcCompactSpan& s = chf.spans[i];
+
+					const unsigned char area = chf.areas[i];
+					unsigned int color = duRGBA(0, 0, 0, 64);;
+					if (area == RC_WALKABLE_AREA)
+						color = duRGBA(0, 192, 255, 64);
+
+					const float fy = chf.bmin[1] + (s.y + 1) * ch;
+
+					
+				}
+			}
+		}*/
+
+		for (int y = 0; y < chf.height; ++y)
+		{
+			for (int x = 0; x < chf.width; ++x)
+			{
+				const float fx = chf.bmin[0] + x * cs;
+				const float fz = chf.bmin[2] + y * cs;
+				const rcCompactCell& c = chf.cells[x + y * chf.width];
+
+				for (unsigned i = c.index, ni = c.index + c.count; i < ni; ++i)
+				{
+					const rcCompactSpan& s = chf.spans[i];
+					const float fy = chf.bmin[1] + (s.y) * ch;
+					unsigned int color;
+					if (s.reg)
+						color = duIntToCol(s.reg, 192);
+					else
+						color = duRGBA(0, 0, 0, 64);
+
+					RCVertex vs[4];
+					vs[0] = getRCvertexFromData(fx, fy, fz, color);
+					vs[1] = getRCvertexFromData(fx, fy, fz + cs, color);
+					vs[2] = getRCvertexFromData(fx + cs, fy, fz + cs, color);
+					vs[3] = getRCvertexFromData(fx + cs, fy, fz, color);
+
+					for (size_t in = 0; in < 6; in++)
+					{
+						m_verts.push_back(vs[inds[in]]);
+					}
+				}
+			}
+		}
+		createVertexBuffer(*GLOBAL_VULKAN_CONTEXT, m_verts, vertexBuffer, vertexMemory);
+	}
 }

@@ -25,6 +25,7 @@ private slots:
     void on_IsRenderCTStateChanged(int state);
     void on_IsRenderDMStateChanged(int state);
     void on_IsRenderTContourChanged(int state);
+    void on_IsRenderTCompactFieldChanged(int state);
 private:
     Ui::NavMeshParamsDlg *ui;
     QStandardItemModel* m_meshTableModel;

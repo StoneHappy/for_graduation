@@ -70,6 +70,15 @@ namespace GU
 		VkDeviceMemory							vertexMemory;
 	};
 
+	struct RCTCompactField
+	{
+		RCTCompactField(const rcCompactHeightfield& chf);
+
+		std::vector<RCVertex> m_verts;
+		VkBuffer								vertexBuffer;
+		VkDeviceMemory							vertexMemory;
+	};
+
 	struct RCStraightPath
 	{
 		RCStraightPath(float* path, int num);

@@ -437,20 +437,20 @@
       <string>渲染中间结果</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_5">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="isRenderHF">
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="isRenderCC">
         <property name="text">
-         <string>渲染高度域</string>
+         <string>渲染外轮廓</string>
         </property>
         <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="isRenderCC">
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="isRenderTContour">
         <property name="text">
-         <string>渲染外轮廓</string>
+         <string>渲染凸多边形</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -467,10 +467,20 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="isRenderTContour">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="isRenderHF">
         <property name="text">
-         <string>渲染凸多边形</string>
+         <string>渲染高度域</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="isRenderTCompactField">
+        <property name="text">
+         <string>紧凑连通域</string>
         </property>
         <property name="checked">
          <bool>true</bool>

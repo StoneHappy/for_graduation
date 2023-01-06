@@ -517,6 +517,7 @@ namespace GU
 		timeend = clock();
 		timedelta = (timeend - timestart);
 		qDebug() << "Build nav mesh step4: " << timedelta << "ms";
+		m_TCompatField = new RCTCompactField(*m_chf);
 		//
 		// Step 5. Trace and simplify region contours.
 		//
@@ -769,6 +770,16 @@ namespace GU
 			VkDeviceSize solidOffsets[] = { 0 };
 			vkCmdBindVertexBuffers(cmdBuf, 0, 1, solidVertexBuffers, solidOffsets);
 			vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_heightFieldSolid->m_verts.size()), 1, 0, 0);
+		}
+		if (isRenderTCompactField)
+		{
+			vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipelineLayout, 0, 1, &GLOBAL_VULKAN_CONTEXT->rcDescriptorSets[currentImage], 0, nullptr);
+			vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, GLOBAL_VULKAN_CONTEXT->rcPipeline);
+			// heightfield
+			VkBuffer solidVertexBuffers[] = { m_TCompatField->vertexBuffer };
+			VkDeviceSize solidOffsets[] = { 0 };
+			vkCmdBindVertexBuffers(cmdBuf, 0, 1, solidVertexBuffers, solidOffsets);
+			vkCmdDraw(cmdBuf, static_cast<uint32_t>(m_TCompatField->m_verts.size()), 1, 0, 0);
 		}
 
 		if (isRenderContour)

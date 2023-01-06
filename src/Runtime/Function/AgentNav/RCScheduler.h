@@ -23,6 +23,7 @@ namespace GU
 	class RCStraightPath;
 	class RCAgentSamplePath;
 	class RCTContours;
+	class RCTCompactField;
 	class RCScheduler
 	{
 	public:
@@ -72,10 +73,12 @@ namespace GU
 		bool isRenderContour = true;
 		bool isRenderDetailMesh = true;
 		bool isRenderTContour = true;
+		bool isRenderTCompactField = true;
 
 		RCMesh* m_polymesh = nullptr;
 		RCContour* m_polyContourMesh = nullptr;
 		RCTContours* m_tContours = nullptr;
+		RCTCompactField* m_TCompatField = nullptr;
 		RCHeightfieldSolid* m_heightFieldSolid = nullptr;
 		glm::vec3 hitPos;
 		RCParams m_rcparams;
