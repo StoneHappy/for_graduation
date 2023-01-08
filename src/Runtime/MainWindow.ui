@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1188</width>
+    <width>1385</width>
     <height>823</height>
    </rect>
   </property>
@@ -43,6 +43,8 @@
    <addaction name="actAgentParam"/>
    <addaction name="actAgentTarget"/>
    <addaction name="actAddAgent"/>
+   <addaction name="actSaveAgent"/>
+   <addaction name="actReadAgent"/>
   </widget>
   <widget class="QDockWidget" name="dockEntity">
    <property name="features">
@@ -427,6 +429,30 @@
    </property>
    <property name="toolTip">
     <string>终点位置</string>
+   </property>
+  </action>
+  <action name="actSaveAgent">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/saveAgent.png</normaloff>:/images/saveAgent.png</iconset>
+   </property>
+   <property name="text">
+    <string>保存智能体位置</string>
+   </property>
+   <property name="toolTip">
+    <string>保存智能体位置</string>
+   </property>
+  </action>
+  <action name="actReadAgent">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/images/readAgent.png</normaloff>:/images/readAgent.png</iconset>
+   </property>
+   <property name="text">
+    <string>读取智能体位置</string>
+   </property>
+   <property name="toolTip">
+    <string>读取智能体位置</string>
    </property>
   </action>
  </widget>

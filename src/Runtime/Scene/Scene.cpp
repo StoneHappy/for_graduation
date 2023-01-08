@@ -151,7 +151,7 @@ namespace GU
 				agentComponent.modelUBO->update(agentubo, currImageIndex);
 
 				auto agentaaa = GLOBAL_RCSCHEDULER->m_crowd->getAgent(agentComponent.idx);
-				int nclosenes = 0;
+				/*int nclosenes = 0;
 				for (size_t i = 0; i < agentaaa->nneis; i++)
 				{
 					if (agentaaa->neis[i].dist < 5)
@@ -164,16 +164,17 @@ namespace GU
 					float zerovert[3] = { 0.0f, 0.0f, 0.0f };
 					GLOBAL_RCSCHEDULER->m_crowd->requestMoveVelocity(agentComponent.idx, zerovert);
 					transformComponent.Rotation.x = 90 * 3.14 / 180.0;
-				}
+				}*/
 				// sample path
-				if (GLOBAL_PLAY && velLength>0.1)
+				//if (GLOBAL_PLAY && velLength>0.1)
+				if (false)
 				{
 					agentComponent.samplePath.push_back(transformComponent.Translation);
 				}
 				if (glm::length( agentComponent.targetPos - transformComponent.Translation ) < 1.5)
 				{
 					GLOBAL_RCSCHEDULER->m_crowd->removeAgent(agentComponent.idx);
-					std::shared_ptr<RCAgentSamplePath> path = std::make_shared<RCAgentSamplePath>(agentComponent.samplePath);
+					//std::shared_ptr<RCAgentSamplePath> path = std::make_shared<RCAgentSamplePath>(agentComponent.samplePath);
 					//GLOBAL_RCSCHEDULER->rcAgentSamplePath.push_back(path);
 					auto uuid = m_registry.get<IDComponent>(entity).ID;
 					destroyEntity(getEntityByUUID(uuid));

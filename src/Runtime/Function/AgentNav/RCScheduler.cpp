@@ -961,7 +961,7 @@ namespace GU
 
 		int idx = GLOBAL_RCSCHEDULER->addAgent(GLOBAL_RCSCHEDULER->hitPos, agentParams);
 		GLOBAL_RCSCHEDULER->setMoveTarget(idx, agentTargetPos);
-		GLOBAL_RCSCHEDULER->calAgentPath(GLOBAL_RCSCHEDULER->hitPos, agentTargetPos);
+		//GLOBAL_RCSCHEDULER->calAgentPath(GLOBAL_RCSCHEDULER->hitPos, agentTargetPos);
 
 		QString name = QString("Agent%1").arg(idx);
 

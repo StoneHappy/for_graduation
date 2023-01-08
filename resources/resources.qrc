@@ -24,5 +24,7 @@
         <file>images/addAgent.png</file>
         <file>images/agentParam.png</file>
         <file>images/targetPos.png</file>
+        <file>images/readAgent.png</file>
+        <file>images/saveAgent.png</file>
     </qresource>
 </RCC>
