@@ -659,6 +659,28 @@ void MainWindow::on_actAddAgent_triggered()
 	ui->actAgentTarget->setChecked(false);
 }
 
+void MainWindow::on_actSaveAgent_triggered()
+{
+	QFileDialog filedial;
+	auto rnt = filedial.exec();
+	if (rnt == QDialog::Accepted)
+	{
+		std::filesystem::path savepath = filedial.getSaveFileName().toStdString();
+		GLOBAL_RCSCHEDULER->saveAgent(savepath);
+	}
+}
+
+void MainWindow::on_actReadAgent_triggered()
+{
+	QFileDialog filedial;
+	auto rnt = filedial.exec();
+	if (rnt == QDialog::Accepted)
+	{
+		std::filesystem::path readPath = filedial.getOpenFileName().toStdString();
+		GLOBAL_RCSCHEDULER->readAgent(readPath);
+	}
+}
+
 void MainWindow::slot_treeviewEntity_customcontextmenu(const QPoint& point)
 {
 	QMenu* menu = new QMenu(this);

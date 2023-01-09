@@ -99,6 +99,8 @@ private slots:
     void on_actAgentParam_triggered();
     void on_actAgentTarget_triggered();
     void on_actAddAgent_triggered();
+    void on_actSaveAgent_triggered();
+    void on_actReadAgent_triggered();
 
     void slot_tagPropertyChanged();
     void slot_treeviewEntity_customcontextmenu(const QPoint&);

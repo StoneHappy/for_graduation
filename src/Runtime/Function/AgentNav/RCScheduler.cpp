@@ -21,6 +21,9 @@
 #include <Scene/Component.h>
 #include <QString>
 #include <ctime>
+#include <yaml-cpp/yaml.h>
+#include <filesystem>
+#include <fstream>
 namespace GU
 {
 	static bool isectSegAABB(const float* sp, const float* sq,
@@ -969,6 +972,27 @@ namespace GU
 		auto&& transform = entity.getComponent<GU::TransformComponent>();
 		transform.Translation = GLOBAL_RCSCHEDULER->hitPos;
 		auto&& agentcomponent = entity.addComponent<::GU::AgentComponent>(idx, agentTargetPos);
+		agentcomponent.startPos = GLOBAL_RCSCHEDULER->hitPos;
+		agentcomponent.targetPos = GLOBAL_RCSCHEDULER->agentTargetPos;
+	}
+	void RCScheduler::setAgent(const glm::vec3& startpos, const glm::vec3& endpos)
+	{
+		//if (GLOBAL_RCSCHEDULER->isSetTarget || !GLOBAL_RCSCHEDULER->isSetAgent || agentTargetPos == glm::vec3{ -9999.0, -9999.0, -9999.0 }) return;
+
+		GLOBAL_RCSCHEDULER->agentParams = agentParams;
+
+		int idx = GLOBAL_RCSCHEDULER->addAgent(startpos, agentParams);
+		GLOBAL_RCSCHEDULER->setMoveTarget(idx, endpos);
+		//GLOBAL_RCSCHEDULER->calAgentPath(GLOBAL_RCSCHEDULER->hitPos, agentTargetPos);
+
+		QString name = QString("Agent%1").arg(idx);
+
+		auto entity = GLOBAL_SCENE->createEntity(name.toStdString());
+		auto&& transform = entity.getComponent<GU::TransformComponent>();
+		transform.Translation = GLOBAL_RCSCHEDULER->hitPos;
+		auto&& agentcomponent = entity.addComponent<::GU::AgentComponent>(idx, agentTargetPos);
+		agentcomponent.startPos = startpos;
+		agentcomponent.targetPos = endpos;
 	}
 	void RCScheduler::setMoveTarget(int idx, const glm::vec3& pos)
 	{
@@ -1073,6 +1097,56 @@ namespace GU
 		}
 		std::shared_ptr<RCStraightPath> inputStraightPath = std::make_shared<RCStraightPath>(m_straightPath, m_npolys);
 		rcStraightPath.push_back(inputStraightPath);
+	}
+
+	void RCScheduler::saveAgent(const std::filesystem::path& filepath)
+	{
+		auto view = GLOBAL_SCENE->m_registry.view<AgentComponent, TagComponent>();
+		YAML::Emitter out;
+		out << YAML::BeginMap;
+		out << YAML::Key << "Agents" << YAML::Value;
+		out << YAML::BeginMap;
+		for (auto entity : view)
+		{
+			//auto&& [tagComponent,agentComponent]= view.get<TagComponent, AgentComponent>(entity);
+			auto&& [agentComponent, tagComponet] = view.get<AgentComponent, TagComponent>(entity);
+			out << YAML::Key << tagComponet.Tag  <<YAML::Value;
+			out << YAML::BeginSeq;
+			out << agentComponent.startPos.x;
+			out << agentComponent.startPos.y;
+			out << agentComponent.startPos.z;
+
+			out << agentComponent.targetPos.x;
+			out << agentComponent.targetPos.y;
+			out << agentComponent.targetPos.z;
+			out << YAML::EndSeq;
+		}
+		out << YAML::EndMap;
+		out << YAML::EndMap;
+		std::string savepath = filepath.generic_string();
+		std::ofstream fout(savepath);
+		if (fout.is_open())
+		{
+			fout.clear();
+			fout << out.c_str();
+		}
+		fout.close();
+		for (auto entity : view)
+		{
+			auto&& agentComponent = view.get<AgentComponent>(entity);
+		}
+	}
+
+	void RCScheduler::readAgent(const std::filesystem::path& filepath)
+	{
+		YAML::Node config = YAML::LoadFile(filepath.string());
+		auto agents = config["Agents"];
+		for (auto agent : agents)
+		{
+			glm::vec3 startPos = { agent.second[0].as<float>(), agent.second[1].as<float>(), agent.second[2].as<float>() };
+			glm::vec3 endPos = { agent.second[3].as<float>(), agent.second[4].as<float>(), agent.second[5].as<float>() };
+			GLOBAL_RCSCHEDULER->setAgent(startPos, endPos);
+		}
 	}
 
 	void RCScheduler::createRCMesh(Mesh* mesh, rcMeshLoaderObj& rcMesh)

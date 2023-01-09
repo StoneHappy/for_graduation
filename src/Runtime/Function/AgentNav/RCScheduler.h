@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <DetourCrowd.h>
 #include <vector>
+#include <filesystem>
 class dtNavMesh;
 class dtNavMeshQuery;
 class dtCrowd;
@@ -43,6 +44,7 @@ namespace GU
 		glm::vec3 getAgentColor(int idx);
 		int addAgent(const glm::vec3& pos, const dtCrowdAgentParams& ap);
 		void setAgent(const glm::vec3& pos);
+		void setAgent(const glm::vec3& startpos, const glm::vec3& endpos);
 
 		void setMoveTarget(int idx, const glm::vec3& pos);
 		void setCurrentTarget(const glm::vec3& pos);
@@ -65,6 +67,9 @@ namespace GU
 		std::vector<std::shared_ptr<RCAgentSamplePath>> rcAgentSamplePath;
 
 		void calAgentPath(const glm::vec3& start, const glm::vec3& end);
+
+		void saveAgent(const std::filesystem::path& filepath);
+		void readAgent(const std::filesystem::path& filepath);
 
 		bool isSetTarget = false;
 		bool isSetAgent = false;

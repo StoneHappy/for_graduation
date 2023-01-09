@@ -94,6 +94,7 @@ namespace GU
 
 		int idx;
 		glm::vec3 targetPos;
+		glm::vec3 startPos;
 		std::vector<VkDescriptorSet> descriptorSets;
 		std::shared_ptr<VulkanUniformBuffer<AgentModelUBO> > modelUBO;
 
